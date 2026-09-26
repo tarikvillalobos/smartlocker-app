@@ -12,6 +12,9 @@ import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.CancellationException
 import kotlinx.serialization.json.Json
+import io.ktor.utils.io.readTo
+import kotlinx.io.Buffer
+import kotlinx.io.readByteArray
 
 /** Transport only. Paths, auth headers and DTOs must come from the external contract. */
 class HttpTransport(engine: HttpClientEngine, private val baseUrl: String) : AutoCloseable {
