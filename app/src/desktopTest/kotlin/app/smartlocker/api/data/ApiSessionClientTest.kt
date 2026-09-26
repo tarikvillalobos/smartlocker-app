@@ -218,3 +218,23 @@ class ApiSessionClientTest {
             val clock = TestClock()
             val secure = MemorySecure()
             val entered = CompletableDeferred<Unit>()
+            val release = CompletableDeferred<Unit>()
+            val client = client(clock, secure) {
+                entered.complete(Unit)
+                withContext(NonCancellable) { release.await() }
+                respond(tokens(clock), headers = JSON)
+            }
+            try {
+                val verification = async { runCatching { client.verifyLogin("challenge-1", "123456") } }
+                entered.await()
+                val leaving = if (logout) async { client.logout() } else null
+                if (!logout) client.close()
+                runCurrent()
+                release.complete(Unit)
+                assertTrue(verification.await().exceptionOrNull() is CancellationException)
+                leaving?.await()
+                assertNull(client.currentSession())
+                assertTrue(secure.values.isEmpty())
+            } finally { release.complete(Unit); client.close() }
+        }
+    }
