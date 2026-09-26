@@ -138,3 +138,23 @@ class AppController(
             feedback("Recurso não habilitado para esta marca.")
             return
         }
+        mutable.update { it.copy(route = route, error = null) }
+        if (route == Route.RESIDENTS) execute {
+            val generation = epoch
+            val residents = repository.recipients(state.value.membershipId)
+            if (generation == epoch) mutable.update { it.copy(residents = residents) }
+        }
+    }
+    fun filter(value: ParcelFilter) {
+        mutable.update { it.copy(filter = value, parcels = emptyList(), nextCursor = null) }
+        refresh()
+    }
+    fun membership(id: String) {
+        if (state.value.profile?.memberships?.none { it.id == id } != false) return
+        epoch++
+        readJob?.cancel()
+        mutable.update { it.copy(membershipId = id, selectedId = null, selected = null, credential = null,
+            parcels = emptyList(), pending = emptyList(), notices = emptyList(), issues = emptyList(),
+            statistics = null, nextCursor = null, residents = emptyList(), route = Route.HOME) }
+        refresh()
+    }
