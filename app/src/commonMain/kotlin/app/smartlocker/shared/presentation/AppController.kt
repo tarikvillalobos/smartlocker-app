@@ -288,8 +288,6 @@ class AppController(
             refreshAfterMutation(generation)
         }
     }
-    private suspend fun refreshAfterMutation(generation: Int) {
-        try { load(generation) }
         catch (error: CancellationException) { throw error }
         catch (error: Exception) {
             if (generation == epoch) {
