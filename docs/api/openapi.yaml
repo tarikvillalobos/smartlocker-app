@@ -1078,3 +1078,23 @@ paths:
         duplicação caso a confirmação da resposta se perca na rede.
       x-required-permission: "support:write"
       parameters:
+        -
+          $ref: "#/components/parameters/BrandId"
+        -
+          $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/IssueRequest"
+      responses:
+        "201":
+          description: "Resultado confirmado pelo servidor."
+          headers:
+            X-Request-Id:
+              $ref: "#/components/headers/RequestId"
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+          content:
+            "application/json":
