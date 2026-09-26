@@ -87,7 +87,6 @@ Resultado local total: 26 testes JVM/Compose e 1 teste XCTest aprovados.
 A CI configura auditoria de commits, desktop em macOS/Windows/Linux, build/lint
 Android e build do simulador iOS. A primeira execução encontrou o pacote Android
 obsoleto `tools`; os jobs agora especificam os pacotes suportados e isolam o SDK.
-A execução final será identificada aqui após receber o resultado remoto.
 
 A auditoria exige um arquivo textual e até 20 linhas alteradas por commit de
 implementação, com autoria `tarik.villalobos@gmail.com`. O README inicial é
