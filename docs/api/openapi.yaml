@@ -358,3 +358,23 @@ paths:
           $ref: "#/components/responses/Problem"
         "404":
           $ref: "#/components/responses/Problem"
+        "429":
+          $ref: "#/components/responses/Problem"
+        "503":
+          $ref: "#/components/responses/Problem"
+        default:
+          $ref: "#/components/responses/Problem"
+  "/me/memberships":
+    get:
+      operationId: "listMemberships"
+      tags:
+        - "Profile"
+      summary: "Listar locais e unidades autorizados"
+      x-required-permission: "profile:read"
+      parameters:
+        -
+          $ref: "#/components/parameters/BrandId"
+      responses:
+        "200":
+          description: "Resultado confirmado pelo servidor."
+          headers:
