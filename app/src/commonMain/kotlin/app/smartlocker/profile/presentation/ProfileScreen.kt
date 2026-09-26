@@ -22,9 +22,6 @@ fun ProfileScreen(state: AppState, controller: AppController, platform: Platform
     var permission by remember { mutableStateOf("Consultar permissão do dispositivo") }
     PageTitle("Perfil")
     Panel(dark = true) {
-        Text(profile.name, style = MaterialTheme.typography.titleLarge)
-        Text(brand.name, color = Tokens.soft)
-        Text("${state.membership?.location} · ${state.membership?.unit}", color = Tokens.soft)
     }
     Text("DADOS DE CONTATO", style = MaterialTheme.typography.labelMedium, color = Tokens.secondary)
     Panel {
