@@ -1,4 +1,5 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import java.util.UUID
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
