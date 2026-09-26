@@ -2118,3 +2118,23 @@ components:
           then:
             properties:
               totalReceived:
+                type: "null"
+              physicalPickupCount:
+                type: "null"
+              averagePickupDurationSeconds:
+                type: "null"
+          else:
+            properties:
+              totalReceived:
+                type: "integer"
+              physicalPickupCount:
+                type: "integer"
+        -
+          if:
+            properties:
+              physicalPickupCount:
+                const: 0
+          then:
+            properties:
+              averagePickupDurationSeconds:
+                type: "null"
