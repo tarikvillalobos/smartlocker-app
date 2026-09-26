@@ -58,3 +58,23 @@ fun EmptyState(title: String, description: String) {
     Panel {
         AppIcon(Symbol.PARCEL, modifier = Modifier.size(36.dp), tint = MaterialTheme.colorScheme.primary)
         Text(title, style = MaterialTheme.typography.titleMedium)
+        Text(description, color = Tokens.secondary)
+    }
+}
+
+@Composable
+fun MenuRow(label: String, symbol: Symbol = Symbol.NEXT, onClick: () -> Unit) {
+    TextButton(onClick, Modifier.fillMaxWidth().heightIn(min = Tokens.touch),
+        shape = Tokens.control, contentPadding = PaddingValues(vertical = 12.dp, horizontal = 4.dp)) {
+        AppIcon(symbol, modifier = Modifier.size(20.dp))
+        Spacer(Modifier.width(12.dp))
+        Text(label, Modifier.weight(1f), color = Tokens.text)
+        AppIcon(Symbol.NEXT, modifier = Modifier.size(18.dp), tint = Tokens.secondary)
+    }
+}
+
+@Composable
+fun Metadata(label: String, value: String, light: Boolean = false) {
+    Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
+        Text(label, style = MaterialTheme.typography.bodySmall, color = if (light) Tokens.soft else Tokens.secondary)
+        Text(value, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
