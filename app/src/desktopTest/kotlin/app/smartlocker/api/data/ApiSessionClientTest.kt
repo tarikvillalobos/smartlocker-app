@@ -370,6 +370,26 @@ class ApiSessionClientTest {
         } finally { release.complete(Unit); client.close() }
     }
 
+    @Test fun unauthorizedStillExpiresMemoryWhenProtectedSessionCannotBeRemoved() = runTest {
+        val clock = TestClock()
+        val secure = DeleteFailureSecure()
+        val client = client(clock, secure) { request ->
+            if (request.path().endsWith("/verify")) respond(tokens(clock), headers = JSON)
+            else respond("""{"status":401,"code":"SESSION_EXPIRED"}""", HttpStatusCode.Unauthorized, PROBLEM)
+        }
+        try {
+            client.verifyLogin("challenge-1", "123456")
+            secure.failClearing = true
+            val failure = assertFailsWith<AppFailure> { client.request("/me") }
+            assertEquals(FailureKind.EXPIRED_SESSION, failure.kind)
+            assertTrue(failure.message.contains("Não foi possível remover a sessão protegida"))
+            assertNull(client.currentSession())
+            assertNull(client.restoreSession())
+            assertTrue(secure.memory.values.keys.any { it.endsWith(".head") })
+        } finally {
+            secure.failClearing = false
+            try { client.logout() } finally { client.close() }
+        }
     private fun TestScope.client(
         clock: TestClock, secure: SecureStorage = MemorySecure(), baseUrl: String = BASE,
         handler: suspend MockRequestHandleScope.(HttpRequestData) -> HttpResponseData,
