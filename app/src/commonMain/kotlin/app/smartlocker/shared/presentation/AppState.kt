@@ -1,6 +1,7 @@
 package app.smartlocker.shared.presentation
 
 import app.smartlocker.auth.domain.*
+import app.smartlocker.config.*
 import app.smartlocker.parcels.domain.*
 import app.smartlocker.profile.domain.*
 
