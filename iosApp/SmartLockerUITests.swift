@@ -53,6 +53,15 @@ final class SmartLockerUITests: XCTestCase {
             field.frame.maxY <= app.keyboards.firstMatch.frame.minY && field.frame.height > 0
         }
         let expectation = XCTNSPredicateExpectation(predicate: visible, object: nil)
+        let result = XCTWaiter.wait(for: [expectation], timeout: 8)
+        if result != .completed {
+            let screenshot = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
+            screenshot.name = "Keyboard overlap failure"
+            screenshot.lifetime = .keepAlways
+            add(screenshot)
+        }
+        XCTAssertEqual(result, .completed,
+                       "Field \(field.frame), keyboard \(app.keyboards.firstMatch.frame), app \(app.frame)")
     }
 
     private func reveal(_ element: XCUIElement, in app: XCUIApplication) {
