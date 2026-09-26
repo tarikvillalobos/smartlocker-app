@@ -99,4 +99,6 @@ class ControllerTest {
         response.complete(demo.requestLogin(demoLogin))
         runCurrent()
         assertNull(controller.state.value.challenge)
+        assertFalse(controller.state.value.busy)
+    }
 }
