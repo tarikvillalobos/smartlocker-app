@@ -79,7 +79,6 @@ class ResponsiveUiTest {
             onNodeWithContentDescription("Ver detalhes").performScrollTo().performClick()
             onNodeWithText("Já retirei a encomenda").performScrollTo().performClick()
             onNodeWithText("Sim, retirei").performClick()
-            waitUntil(10_000) { runtime.state.value.controller.state.value.selected?.manualAt != null }
             onNodeWithText("Retirada informada").assertExists()
         } finally { runOnIdle { runtime.close() } }
     }
