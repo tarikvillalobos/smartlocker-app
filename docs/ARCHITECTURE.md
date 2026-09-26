@@ -5,6 +5,10 @@ contratos e funções de domínio pertencem às funcionalidades auth, parcels,
 profile e shared. O aplicativo organiza dados e apresentação por funcionalidade.
 
 `AppRuntime` é a raiz de composição e faz injeção por construtor. A seleção do
+ambiente é explícita: DEMO usa `DemoRepository`; PRODUCTION usa
+`ApiLockerRepository` com endpoint válido ou `UnconfiguredRepository` quando
+falta configuração. Um erro nunca ativa fallback demonstrativo.
+`AppController` expõe `StateFlow<AppState>` imutável;
 ações iniciam coroutines e publicam novos estados. Os composables apresentam
 estado e disparam ações. Sucesso exige confirmação do repositório; a releitura
 posterior atualiza as consultas. Se ela falhar, o app conserva a confirmação da
