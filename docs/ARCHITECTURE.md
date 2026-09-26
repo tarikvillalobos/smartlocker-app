@@ -7,7 +7,6 @@ profile e shared. O aplicativo organiza dados e apresentação por funcionalidad
 `AppRuntime` é a raiz de composição e faz injeção por construtor. A seleção do
 ambiente é explícita. `AppController` expõe `StateFlow<AppState>` imutável;
 ações iniciam coroutines e publicam novos estados. Os composables apresentam
-estado e disparam ações. Mudanças em dados são relidas antes de mostrar sucesso.
 
 ## Consistência
 
