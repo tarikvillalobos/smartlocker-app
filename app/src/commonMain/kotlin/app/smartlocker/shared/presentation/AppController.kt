@@ -304,6 +304,7 @@ class AppController(
     fun logout() {
         epoch++
         readJob?.cancel()
+        actionJob?.cancel()
         previousUser = null
         lastLogin = null
         mutable.value = AppState(initialized = true, now = clock.now())
