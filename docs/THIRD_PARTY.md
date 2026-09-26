@@ -18,3 +18,8 @@ Versões escolhidas após consulta em 25/09/2026:
 - [Compose 1.10.3](https://github.com/JetBrains/compose-multiplatform/releases/tag/v1.10.3).
 - [Kotlin 2.3.21](https://github.com/JetBrains/kotlin/releases/tag/v2.3.21).
 - [Versões Ktor](https://ktor.io/docs/releases.html).
+- [QRCode-Kotlin](https://github.com/g0dkar/qrcode-kotlin).
+
+Foram preferidas versões estáveis compatíveis com o ambiente instalado,
+não necessariamente as versões mais novas. Material 3 foi fixado em 1.9.0
+para evitar a versão alpha sugerida pelo catálogo padrão do plugin Compose.
