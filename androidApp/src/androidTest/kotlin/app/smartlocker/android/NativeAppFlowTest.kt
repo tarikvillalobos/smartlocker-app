@@ -78,3 +78,17 @@ class NativeAppFlowTest {
         ui.onNodeWithText("Receber código por SMS").performScrollTo().performClick()
         waitForText("Código de 6 dígitos")
         ui.onNodeWithText("Código de 6 dígitos").performScrollTo().performTextInput("123456")
+        ui.onNodeWithText("Confirmar código").performScrollTo().performClick()
+        waitForText("Copiar código")
+    }
+
+    private fun rotate(requested: Int, expected: Int) {
+        scenario.onActivity { it.requestedOrientation = requested }
+        ui.waitUntil(10_000) { context.resources.configuration.orientation == expected }
+        ui.waitForIdle()
+    }
+
+    private fun waitForText(value: String) {
+        ui.waitUntil(15_000) { ui.onAllNodesWithText(value).fetchSemanticsNodes().isNotEmpty() }
+    }
+}
