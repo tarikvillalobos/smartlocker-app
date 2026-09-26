@@ -76,6 +76,26 @@ um conflito não provoca atualização de versão e repetição automática.
 
 Indicadores usam a coleção completa dos últimos 30 dias no repositório demo,
 independentemente da página exibida. Média inclui apenas timestamps físicos
+válidos, com início inclusivo e fim exclusivo. Em produção, os indicadores vêm
+de `/parcel-metrics` e preservam `complete=false` com valores desconhecidos.
+Datas usam o fuso IANA do vínculo ativo; sem vínculo, a composição usa UTC.
+
+## Cliente HTTP e sessão
+
+`ApiSessionClient` carrega a configuração pública, normaliza login, verifica OTP
+e guarda access/refresh tokens com marca, usuário, sessionId e prazos. O refresh
+é serializado antes de uma requisição protegida quando o access token precisa
+ser renovado. Sua chave pendente de idempotência permanece no cofre até a
+confirmação. O controller usa o prazo renovável da sessão para encerrar o acesso.
+
+`ApiLockerRepository` mapeia DTOs validados para o domínio e confere IDs de
+usuário, vínculo e recurso nas respostas. Perfil combina `/me` e a lista completa
+de vínculos. Identificadores são opacos; um vínculo não é o ID físico do local.
+Unidades podem estar ausentes para lockers avulsos.
+
+Avisos e solicitações expõem páginas explícitas. O estado conserva as páginas
+carregadas e os próximos cursores; `unreadCount` vem do total fornecido pelo
+servidor. Capacidades restringem navegação e comandos, sem conceder autorização.
 
 ## Extensão
 
