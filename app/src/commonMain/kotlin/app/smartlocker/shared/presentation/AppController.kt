@@ -99,6 +99,7 @@ class AppController(
         load()
     }
 
+    fun refresh(detailOnly: Boolean = false) {
         readJob?.cancel()
         val generation = ++epoch
         readJob = scope.launch {
