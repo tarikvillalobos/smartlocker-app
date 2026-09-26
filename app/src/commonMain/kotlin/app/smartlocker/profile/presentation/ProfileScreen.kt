@@ -58,3 +58,23 @@ fun ProfileScreen(state: AppState, controller: AppController, platform: Platform
         if (controller.configuration.environment == Environment.DEMO) MenuRow("Cenários de demonstração", Symbol.PARCEL) {
             controller.navigate(Route.DEMO)
         }
+        TextButton(controller::logout, Modifier.fillMaxWidth(), enabled = !state.busy) {
+            AppIcon(Symbol.EXIT, tint = Tokens.destructive)
+            Spacer(Modifier.width(12.dp))
+            Text("Sair", color = Tokens.destructive)
+        }
+    }
+}
+
+@Composable
+private fun PreferenceRow(label: String, value: Boolean, enabled: Boolean, onChange: (Boolean) -> Unit) {
+    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+        Text(label, Modifier.weight(1f))
+        Switch(value, onChange, enabled = enabled, modifier = Modifier.semanticsLabel(label))
+    }
+}
+
+@Composable
+fun ContactScreen(state: AppState, controller: AppController) {
+    var contact by rememberSaveable { mutableStateOf("") }
+    var code by rememberSaveable { mutableStateOf("") }
