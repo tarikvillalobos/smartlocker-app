@@ -132,11 +132,6 @@ Veja [arquitetura e segurança local](docs/ARCHITECTURE.md),
 
 ## Distribuição
 
-Desktop: `./gradlew :app:packageDistributionForCurrentOS`. Pacotes DMG, MSI e DEB
-são gerados no sistema correspondente; assinatura e notarização não estão
-configuradas. Android release exige keystore privado e política de assinatura.
-iOS exige equipe Apple, provisioning, ícones de distribuição e documentos legais.
-Não inclua segredos ou chaves privadas no repositório.
 
 ## Git
 
