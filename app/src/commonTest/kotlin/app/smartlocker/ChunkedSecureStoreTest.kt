@@ -118,3 +118,23 @@ class ChunkedSecureStoreTest {
             val memory = MemorySecure()
             val store = ChunkedSecureStore(memory, KEY)
             store.write("private-session".repeat(1000))
+            val chunk = memory.values.keys.first { ".chunk." in it }
+            val original = memory.values.getValue(chunk)
+            when (corruption) {
+                0 -> memory.values.remove(chunk)
+                1 -> memory.values[chunk] = original.dropLast(1)
+                2 -> memory.values[chunk] = (if (original[0] == 'A') "B" else "A") + original.drop(1)
+            }
+            val failure = assertFailsWith<AppFailure> { store.read() }
+            assertEquals("Não foi possível acessar a sessão protegida.", failure.message)
+        }
+    }
+
+    @Test fun oversizedOrMalformedManifestNeverEnumeratesUnboundedKeys() = runTest {
+        val vault = FaultVault()
+        val store = ChunkedSecureStore(vault, KEY)
+        store.write("previous")
+        val snapshot = vault.memory.values.toMap()
+        assertFailsWith<AppFailure> { store.write("é".repeat(256 * 1024)) }
+        assertEquals(snapshot, vault.memory.values)
+        val manifest = vault.memory.values.getValue("$KEY.head")
