@@ -23,6 +23,7 @@ class AppFailure(
 ) : Exception(message)
 
 interface LockerRepository {
+    suspend fun brandConfiguration(): app.smartlocker.config.Brand? = null
     suspend fun requestLogin(request: LoginRequest): Challenge
     suspend fun resendLogin(challengeId: String, request: LoginRequest): Challenge = requestLogin(request)
     suspend fun verifyLogin(challengeId: String, code: String): Session
