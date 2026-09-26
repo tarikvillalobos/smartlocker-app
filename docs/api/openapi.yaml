@@ -1358,3 +1358,23 @@ components:
         default: "all"
       description: "collected inclui manual e físico, sempre distinguíveis no status de cada item."
     Since:
+      name: "since"
+      in: "query"
+      schema:
+        $ref: "#/components/schemas/Instant"
+      description: "Início inclusivo. Informar junto de until; se ambos omitidos, últimos 30 dias pelo relógio do servidor."
+    Until:
+      name: "until"
+      in: "query"
+      schema:
+        $ref: "#/components/schemas/Instant"
+      description: "Fim exclusivo. Exige since < until, até o instante atual e intervalo máximo de 366 dias."
+  headers:
+    RequestId:
+      description: "Identificador de correlação não sensível."
+      schema:
+        type: "string"
+        maxLength: 128
+    NoStore:
+      description: "Proíbe armazenamento HTTP de dados pessoais ou credenciais."
+      schema:
