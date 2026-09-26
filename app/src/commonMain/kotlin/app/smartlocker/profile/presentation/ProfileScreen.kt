@@ -56,6 +56,7 @@ fun ProfileScreen(state: AppState, controller: AppController, platform: Platform
         Text("O envio depende da disponibilidade do canal e da permissão do dispositivo.",
             style = MaterialTheme.typography.bodySmall, color = Tokens.secondary)
         Text(if (controller.configuration.environment == Environment.DEMO) "Demonstração: nenhum canal externo envia mensagens."
+            else "As preferências são confirmadas pela API. Estes canais estão habilitados para o local.", style = MaterialTheme.typography.bodySmall)
         TextButton({ scope.launchPermission(platform) { permission = it } }) { Text(permission) }
     }
     Panel {
