@@ -18,3 +18,23 @@ data class ParcelRecord(
     fun toDomain(now: Long) = Parcel(
         id, recipient, location, carrier, tracking, locker, address, compartment,
         size, deposited, notified, deadline, manual, collected,
+        if (deadline <= now && credential == "ACTIVE") CredentialStatus.EXPIRED
+        else CredentialStatus.valueOf(credential), available,
+        canUndo = manual != null && collected == null && now - manual < 600_000,
+    )
+}
+
+@Serializable
+data class NoticeRecord(val id: String, val parcel: String, val title: String, val at: Long, val read: Boolean = false) {
+    fun toDomain() = DeliveryNotice(id, parcel, title, at, read)
+}
+@Serializable
+data class IssueRecord(val id: String, val parcel: String, val message: String, val at: Long) {
+    fun toDomain() = SupportIssue(id, parcel, message, at)
+}
+@Serializable
+data class DemoSnapshot(
+    val parcels: List<ParcelRecord>,
+    val notices: List<NoticeRecord>,
+    val issues: List<IssueRecord> = emptyList(),
+    val phone: String = "11987654321",
