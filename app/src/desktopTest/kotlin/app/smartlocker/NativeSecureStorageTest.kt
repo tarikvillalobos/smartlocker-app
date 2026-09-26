@@ -58,3 +58,23 @@ class NativeSecureStorageTest {
         val second = "$first.second"
         var failure: Throwable? = null
         try {
+            runBlocking { test(storage, directory, first, second) }
+        } catch (problem: Throwable) {
+            failure = problem
+            throw problem
+        } finally {
+            // Attempt every cleanup even when an assertion or one vault operation fails.
+            for (key in listOf(first, second)) {
+                try { runBlocking { storage.write(key, null) } }
+                catch (cleanup: Throwable) {
+                    if (failure == null) failure = cleanup else failure.addSuppressed(cleanup)
+                }
+            }
+            try {
+                Files.walk(directory).use { paths ->
+                    paths.sorted(Comparator.reverseOrder()).forEach { Files.deleteIfExists(it) }
+                }
+            } catch (cleanup: Throwable) {
+                if (failure == null) failure = cleanup else failure.addSuppressed(cleanup)
+            }
+            failure?.let { throw it }
