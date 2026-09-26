@@ -18,3 +18,23 @@ class ApiLockerRepository(private val session: ApiSessionClient) : LockerReposit
     private val cacheMutex = Mutex()
     private var cacheUser: String? = null
     private val memberships = mutableMapOf<String, ApiMembership>()
+    private val reviewedParcels = mutableMapOf<Pair<String, String>, Parcel>()
+
+    suspend fun configuration(): ApiBrandConfiguration = session.configuration()
+    override suspend fun brandConfiguration(): Brand = configuration().toDomain(session.brand)
+
+    override suspend fun requestLogin(request: LoginRequest): Challenge = session.requestLogin(request)
+    override suspend fun resendLogin(challengeId: String, request: LoginRequest): Challenge =
+        session.resendLogin(identifier(challengeId))
+    override suspend fun verifyLogin(challengeId: String, code: String): Session {
+        val result = session.verifyLogin(identifier(challengeId), otp(code))
+        clearCache()
+        return result
+    }
+    override suspend fun restoreSession(): Session? = session.restoreSession()
+    override suspend fun logout() {
+        clearCache()
+        session.logout()
+    }
+    override fun close() = session.close()
+
