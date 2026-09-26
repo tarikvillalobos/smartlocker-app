@@ -59,6 +59,10 @@ criptográfica permanece responsabilidade do cofre nativo.
 
 Dados locais do desktop ficam em `~/.smartlocker`, com diretório 0700 e arquivos
 0600 em sistemas POSIX. No Windows, as sessões usam DPAPI do usuário corrente.
+O logout apaga o registro de sessão; na demonstração também remove o snapshot.
+Em produção, tenta revogar a sessão remotamente após limpar o estado local.
+Uma falha de rede não comprova revogação no servidor. A chave de criptografia
+do sistema pode permanecer, sem conteúdo de sessão.
 
 ## Regras de retirada
 
