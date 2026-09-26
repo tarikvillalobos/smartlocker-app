@@ -18,3 +18,23 @@ python3 scripts/prepare_icons.py
 
 Use `python scripts/gradle.py` no Windows. O parâmetro `brand` seleciona nome,
 ícones, identificador e marca inicial; não define local/unidade do usuário.
+Os arquivos ficam em `app/build/compose/binaries/main/{dmg,msi,deb}/`.
+Cada sistema gera seu próprio formato. macOS exige as ferramentas do Xcode;
+Windows exige WiX 3 no PATH; Linux exige `fakeroot` para o pacote DEB.
+
+O workflow **Build installable artifacts**, acionado manualmente em Actions,
+produz DMG, MSI e DEB de ambas as marcas e um ZIP do app iOS de simulador.
+São artefatos privados do repositório, mantidos por 14 dias, sem publicação em loja.
+Os pacotes não têm assinatura comercial nem notarização. Use identidades do
+proprietário para assinar antes de distribuir externamente.
+
+Para persistir sessões, macOS usa Keychain, Windows usa DPAPI e Linux usa Secret
+Service. Linux precisa de `libsecret-tools` e de um cofre desbloqueado, como
+`gnome-keyring`. Não há fallback de credenciais para arquivo em texto puro.
+
+## Android
+
+`./gradlew :androidApp:assembleDebug` gera o APK de desenvolvimento em
+`androidApp/build/outputs/apk/debug/androidApp-debug.apk`, assinado com a chave
+de debug local. O app abre no ambiente externo; escolha “Experimentar demonstração”.
+Para produção, configure o keystore privado e a assinatura do responsável.
