@@ -218,3 +218,23 @@ class ApiLockerRepositoryTest {
                 "/v1/configuration" -> json(public)
                 "/v1/me/memberships" -> json(ApiMembershipList(listOf(membership)))
                 else -> handler(request)
+            }
+        }
+        val secure = object : SecureStorage {
+            val entries = mutableMapOf<String, String>()
+            override suspend fun read(key: String) = entries[key]
+            override suspend fun write(key: String, value: String?) { if (value == null) entries.remove(key) else entries[key] = value }
+        }
+        val base = "https://api.example.test/v1"
+        val session = ApiSessionClient(HttpTransport(engine, base), Brands.smartLocker, base, secure,
+            AppClock { Instant.parse(NOW).toEpochMilliseconds() })
+        val repo = ApiLockerRepository(session)
+        repo.verifyLogin("login-1", "123456")
+        return Fixture(repo, requests)
+    }
+
+    private inline fun <reified T> MockRequestHandleScope.json(value: T): HttpResponseData = respond(
+        ApiJson.encodeToString(value), HttpStatusCode.OK, headersOf(HttpHeaders.ContentType, "application/json"))
+    private fun HttpRequestData.bodyText() = when (val content = body) {
+        is OutgoingContent.ByteArrayContent -> content.bytes().decodeToString()
+        is OutgoingContent.NoContent -> ""
