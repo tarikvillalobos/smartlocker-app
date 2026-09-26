@@ -3,6 +3,10 @@
 Aplicativo white-label para usuários de armários inteligentes, em Kotlin
 Multiplatform e Compose Multiplatform, com interface em português brasileiro.
 
+Consulte encomendas, códigos e QR Codes de retirada, histórico, notificações,
+perfil, contatos, preferências de comunicação e solicitações de suporte.
+A identidade visual segue o HTML fornecido: Sora, Plus Jakarta Sans e a paleta
+verde da marca padrão. Aurora Lockers demonstra uma segunda personalização.
 
 ## Features
 
