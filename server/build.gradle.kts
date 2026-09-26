@@ -18,3 +18,4 @@ dependencies {
     testImplementation(libs.ktor.server.test)
 }
 application { mainClass.set("app.smartlocker.server.MainKt") }
+tasks.test { useJUnitPlatform() }
