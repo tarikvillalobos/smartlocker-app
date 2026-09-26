@@ -89,3 +89,23 @@ físico. O projeto Xcode é gerado e ignorado pelo Git; edite `project.yml`.
 O código de login demonstrativo expira em cinco minutos, permite cinco tentativas
 e tem intervalo de reenvio de 30 segundos. Esses valores não definem o contrato
 externo. O logout limpa a sessão e os dados fictícios sensíveis daquele contexto.
+
+## Testes
+
+```sh
+./gradlew :core:jvmTest :app:desktopTest
+./gradlew :androidApp:assembleDebug :androidApp:lintDebug
+./gradlew :app:compileKotlinIosSimulatorArm64
+python3 scripts/audit_commits.py
+```
+
+Testes desktop geram capturas em `app/build/reports/screenshots/` e relatórios
+em `app/build/reports/tests/desktopTest/`. Use `xvfb-run` em Linux sem display.
+A CI configura runners Linux, Windows e macOS, além de Android e simulador iOS.
+
+## Organização
+
+- `core`: domínio, entidades, contratos, validações e indicadores.
+- `app/commonMain`: repositórios, transporte HTTP, demonstração, estado e UI.
+- `app/androidMain`, `iosMain`, `desktopMain`: serviços específicos.
+- `androidApp`: Activity, ViewModel, ícone, manifesto e tratamento de dobradiças.
