@@ -198,3 +198,10 @@ class ControllerMembershipRevocationTest {
         assertTrue(state.issues.isEmpty())
         assertTrue(state.residents.isEmpty())
     }
+
+    private suspend fun TestScope.start(repository: LockerRepository, clock: TestClock): AppController {
+        val controller = AppController(AppConfiguration(Brands.smartLocker, Environment.DEMO), repository, clock, backgroundScope)
+        controller.state.first { it.profile != null && !it.busy }
+        return controller
+    }
+}
