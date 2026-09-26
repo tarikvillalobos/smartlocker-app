@@ -67,6 +67,10 @@ class AppController(
     }
 
     private fun handle(error: Exception) {
+        (error as? AppFailure)?.retryAt?.let { retryAt ->
+            mutable.update { it.copy(challenge = it.challenge?.copy(resendAt = maxOf(it.challenge.resendAt, retryAt)),
+                contactChallenge = it.contactChallenge?.copy(resendAt = maxOf(it.contactChallenge.resendAt, retryAt))) }
+        }
         if (error is AppFailure && error.kind == FailureKind.EXPIRED_SESSION) {
             previousUser = state.value.session?.userId
             epoch++
