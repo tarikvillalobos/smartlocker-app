@@ -85,6 +85,7 @@ private fun PreferenceRow(label: String, value: Boolean, enabled: Boolean, onCha
 
 @Composable
 fun ContactScreen(state: AppState, controller: AppController) {
+    var contact by rememberSaveable { mutableStateOf(state.contactValue) }
     var code by rememberSaveable { mutableStateOf("") }
     var email by rememberSaveable { mutableStateOf(true) }
     PageTitle("Editar contato", { controller.navigate(Route.PROFILE) })
