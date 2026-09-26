@@ -71,6 +71,26 @@ para esse papel; esta minuta define apenas o cliente de usuários finais.
 
 ## Mapeamento implementado no cliente
 
+- `ApiSessionClient` guarda access/refresh tokens, sessionId, brandId e prazos
+  no cofre. O prazo da sessão exposto ao controller é o de renovação; o access
+  token pode ser rotacionado sem obrigar novo login.
+- O domínio usa o ID de membership como contexto. O DTO preserva a distinção
+  entre vínculo, local e unidade, com fuso e capacidades. Lockers avulsos usam
+  `unitId` e `unitLabel` nulos em conjunto, sem inventar uma unidade.
+- Contatos ausentes viram campos vazios no domínio, sem dados fictícios.
+- Datas UTC são convertidas para milissegundos e apresentadas no fuso do vínculo;
+  médias passam de segundos para milissegundos. O período tem fim exclusivo.
+- Versões positivas alimentam `If-Match`; conflitos não são repetidos com outra
+  versão. `revalidateAfter` limita a apresentação do código e do QR.
+- Avisos e solicitações têm páginas explícitas. `unreadCount` é preservado como
+  total global; métricas incompletas continuam desconhecidas.
+- `ChunkedSecureStore` resolve o limite por item dos cofres: a sessão é dividida
+  em partes protegidas, sem truncar tokens. O registro inteiro tem limite de
+  256 KiB, com manifesto e journal de recuperação.
+- Configuração pública é carregada antes do login; capacidades do servidor se
+  combinam com as opções da marca e do vínculo.
+
+Os endpoints de negócio usados pela UI estão implementados no repositório HTTP.
 
 ## Lacunas e escolhas que exigem homologação
 
