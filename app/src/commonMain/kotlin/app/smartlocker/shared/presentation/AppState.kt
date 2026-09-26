@@ -18,3 +18,21 @@ data class AppState(
     val nextCursor: String? = null,
     val selectedId: String? = null,
     val selected: Parcel? = null,
+    val credential: PickupCredential? = null,
+    val credentialMessage: String? = null,
+    val statistics: Statistics? = null,
+    val notices: List<DeliveryNotice> = emptyList(),
+    val issues: List<SupportIssue> = emptyList(),
+    val residents: List<Recipient> = emptyList(),
+    val challenge: Challenge? = null,
+    val contactChallenge: Challenge? = null,
+    val busy: Boolean = false,
+    val stale: Boolean = false,
+    val error: String? = null,
+    val feedback: String? = null,
+    val now: Long = 0,
+    val lastUpdated: Long? = null,
+) {
+    val membership: Membership? get() = profile?.memberships?.find { it.id == membershipId }
+    val unreadCount: Int get() = notices.count { !it.read }
+}
