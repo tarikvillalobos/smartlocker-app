@@ -22,6 +22,7 @@ data class Parcel(
     val lockerAvailable: Boolean = true,
     val canMarkManually: Boolean = true,
     val canUndo: Boolean = false,
+    val version: String? = null,
 ) {
     val status: ParcelStatus get() = when {
         collectedAt != null -> ParcelStatus.COLLECTED
