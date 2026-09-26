@@ -1,5 +1,10 @@
 # Instalação e distribuição
 
+A versão `1.1.0` inclui o cliente HTTP da OpenAPI proposta e a demonstração local.
+O backend está sendo finalizado em outro projeto; a homologação conjunta depende
+do ambiente externo. Configure o endpoint conforme [API.md](API.md). Os pacotes
+sem endpoint permitem selecionar a demonstração explicitamente. Documentos legais,
+fornecedores e assinaturas de distribuição dependem da configuração do proprietário.
 
 ## Desktop
 
