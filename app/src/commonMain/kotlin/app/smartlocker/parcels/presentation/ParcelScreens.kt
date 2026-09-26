@@ -79,7 +79,6 @@ fun HistoryScreen(state: AppState, controller: AppController) {
     Panel {
         Text("Últimos 30 dias · neste local", style = MaterialTheme.typography.bodySmall, color = Tokens.secondary)
         FlowRow(horizontalArrangement = Arrangement.spacedBy(24.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            Metadata("Total recebido", state.statistics?.let { "${it.total} encomendas" } ?: "Sem dados")
             Metadata("Tempo médio para retirar", durationLabel(state.statistics?.averageMillis))
         }
         Text("Média de retiradas físicas confirmadas. Marcações manuais não entram na média.",
