@@ -178,3 +178,23 @@ class AppController(
     }
     private fun mutateSelected(action: suspend (AppState) -> Unit) = execute {
         val context = state.value
+        if (context.selectedId == null) return@execute
+        val generation = epoch
+        action(context)
+        if (generation == epoch) load(generation)
+    }
+    fun preferences(value: CommunicationPreferences) = execute {
+        val generation = epoch
+        val profile = repository.updatePreferences(value)
+        if (generation == epoch) mutable.update { it.copy(profile = profile, feedback = "Preferências salvas.") }
+    }
+    fun contact(value: String, channel: LoginChannel) = execute {
+        val challenge = repository.requestContactChange(value, channel)
+        mutable.update { it.copy(contactChallenge = challenge) }
+    }
+    fun verifyContact(code: String) = execute {
+        val challenge = state.value.contactChallenge ?: return@execute
+        val profile = repository.verifyContactChange(challenge.id, code)
+        mutable.update { it.copy(profile = profile, contactChallenge = null, route = Route.PROFILE,
+            feedback = "Contato verificado e atualizado.") }
+    }
