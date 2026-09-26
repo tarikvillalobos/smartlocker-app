@@ -88,10 +88,6 @@ física nem verificação completa de foco por teclado em cada sistema.
 `python3 scripts/run_native_secure_tests.py` executa **três testes nativos** com
 chaves sintéticas exclusivas, cobrindo gravação, leitura por outra instância,
 atualização, isolamento, remoção e tratamento de valores longos sem truncamento.
-Os três passaram no macOS local, incluindo uma sessão fragmentada de 18.059
-bytes, atualização, leitura por outra instância e remoção completa das chaves.
-Os dois testes anteriores também passaram nos três runners da CI: Keychain no
-macOS, DPAPI no Windows e Secret Service no Linux.
 
 O runner Linux abre uma sessão D-Bus e um cofre temporários, sem reutilizar o
 cofre pessoal. Os testes removem apenas suas próprias entradas. Relatório separado:
