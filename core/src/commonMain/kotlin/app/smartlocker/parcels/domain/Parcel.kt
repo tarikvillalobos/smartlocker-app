@@ -59,7 +59,6 @@ fun List<Parcel>.filtered(filter: ParcelFilter): List<Parcel> = filter {
 }
 
 fun calculateStatistics(completeData: List<Parcel>, since: Long, until: Long): Statistics {
-    val period = completeData.filter { it.depositedAt in since..until }
     val durations = period.mapNotNull { parcel ->
         parcel.collectedAt?.takeIf { it in parcel.depositedAt..until }
             ?.minus(parcel.depositedAt)
