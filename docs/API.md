@@ -1,5 +1,10 @@
 # Integração com a API externa
 
+O aplicativo possui cliente HTTP implementado para o contrato versionado em
+[api/openapi.yaml](api/openapi.yaml). O backend está sendo finalizado em outro
+projeto; este repositório contém o aplicativo, sem implementar esse servidor.
+A especificação continua identificada como minuta `0.1.0-draft` até homologação.
+Seu domínio `.invalid` é um placeholder não operacional.
 
 ## Implementado independentemente do contrato
 
