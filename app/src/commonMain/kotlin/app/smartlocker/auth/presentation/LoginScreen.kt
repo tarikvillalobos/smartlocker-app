@@ -21,6 +21,7 @@ import app.smartlocker.shared.presentation.*
 
 @Composable
 fun LoginScreen(controller: AppController, state: AppState, legal: () -> Unit) {
+    val brand = controller.brand
     val demo = controller.configuration.environment == Environment.DEMO
     var contact by rememberSaveable { mutableStateOf("") }
     var cpf by rememberSaveable { mutableStateOf("") }
