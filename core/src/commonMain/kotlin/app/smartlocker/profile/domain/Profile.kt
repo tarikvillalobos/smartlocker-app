@@ -1,5 +1,12 @@
 package app.smartlocker.profile.domain
 
+import app.smartlocker.config.Features
+
+data class Membership(
+    val id: String, val location: String, val unit: String,
+    val timeZone: String = "America/Sao_Paulo",
+    val features: Features = Features(), val channels: Set<String>? = null,
+)
 data class CommunicationPreferences(
     val inApp: Boolean = true,
     val sms: Boolean = true,
