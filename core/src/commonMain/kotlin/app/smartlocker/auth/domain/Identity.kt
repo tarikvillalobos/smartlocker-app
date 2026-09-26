@@ -18,3 +18,10 @@ object InputValidation {
     fun cpf(value: String): Boolean {
         val digits = value.filter(Char::isDigit)
         if (digits.length != 11 || digits.toSet().size == 1) return false
+        return (9..10).all { length ->
+            val sum = (0 until length).sumOf { digits[it].digitToInt() * (length + 1 - it) }
+            val check = (sum * 10 % 11).let { if (it == 10) 0 else it }
+            check == digits[length].digitToInt()
+        }
+    }
+}
