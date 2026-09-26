@@ -79,4 +79,24 @@ class ControllerTest {
         runCurrent()
         response.complete(profile.copy(email = "changed@example.test"))
         runCurrent()
+        assertNull(controller.state.value.session)
+        assertNull(controller.state.value.profile)
+        assertNull(controller.state.value.contactChallenge)
+        assertEquals(Route.HOME, controller.state.value.route)
+    }
+    @Test fun correctingContactDiscardsEarlierLoginResponse() = runTest {
+        val clock = TestClock()
+        val demo = DemoRepository(MemoryStorage(), MemorySecure(), Brands.smartLocker, clock, 0)
+        val response = CompletableDeferred<Challenge>()
+        val repository = object : LockerRepository by demo {
+            override suspend fun requestLogin(request: LoginRequest) = response.await()
+        }
+        val controller = AppController(AppConfiguration(Brands.smartLocker, Environment.DEMO), repository, clock, backgroundScope)
+        controller.state.first { it.initialized }
+        controller.login(demoLogin)
+        runCurrent()
+        controller.correctContact()
+        response.complete(demo.requestLogin(demoLogin))
+        runCurrent()
+        assertNull(controller.state.value.challenge)
 }
