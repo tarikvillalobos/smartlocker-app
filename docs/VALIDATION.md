@@ -147,6 +147,11 @@ O plist contém `CADisableMinimumFrameDurationOnPhone=true`, exigido pelo Compos
 | Linux DEB | Duas marcas geradas em CI | Instalação e abertura do DEB não ensaiadas |
 | iOS simulador | Build, UI e Keychain aprovados | Não é IPA para aparelho físico |
 
+A [execução Verify SmartLocker 36241258299](https://github.com/tarikvillalobos/smartlocker-app/actions/runs/36241258299)
+passou em **todos os sete jobs**: OpenAPI, auditoria, Android, iOS e desktop em
+macOS/Windows/Linux. Os jobs desktop incluem os cofres nativos separados.
+Consulte a revisão de cada execução antes de atribuir esse resultado a commits
+posteriores; novas alterações locais não são validadas retroativamente pela CI.
 
 O lint do AGP utilizado falhou ao enumerar a plataforma global Android 37.0.
 A validação passou com cópia isolada dos componentes Android 35, sem modificar
