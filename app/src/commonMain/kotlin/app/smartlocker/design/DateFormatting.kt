@@ -6,6 +6,7 @@ import kotlinx.datetime.number
 import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Instant
 
+val LocalDisplayTimeZone = staticCompositionLocalOf<TimeZone> { TimeZone.UTC }
 
 @Composable
 fun MembershipTimeZone(timeZoneId: String?, content: @Composable () -> Unit) {
