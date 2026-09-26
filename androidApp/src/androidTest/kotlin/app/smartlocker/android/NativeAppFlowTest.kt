@@ -125,6 +125,26 @@ class NativeAppFlowTest {
                 insets.getInsets(WindowInsetsCompat.Type.ime()).bottom, bounds.width(), bounds.height(),
                 systemBars.top, systemBars.left, systemBars.right)
         }
+        return result
+    }
+
+    private data class KeyboardWindow(
+        val imeVisible: Boolean, val imeBottom: Int, val width: Int, val height: Int,
+        val safeTop: Int, val safeLeft: Int, val safeRight: Int,
+    )
+    private data class FieldImeSample(
+        val window: KeyboardWindow, val clipped: Rect, val complete: Rect, val focused: Boolean,
+    ) {
+        fun isFullyVisible(): Boolean {
+            val tolerance = 1f
+            return focused && window.imeVisible && window.imeBottom > 0 &&
+                complete.width > 0 && complete.height > 0 &&
+                kotlin.math.abs(clipped.left - complete.left) <= tolerance &&
+                kotlin.math.abs(clipped.top - complete.top) <= tolerance &&
+                kotlin.math.abs(clipped.right - complete.right) <= tolerance &&
+                kotlin.math.abs(clipped.bottom - complete.bottom) <= tolerance &&
+                complete.top >= window.safeTop - tolerance &&
+                complete.left >= window.safeLeft - tolerance &&
     private fun login() {
         ui.onNodeWithText("Preencher dados de demonstração").performScrollTo().performClick()
         ui.onNodeWithText("Receber código por SMS").performScrollTo().performClick()
