@@ -317,6 +317,11 @@ class AppController(
     fun preferences(value: CommunicationPreferences) = execute {
         val generation = epoch
         val profile = repository.updatePreferences(value)
+        if (generation == epoch) {
+            val reload = acceptProfile(profile)
+            mutable.update { it.copy(feedback = "Preferências salvas.") }
+            if (reload) refreshAfterMutation(generation, profile)
+        }
     }
     fun contact(value: String, channel: LoginChannel) = execute { generation ->
         val challenge = repository.requestContactChange(value, channel)
