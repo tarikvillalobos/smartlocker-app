@@ -151,6 +151,12 @@ class ApiSessionClient(
 
     private suspend fun expired(): Nothing {
         stored = null
+        try { store.write(null) }
+        catch (cancelled: CancellationException) { throw cancelled }
+        catch (_: Exception) {
+            throw AppFailure(FailureKind.EXPIRED_SESSION,
+                "Sua sessão expirou. Não foi possível remover a sessão protegida deste dispositivo. Entre novamente.")
+        }
         throw AppFailure(FailureKind.EXPIRED_SESSION, "Sua sessão expirou. Entre novamente.")
     }
 
