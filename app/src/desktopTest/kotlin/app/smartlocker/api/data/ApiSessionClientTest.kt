@@ -358,3 +358,23 @@ class ApiSessionClientTest {
             clock.time += 6_000
             client.request("/newer")
             release.complete(Unit)
+            val failure = older.await().exceptionOrNull()
+            assertTrue(failure is CancellationException || (failure is AppFailure && failure.kind != FailureKind.EXPIRED_SESSION))
+            assertEquals(1, olderCalls)
+            assertTrue(client.currentSession()?.token == "access-new")
+            assertTrue(secure.values.isNotEmpty())
+        } finally { release.complete(Unit); client.close() }
+    }
+
+    private fun TestScope.client(
+        clock: TestClock, secure: SecureStorage = MemorySecure(), baseUrl: String = BASE,
+        handler: suspend MockRequestHandleScope.(HttpRequestData) -> HttpResponseData,
+    ): ApiSessionClient {
+        val engine = MockEngine(MockEngineConfig().apply {
+            dispatcher = StandardTestDispatcher(testScheduler)
+            addHandler(handler)
+        })
+        return ApiSessionClient(HttpTransport(engine, baseUrl), Brands.smartLocker, baseUrl, secure, clock)
+    }
+
+    private fun HttpRequestData.path() = url.encodedPath.removePrefix("/v1")
