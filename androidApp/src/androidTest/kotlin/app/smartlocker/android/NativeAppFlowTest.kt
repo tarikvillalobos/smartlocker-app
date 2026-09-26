@@ -58,3 +58,23 @@ class NativeAppFlowTest {
         ui.onNodeWithText("Copiar código").assertDoesNotExist()
     }
 
+    @Test fun closingAndReopeningTheActivityRestoresSessionUntilLogout() {
+        login()
+        scenario.close()
+        scenario = ActivityScenario.launch(MainActivity::class.java)
+        waitForText("Copiar código")
+        ui.onNodeWithText("Preencher dados de demonstração").assertDoesNotExist()
+        ui.onNodeWithText("Perfil").performClick()
+        ui.onNodeWithText("Sair").performScrollTo().performClick()
+        waitForText("Preencher dados de demonstração")
+        scenario.close()
+        scenario = ActivityScenario.launch(MainActivity::class.java)
+        waitForText("Preencher dados de demonstração")
+        ui.onNodeWithText("Copiar código").assertDoesNotExist()
+    }
+
+    private fun login() {
+        ui.onNodeWithText("Preencher dados de demonstração").performScrollTo().performClick()
+        ui.onNodeWithText("Receber código por SMS").performScrollTo().performClick()
+        waitForText("Código de 6 dígitos")
+        ui.onNodeWithText("Código de 6 dígitos").performScrollTo().performTextInput("123456")
