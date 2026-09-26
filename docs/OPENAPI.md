@@ -38,3 +38,23 @@ para esse papel; esta minuta define apenas o cliente de usuários finais.
    que o fornecedor entregou a mensagem. Cada desafio tem propósito explícito.
 5. Datas RFC 3339 UTC com sufixo Z; o vínculo fornece o fuso IANA para apresentação.
    Métricas usam intervalo [since, until), com padrão de 30 dias quando omitido.
+   A média usa segundos e só inclui retirada física com dados completos.
+6. Paginação usa snapshot estável e cursor opaco vinculado a marca, usuário,
+   vínculo, filtro e ordenação. Expiração retorna 410 e exige nova primeira página.
+   Métricas e unreadCount são globais ao vínculo, nunca derivadas da página.
+7. Credenciais só são devolvidas quando ativas; QR usa o payload exato do servidor.
+   `revalidateAfter` determina quando ocultar o código sem nova consulta. Manual
+   revoga código; desfazer jamais reativa; físico confirmado consome a credencial.
+8. Mutações especificadas exigem UUID Idempotency-Key, retenção proposta de 24h.
+   Antes do login, namespace estável é marca+operação+caminho+chave; o digest do
+   corpo é comparado após lookup, permitindo 409 para chave reutilizada com outro
+   corpo. Depois do login, o escopo também inclui o sujeito autenticado.
+   Replay de tokens não prolonga prazos nem restaura sessão revogada/substituída.
+   Seu cache exige criptografia em repouso, acesso restrito, ausência de logs e
+   remoção do material secreto ao expirar/revogar a sessão ou vencer o TTL.
+9. If-Match com a versão da encomenda protege marcação/reversão concorrentes.
+   Uma reprodução idempotente é resolvida antes de comparar If-Match.
+10. Erros usam application/problem+json, código estável e requestId seguro.
+    Nenhum corpo contém logs internos ou eco de CPF, contatos, OTP ou credenciais.
+11. Preferência, permissão do sistema e disponibilidade de canal são independentes.
+    Push leva apenas IDs para navegação; o app reautentica e consulta a API.
