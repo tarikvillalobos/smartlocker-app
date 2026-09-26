@@ -72,6 +72,26 @@ class NativeSecureStorageTest {
                 assertSecret(original, ChunkedSecureStore(DesktopSecureStorage(directory), namespace).read())
                 chunks.write(replacement)
                 assertSecret(replacement, ChunkedSecureStore(DesktopSecureStorage(directory), namespace).read())
+                assertNoPlaintext(directory, original, replacement)
+                chunks.write(null)
+                chunks.write(null)
+                assertNull(ChunkedSecureStore(DesktopSecureStorage(directory), namespace).read())
+                for (key in touched) assertNull(storage.read(key), "Every isolated chunk and manifest must be removed")
+            } catch (problem: Throwable) {
+                failure = problem
+                throw problem
+            } finally {
+                // Track keys before writes, including writes whose native acknowledgement might be lost.
+                // Attempt every isolated cleanup even if one item fails; never enumerate a user's vault.
+                for (key in listOf("$namespace.head") + touched) {
+                    try { storage.write(key, null) }
+                    catch (cleanup: Throwable) {
+                        if (failure == null) failure = cleanup else failure.addSuppressed(cleanup)
+                    }
+                }
+                failure?.let { throw it }
+            }
+        }
     private fun fixture(test: suspend (DesktopSecureStorage, Path, String, String) -> Unit) {
         assumeTrue("Native vault tests require explicit opt-in", System.getenv("SMARTLOCKER_NATIVE_SECURE_TESTS") == "1")
         val directory = Files.createTempDirectory("smartlocker-vault-test-")
