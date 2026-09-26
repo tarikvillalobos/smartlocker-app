@@ -22,6 +22,7 @@ class AppRuntime(val platform: PlatformServices, initial: AppConfiguration? = nu
     private val initialConfig = (initial ?: AppConfiguration(
         Brands.all.find { it.id == platform.local.read("brand") } ?: Brands.smartLocker,
         platform.local.read("environment")?.let { runCatching { Environment.valueOf(it) }.getOrNull() } ?: Environment.PRODUCTION,
+    )).copy(apiBaseUrl = endpoint)
     private val mutable = MutableStateFlow(create(initialConfig))
     val state = mutable.asStateFlow()
 
