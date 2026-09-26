@@ -58,3 +58,23 @@ class DemoRepositoryTest {
         assertFailsWith<AppFailure> { repo.undoManual("home", "demo-1") }
     }
     @Test fun isolatesMembershipBrandAndUnrelatedRecipients() = runTest {
+        val repo = repository()
+        repo.signIn()
+        assertFailsWith<AppFailure> { repo.parcel("office", "demo-0") }
+        assertFailsWith<AppFailure> { repo.parcels("unknown", ParcelFilter.ALL, null) }
+        assertTrue(repo.parcels("home", ParcelFilter.ALL, null).items.all { it.recipientId == "ana" })
+        assertNull(repository(Brands.aurora).restoreSession())
+    }
+    @Test fun preferenceAndContactChangesPersistAfterVerification() = runTest {
+        val repo = repository()
+        repo.signIn()
+        repo.updatePreferences(CommunicationPreferences(false, false, true))
+        val challenge = repo.requestContactChange("new@example.test", app.smartlocker.auth.domain.LoginChannel.EMAIL)
+        assertEquals("ana@example.test", repo.profile().email)
+        repo.verifyContactChange(challenge.id, "123456")
+        val second = repository()
+        second.restoreSession()
+        assertEquals("new@example.test", second.profile().email)
+        assertTrue(second.profile().preferences.whatsapp)
+        assertFalse(second.profile().preferences.inApp)
+    }
