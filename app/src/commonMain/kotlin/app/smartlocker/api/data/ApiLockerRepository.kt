@@ -138,3 +138,23 @@ class ApiLockerRepository(private val session: ApiSessionClient) : LockerReposit
             .toDomain(expectedPurpose = "contact_change")
     }
 
+    override suspend fun resendContactChange(challengeId: String, contact: String, channel: LoginChannel): Challenge {
+        val user = currentUser()
+        // Contact/channel come from the original challenge on the server, never from the edited form.
+        return request<ApiChallenge>(user, "/me/contact-challenges/${identifier(challengeId)}/resend", HttpMethod.Post)
+            .toDomain(expectedPurpose = "contact_change")
+    }
+
+    override suspend fun verifyContactChange(challengeId: String, code: String): Profile {
+        val user = currentUser()
+        val body = buildJsonObject { put("code", otp(code)) }.toString()
+        val response = request<ApiProfile>(user, "/me/contact-challenges/${identifier(challengeId)}/verify", HttpMethod.Post, body)
+        return profile(response, response.memberships, user)
+    }
+
+    override suspend fun notifications(locationId: String): List<DeliveryNotice> = noticePage(locationId).items
+
+    override suspend fun noticePage(locationId: String, cursor: String?): NoticePage {
+        val user = currentUser()
+        membership(locationId, user)
+        val response = request<ApiNoticePage>(user, pagePath("${membershipPath(locationId)}/notifications", cursor))
