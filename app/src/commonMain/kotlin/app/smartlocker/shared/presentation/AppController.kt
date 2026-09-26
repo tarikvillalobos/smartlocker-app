@@ -105,6 +105,7 @@ class AppController(
         val history = LoadHistory(repository)(location, context.filter)
         val page = history.page
         val pending = repository.parcels(location, ParcelFilter.WAITING, null).items
+        val statistics = history.statistics
         val notices = repository.notifications(location)
         val issues = if (configuration.brand.features.issues) repository.issues(location) else emptyList()
         val selectedId = context.selectedId ?: pending.firstOrNull()?.id
