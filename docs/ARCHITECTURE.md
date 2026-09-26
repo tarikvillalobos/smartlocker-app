@@ -96,6 +96,12 @@ Unidades podem estar ausentes para lockers avulsos.
 Avisos e solicitações expõem páginas explícitas. O estado conserva as páginas
 carregadas e os próximos cursores; `unreadCount` vem do total fornecido pelo
 servidor. Capacidades restringem navegação e comandos, sem conceder autorização.
+Erros HTTP usam mensagens locais escolhidas por status/código, sem exibir o corpo
+remoto nem registrar tokens, CPF, OTP ou credenciais de retirada.
+
+O backend é desenvolvido em outro projeto. Testes com MockEngine exercitam o
+cliente e não comprovam a implementação, os fornecedores ou o hardware externos.
+Registro e recebimento nativo de push ainda não fazem parte dessa integração.
 
 ## Extensão
 
