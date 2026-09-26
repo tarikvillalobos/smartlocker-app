@@ -25,7 +25,6 @@ class AppController(
         scope.launch {
             while (isActive) {
                 delay(1_000)
-                mutable.update { it.copy(now = clock.now()) }
             }
         }
         execute { generation ->
