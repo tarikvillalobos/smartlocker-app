@@ -1,5 +1,9 @@
 # Validação executada
 
+Registro de 26/09/2026 em macOS Apple Silicon, JDK 21, Gradle 8.14.3 e Xcode 26.2,
+com verificações adicionais nos runners Windows e Linux do GitHub Actions.
+A API operacional não existe. A OpenAPI é uma proposta autorizada; nenhuma
+verificação abaixo prova integração com backend, fornecedor ou hardware externo.
 
 ## Testes compartilhados e desktop
 
