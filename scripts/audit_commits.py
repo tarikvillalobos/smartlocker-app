@@ -18,3 +18,5 @@ for commit in commits:
     if not added.isdigit() or not removed.isdigit() or int(added) + int(removed) > 20:
         sys.exit(f"{commit}: unsupported binary or more than twenty changed lines in {path}")
     if git("show", "-s", "--format=%ae", commit) != "tarik.villalobos@gmail.com":
+        sys.exit(f"{commit}: unexpected author email")
+print(f"Validated {len(commits)} implementation commits: one text file, at most 20 changed lines each.")
