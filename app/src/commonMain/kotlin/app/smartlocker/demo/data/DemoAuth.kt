@@ -58,3 +58,18 @@ class DemoAuth(private val secure: SecureStorage, brandId: String, private val c
             logout()
             return null
         }
+        return Session(stored.token, stored.userId, stored.expiresAt).also { session = it }
+    }
+
+    fun requireSession() {
+        if (session == null || session!!.expiresAt <= clock.now()) {
+            throw AppFailure(FailureKind.EXPIRED_SESSION, "Sua sessão expirou. Entre novamente.")
+        }
+    }
+
+    suspend fun logout() {
+        session = null
+        challenge = null
+        secure.write(key, null)
+    }
+}
