@@ -18,3 +18,23 @@ fun AuxiliaryScreen(state: AppState, controller: AppController, platform: Platfo
     when (state.route) {
         Route.NOTICES -> {
             PageTitle("Notificações", { controller.navigate(Route.HOME) })
+            if (state.notices.isEmpty()) EmptyState("Nenhum aviso", "As notificações das suas entregas aparecerão aqui.")
+            state.notices.forEach { notice ->
+                Panel {
+                    Text(notice.title, style = MaterialTheme.typography.titleMedium)
+                    Text(dateTime(notice.createdAt), color = Tokens.secondary)
+                    Text(if (notice.read) "Lida" else "Não lida", style = MaterialTheme.typography.labelSmall)
+                    TextButton({ controller.notice(notice) }) { Text("Ver encomenda") }
+                }
+            }
+        }
+        Route.LOCATIONS -> {
+            PageTitle("Meus locais", { controller.navigate(Route.PROFILE) })
+            state.profile?.memberships?.forEach { member ->
+                Panel {
+                    Text(member.location, style = MaterialTheme.typography.titleMedium)
+                    Text(member.unit)
+                    PrimaryButton(if (member.id == state.membershipId) "Local selecionado" else "Selecionar local",
+                        member.id != state.membershipId) { controller.membership(member.id) }
+                }
+            }
