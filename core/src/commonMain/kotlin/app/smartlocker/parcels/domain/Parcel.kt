@@ -58,3 +58,7 @@ fun calculateStatistics(completeData: List<Parcel>, since: Long, until: Long): S
     val period = completeData.filter { it.depositedAt in since..until }
     val durations = period.mapNotNull { parcel ->
         parcel.collectedAt?.takeIf { it in parcel.depositedAt..until }
+            ?.minus(parcel.depositedAt)
+    }
+    return Statistics(period.size, durations.takeIf { it.isNotEmpty() }?.average()?.toLong(), since, until)
+}
