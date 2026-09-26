@@ -1689,7 +1689,6 @@ components:
           type: "string"
           maxLength: 200
         unitId:
-          $ref: "#/components/schemas/Identifier"
         unitLabel:
           type: "string"
           maxLength: 200
