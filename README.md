@@ -28,6 +28,7 @@ compilação, testes e integração real.
 - Android SDK 35, com `ANDROID_HOME` configurado.
 - macOS e Xcode para iOS; XcodeGen para gerar o projeto.
 - Linux: ambiente gráfico para executar a UI; `secret-tool` e Secret Service
+  desbloqueado para persistir sessões. Há testes em memória e testes nativos isolados.
 - Windows 10 ou posterior, macOS compatível com a JVM ou Linux com bibliotecas
   gráficas suportadas pelo Compose Desktop.
 
