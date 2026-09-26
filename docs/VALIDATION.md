@@ -87,6 +87,10 @@ Resultado local total: 26 testes JVM/Compose e 1 teste XCTest aprovados.
 A CI configura auditoria de commits, desktop em macOS/Windows/Linux, build/lint
 Android e build do simulador iOS. A primeira execução encontrou o pacote Android
 obsoleto `tools`; os jobs agora especificam os pacotes suportados e isolam o SDK.
+Na [execução 36238579513](https://github.com/tarikvillalobos/smartlocker-app/actions/runs/36238579513),
+commit `f3497c4`, Android, auditoria e testes desktop nos três sistemas passaram.
+Os ajustes seguintes de marca/paleta e do teste XCTest foram novamente validados
+localmente. Consulte os Actions da revisão desejada para o estado do último push.
 
 A auditoria exige um arquivo textual e até 20 linhas alteradas por commit de
 implementação, com autoria `tarik.villalobos@gmail.com`. O README inicial é
