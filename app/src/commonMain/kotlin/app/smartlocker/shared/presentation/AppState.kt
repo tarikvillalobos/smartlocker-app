@@ -9,6 +9,7 @@ enum class Route { HOME, HISTORY, PROFILE, DETAIL, NOTICES, ISSUES, RESIDENTS, C
 
 data class AppState(
     val initialized: Boolean = false,
+    val remoteBrand: Brand? = null,
     val session: Session? = null,
     val profile: Profile? = null,
     val membershipId: String = "home",
