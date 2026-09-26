@@ -58,3 +58,23 @@ class DemoRepository(
     }
     override suspend fun parcels(locationId: String, filter: ParcelFilter, cursor: String?): ParcelPage {
         check()
+        return parcels.page(locationId, filter, cursor)
+    }
+    override suspend fun parcel(locationId: String, id: String): Parcel {
+        check()
+        return parcels.get(locationId, id)
+    }
+    override suspend fun statistics(locationId: String): Statistics {
+        check()
+        return calculateStatistics(parcels.all(locationId), clock.now() - 30 * 86_400_000L, clock.now())
+    }
+    override suspend fun credential(locationId: String, parcelId: String): PickupCredential {
+        check()
+        return parcels.credential(locationId, parcelId)
+    }
+    override suspend fun markCollected(locationId: String, parcelId: String): Parcel = mutex.withLock {
+        check()
+        if (!brand.features.manualPickup) throw AppFailure(FailureKind.DENIED, "Marcação manual não habilitada.")
+        parcels.mark(locationId, parcelId, false)
+    }
+    override suspend fun undoManual(locationId: String, parcelId: String): Parcel = mutex.withLock {
