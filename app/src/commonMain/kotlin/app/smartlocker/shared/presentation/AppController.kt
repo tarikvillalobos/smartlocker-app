@@ -153,6 +153,7 @@ class AppController(
         val selectedId = context.selectedId ?: pending.firstOrNull()?.id
         val detail = readDetail(location, selectedId)
         if (generation != epoch) return
+        mutable.update { normalizeCapabilities(it.copy(profile = profile, membershipId = location, parcels = page.items,
             pending = pending, recent = recent, nextCursor = page.nextCursor, statistics = statistics, notices = notices.items,
             noticeCursor = notices.nextCursor, serverUnreadCount = notices.unreadCount,
             issues = issues.items, issueCursor = issues.nextCursor,
