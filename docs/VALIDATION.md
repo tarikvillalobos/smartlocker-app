@@ -21,6 +21,7 @@ sua execução separada e os sistemas verificados estão registrados abaixo.
 | ControllerActionTest | 3 | Confirmação de ações, avisos e concorrência |
 | UseCaseTest | 1 | Credencial rejeitada quando pertence a outra encomenda |
 | HttpAndQrTest | 4 | HTTP controlado, erros, cancelamento e decodificação do QR |
+| HttpTransportLimitTest | 5 | Corpo limitado a 2 MB, interrupção do stream e cancelamento |
 | ResponsiveUiTest | 2 | Matriz visual e percurso de login, cópia e retirada manual |
 | AdaptiveScenarioTest | 2 | Redimensionamento, paisagem, campos e conteúdo extremo |
 | ApiMappingTest | 9 | Estados, unidade opcional, métricas e capacidades |
