@@ -194,7 +194,6 @@ class AppController(
             feedback("Aguarde a operação em andamento para abrir os moradores.")
             return
         }
-        val features = configuration.brand.features
         if ((route == Route.RESIDENTS && !features.residents) ||
             (route == Route.ISSUES && !features.issues) ||
             (route == Route.CONTACT && !features.contactEditing) ||
