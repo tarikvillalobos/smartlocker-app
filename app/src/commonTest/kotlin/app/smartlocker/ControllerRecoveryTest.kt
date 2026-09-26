@@ -38,3 +38,23 @@ class ControllerRecoveryTest {
         demo.signIn()
         val controller = AppController(AppConfiguration(Brands.smartLocker, Environment.DEMO), demo, clock, backgroundScope)
         val initial = controller.state.first { it.profile != null }.recent
+        assertTrue(initial.any { it.status == ParcelStatus.WAITING })
+        for (filter in listOf(ParcelFilter.COLLECTED, ParcelFilter.WAITING)) {
+            controller.filter(filter)
+            controller.state.first { !it.busy && it.parcels.isNotEmpty() }
+            controller.navigate(Route.HOME)
+            assertEquals(initial, controller.state.value.recent)
+            assertEquals(filter, controller.state.value.filter)
+        }
+    }
+
+    @Test fun expiredSessionRestoresTheSafeDestinationAndMembership() = runTest {
+        val clock = TestClock()
+        val demo = DemoRepository(MemoryStorage(), MemorySecure(), Brands.smartLocker, clock, 0)
+        demo.signIn()
+        val controller = AppController(AppConfiguration(Brands.smartLocker, Environment.DEMO), demo, clock, backgroundScope)
+        controller.state.first { it.profile != null }
+        controller.membership("office")
+        controller.state.first { !it.busy && it.membershipId == "office" }
+        controller.select("demo-8")
+        controller.state.first { !it.busy && it.selected?.id == "demo-8" }
