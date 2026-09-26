@@ -42,7 +42,6 @@ class AppController(
             if (generation != epoch) return@launch
             mutable.update { it.copy(busy = true, error = null) }
             try {
-                block()
             } catch (error: CancellationException) {
                 throw error
             } catch (error: Exception) {
