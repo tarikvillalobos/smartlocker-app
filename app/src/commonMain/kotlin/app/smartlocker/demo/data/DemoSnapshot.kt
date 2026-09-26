@@ -78,3 +78,8 @@ fun seed(now: Long): DemoSnapshot {
             collected = if (index in 2..7) arrival + (index + 1) * 1_800_000 else null,
             credential = if (index in 2..7) "CONSUMED" else "ACTIVE",
         )
+    }
+    return DemoSnapshot(parcels, parcels.take(2).map {
+        NoticeRecord("notice-${it.id}", it.id, "Sua encomenda chegou", it.notified!!)
+    })
+}
