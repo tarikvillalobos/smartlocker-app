@@ -68,3 +68,8 @@ compose.desktop {
         }
     }
 }
+
+compose.resources {
+    packageOfResClass = "app.smartlocker.resources"
+    publicResClass = true
+}
