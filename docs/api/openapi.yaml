@@ -1898,3 +1898,23 @@ components:
           type: "string"
           enum:
             - "deposited"
+            - "notification_available"
+            - "manual_pickup"
+            - "manual_pickup_reverted"
+            - "physical_pickup"
+        at:
+          $ref: "#/components/schemas/Instant"
+      required:
+        - "type"
+        - "at"
+    Parcel:
+      type: "object"
+      properties:
+        id:
+          $ref: "#/components/schemas/Identifier"
+        recipientId:
+          $ref: "#/components/schemas/Identifier"
+        membershipId:
+          $ref: "#/components/schemas/Identifier"
+        carrier:
+          type: "string"
