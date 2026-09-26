@@ -53,6 +53,8 @@ reabertura da Activity e logout; reabertura de Activity não simula morte do pro
 ## iOS
 
 Gere recursos e ícones antes de gerar o projeto Xcode. `python3 scripts/test_ios.py`
+executa Keychain e UI em um iPhone temporário, removido ao final; `--device UUID`
+usa um simulador existente e o preserva. `--output artifacts/nova-execucao` preserva resultados anteriores.
 
 O ZIP de CI contém `SmartLocker.app` para simulador arm64. Não é um IPA para iPhone.
 Distribuição em aparelho exige equipe Apple, provisioning e exportação assinada.
