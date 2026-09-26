@@ -18,6 +18,9 @@ enum class FailureKind {
     VALIDATION, NETWORK, EXPIRED_SESSION, DENIED, EXPIRED_CODE,
     INVALID_CODE, ATTEMPTS_EXCEEDED, UNAVAILABLE, CONFLICT, MISSING_CONTRACT,
 }
+class AppFailure(
+    val kind: FailureKind, override val message: String, val retryAt: Long? = null,
+) : Exception(message)
 
 interface LockerRepository {
     suspend fun requestLogin(request: LoginRequest): Challenge
