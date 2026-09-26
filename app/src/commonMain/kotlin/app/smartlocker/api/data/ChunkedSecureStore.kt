@@ -118,3 +118,18 @@ class ChunkedSecureStore(private val storage: SecureStorage, private val key: St
     private fun checksum(bytes: ByteArray): String {
         var crc = -1
         for (byte in bytes) {
+            crc = crc xor (byte.toInt() and 255)
+            repeat(8) { crc = (crc ushr 1) xor if ((crc and 1) == 1) 0xedb88320.toInt() else 0 }
+        }
+        return (crc xor -1).toUInt().toString(16).padStart(8, '0')
+    }
+
+    private fun failure() = AppFailure(FailureKind.UNAVAILABLE, "Não foi possível acessar a sessão protegida.")
+
+    private companion object {
+        const val MAX_BYTES = 256 * 1024
+        const val CHUNK_SIZE = 1500
+        val UUID = Regex("[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}")
+        val CHECKSUM = Regex("[0-9a-f]{8}")
+    }
+}
