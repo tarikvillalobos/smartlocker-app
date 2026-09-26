@@ -20,4 +20,5 @@ dependencies {
     implementation(project(":app"))
     implementation(project(":core"))
     implementation(libs.activity)
+    implementation(libs.window)
 }
