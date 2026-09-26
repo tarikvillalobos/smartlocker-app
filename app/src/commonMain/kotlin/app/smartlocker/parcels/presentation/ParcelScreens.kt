@@ -118,3 +118,9 @@ fun DetailScreen(state: AppState, controller: AppController, platform: PlatformS
 }
 
 @Composable
+private fun TimelineStep(title: String, time: String, done: Boolean) {
+    Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
+        AppIcon(if (done) Symbol.CHECK else Symbol.HISTORY, tint = if (done) Tokens.successText else Tokens.secondary)
+        Column { Text(title, style = MaterialTheme.typography.labelMedium); Text(time, style = MaterialTheme.typography.bodySmall, color = Tokens.secondary) }
+    }
+}
