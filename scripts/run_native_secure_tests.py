@@ -10,8 +10,6 @@ import tempfile
 
 def gradle(environment):
     return subprocess.call(
-        [sys.executable, "scripts/gradle.py", ":app:desktopTest", "--tests",
-         "app.smartlocker.NativeSecureStorageTest", "--no-daemon"],
         env=environment,
     )
 
