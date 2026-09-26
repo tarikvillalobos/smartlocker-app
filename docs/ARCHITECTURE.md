@@ -76,7 +76,6 @@ um conflito não provoca atualização de versão e repetição automática.
 
 Indicadores usam a coleção completa dos últimos 30 dias no repositório demo,
 independentemente da página exibida. Média inclui apenas timestamps físicos
-válidos. Datas são apresentadas explicitamente em America/Sao_Paulo.
 
 ## Extensão
 
