@@ -410,6 +410,26 @@ class ApiSessionClientTest {
             try {
                 client.verifyLogin("challenge-1", "123456")
                 secure.failClearing = true
+                val failure = assertFailsWith<AppFailure> { client.logout() }
+                assertEquals(FailureKind.UNAVAILABLE, failure.kind)
+                assertEquals(1, revocations)
+                assertNull(client.currentSession())
+                assertTrue(secure.memory.values.keys.any { it.endsWith(".head") })
+                assertFalse(failure.message.contains("Sessão removida deste dispositivo"))
+                if (remoteFails) assertTrue(failure.message.contains("nem confirmar a revogação remota"))
+                else assertTrue(failure.message.contains("revogada no servidor, mas não foi possível remover"))
+            } finally {
+                secure.failClearing = false
+                try { client.logout() } finally { client.close() }
+            }
+        }
+    }
+
+    private class DeleteFailureSecure : SecureStorage {
+        val memory = MemorySecure()
+        var failClearing = false
+        override suspend fun read(key: String): String? = memory.read(key)
+        override suspend fun write(key: String, value: String?) {
     private fun TestScope.client(
         clock: TestClock, secure: SecureStorage = MemorySecure(), baseUrl: String = BASE,
         handler: suspend MockRequestHandleScope.(HttpRequestData) -> HttpResponseData,
