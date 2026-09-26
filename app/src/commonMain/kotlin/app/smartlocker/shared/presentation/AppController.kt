@@ -216,8 +216,6 @@ class AppController(
         val generation = epoch
         val message = action(context)
         if (generation == epoch) {
-            load(generation)
-            if (generation == epoch) feedback(message)
         }
     }
     fun preferences(value: CommunicationPreferences) = execute {
