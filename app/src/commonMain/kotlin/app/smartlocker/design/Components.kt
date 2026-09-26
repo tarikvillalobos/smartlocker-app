@@ -85,7 +85,6 @@ fun Metadata(label: String, value: String, light: Boolean = false) {
 fun dateTime(timestamp: Long): String {
     val value = Instant.fromEpochMilliseconds(timestamp).toLocalDateTime(TimeZone.of("America/Sao_Paulo"))
     fun Int.pad() = toString().padStart(2, '0')
-    return "${value.dayOfMonth.pad()}/${value.monthNumber.pad()} · ${value.hour.pad()}:${value.minute.pad()}"
 }
 fun durationLabel(millis: Long?): String {
     if (millis == null) return "Sem dados"
