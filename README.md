@@ -3,7 +3,6 @@
 Aplicativo white-label para usuários de armários inteligentes, em Kotlin
 Multiplatform e Compose Multiplatform, com interface em português brasileiro.
 
-The app allows users to manage packages delivered to smart lockers, check package status, and access the information required to collect their deliveries.
 
 ## Features
 
