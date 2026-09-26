@@ -2238,3 +2238,23 @@ components:
         message:
           type: "string"
           minLength: 10
+          maxLength: 2000
+      required:
+        - "parcelId"
+        - "message"
+      additionalProperties: false
+      examples:
+        -
+          parcelId: "parcel-example"
+          message: "A porta indicada não abriu durante a retirada."
+    SupportIssue:
+      type: "object"
+      properties:
+        id:
+          $ref: "#/components/schemas/Identifier"
+        reference:
+          type: "string"
+          maxLength: 100
+        membershipId:
+          $ref: "#/components/schemas/Identifier"
+        parcelId:
