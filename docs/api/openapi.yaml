@@ -2038,3 +2038,23 @@ components:
               collectedAt:
                 $ref: "#/components/schemas/Instant"
               credentialStatus:
+                const: "consumed"
+    PageInfo:
+      type: "object"
+      properties:
+        nextCursor:
+          type:
+            - "string"
+            - "null"
+          maxLength: 2048
+        snapshotAt:
+          $ref: "#/components/schemas/Instant"
+        snapshotExpiresAt:
+          $ref: "#/components/schemas/Instant"
+      required:
+        - "nextCursor"
+        - "snapshotAt"
+        - "snapshotExpiresAt"
+      description: |-
+        Cursor opaco vinculado ao usuário, marca, vínculo, filtro, ordenação e snapshot. Uma página não é um total
+        global. Cursor expirado retorna 410 CURSOR_EXPIRED; reiniciar a primeira página.
