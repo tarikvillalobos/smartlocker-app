@@ -10,3 +10,4 @@ artifacts/
 app/src/commonMain/composeResources/font/*.ttf
 iosApp/*.xcodeproj/
 iosApp/Pods/
+iosApp/GeneratedAssets.xcassets/
