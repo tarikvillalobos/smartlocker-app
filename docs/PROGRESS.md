@@ -6,9 +6,6 @@
 - [x] Escopo atualizado: somente app e API externa; sem servidor próprio.
 - [ ] Domínio e repositórios demonstrativos locais.
 - [ ] Cinco telas Compose e fluxos auxiliares.
-- [ ] Plataformas, armazenamento seguro e white-label.
-- [ ] Builds, testes funcionais e validação visual adaptativa.
-- [ ] Documentação e auditoria final do histórico.
 
 O backend local será explicitamente demonstrativo. Integrações reais
 necessitam contratos e credenciais dos fornecedores.
