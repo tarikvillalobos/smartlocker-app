@@ -98,3 +98,18 @@ class ControllerActionTest {
         runCurrent()
         val loggedOut = controller.state.value
         assertNull(loggedOut.session)
+        assertNull(loggedOut.profile)
+        assertNull(loggedOut.selected)
+        assertNull(loggedOut.credential)
+        assertNull(loggedOut.feedback)
+        assertTrue(loggedOut.parcels.isEmpty())
+        assertFalse(loggedOut.busy)
+        assertEquals(Route.HOME, loggedOut.route)
+    }
+
+    private suspend fun TestScope.start(repository: LockerRepository, clock: TestClock): AppController {
+        val controller = AppController(AppConfiguration(Brands.smartLocker, Environment.DEMO), repository, clock, backgroundScope)
+        controller.state.first { it.profile != null && !it.busy }
+        return controller
+    }
+}
