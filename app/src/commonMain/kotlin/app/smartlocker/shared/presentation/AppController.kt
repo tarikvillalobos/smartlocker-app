@@ -73,6 +73,7 @@ class AppController(
     fun login(request: LoginRequest) = execute { generation ->
         lastLogin = request
         val challenge = repository.requestLogin(request)
+        if (generation != epoch) return@execute
         mutable.update { it.copy(challenge = challenge) }
     }
     fun resend() { lastLogin?.let(::login) }
