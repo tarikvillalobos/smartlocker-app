@@ -52,6 +52,14 @@ class HttpTransport(engine: HttpClientEngine, private val baseUrl: String) : Aut
                     contentType(ContentType.Application.Json)
                     setBody(jsonBody)
                 }
+            }.execute { response ->
+                val buffer = Buffer()
+                // Read one extra byte to detect overflow without buffering the remaining response.
+                response.bodyAsChannel().readTo(buffer, 2_000_001L)
+                if (buffer.size > 2_000_000L)
+                    throw AppFailure(FailureKind.UNAVAILABLE, "Resposta da API excedeu o limite permitido.")
+                val body = buffer.readByteArray().decodeToString()
+                if (response.status.value in 200..299) body else throw apiFailure(response.status.value, body)
             }
             val body = response.bodyAsText()
             if (body.length > 2_000_000) throw AppFailure(FailureKind.UNAVAILABLE, "Resposta da API excedeu o limite permitido.")
