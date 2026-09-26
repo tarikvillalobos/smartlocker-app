@@ -175,6 +175,25 @@ class AppController(
             contactChallenge = if (allowed.contactEditing) value.contactChallenge else null)
     }
 
+    /** A confirmed profile can revoke the selected membership while a mutation is completing. */
+    private fun acceptProfile(profile: Profile): Boolean {
+        val keepsMembership = profile.memberships.any { it.id == state.value.membershipId }
+        val nextMembership = profile.memberships.firstOrNull()?.id.orEmpty()
+        mutable.update { current ->
+            val updated = if (keepsMembership) current.copy(profile = profile) else current.copy(
+                profile = profile, membershipId = nextMembership, route = Route.PROFILE,
+                selectedId = null, selected = null, credential = null, credentialMessage = null,
+                parcels = emptyList(), pending = emptyList(), recent = emptyList(), notices = emptyList(),
+                issues = emptyList(), residents = emptyList(), statistics = null, nextCursor = null,
+                noticeCursor = null, serverUnreadCount = null, issueCursor = null, lastUpdated = null,
+                stale = nextMembership.isNotEmpty(),
+                error = if (nextMembership.isEmpty()) "Nenhum local autorizado para esta conta." else null,
+            )
+            normalizeCapabilities(updated)
+        }
+        return !keepsMembership && nextMembership.isNotEmpty()
+    }
+
     private data class Detail(val parcel: Parcel?, val credential: PickupCredential?, val message: String?)
     private suspend fun readDetail(location: String, selectedId: String?): Detail {
         val selected = selectedId?.let { id ->
