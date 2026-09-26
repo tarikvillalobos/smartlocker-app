@@ -91,6 +91,10 @@ para esse papel; esta minuta define apenas o cliente de usuários finais.
   combinam com as opções da marca e do vínculo.
 
 Os endpoints de negócio usados pela UI estão implementados no repositório HTTP.
+O contrato também descreve push e consulta individual de solicitação; registro
+push nativo não foi integrado, e a UI acompanha solicitações pela lista paginada.
+A definição desses endpoints no YAML não significa que todos tenham um fluxo
+nativo ativo no aplicativo.
 
 ## Lacunas e escolhas que exigem homologação
 
