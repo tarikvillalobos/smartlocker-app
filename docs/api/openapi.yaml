@@ -238,3 +238,23 @@ paths:
           $ref: "#/components/responses/Problem"
         "422":
           $ref: "#/components/responses/Problem"
+        "429":
+          $ref: "#/components/responses/Problem"
+        "503":
+          $ref: "#/components/responses/Problem"
+        default:
+          $ref: "#/components/responses/Problem"
+  "/auth/refresh":
+    post:
+      operationId: "refreshSession"
+      tags:
+        - "Authentication"
+      summary: "Renovar e rotacionar a sessão"
+      description: |-
+        Rotacionar refresh token a cada sucesso. A sessão e a marca devem corresponder ao token. O cliente serializa
+        renovações; reuso com chave diferente após consumo revoga a família e retorna 401 REFRESH_REVOKED. Mesma chave
+        e corpo reproduzem a mesma rotação durante a janela de idempotência, sem revogar a família.
+      security: []
+      parameters:
+        -
+          $ref: "#/components/parameters/BrandId"
