@@ -78,3 +78,23 @@ private fun PreferenceRow(label: String, value: Boolean, enabled: Boolean, onCha
 fun ContactScreen(state: AppState, controller: AppController) {
     var contact by rememberSaveable { mutableStateOf("") }
     var code by rememberSaveable { mutableStateOf("") }
+    var email by rememberSaveable { mutableStateOf(true) }
+    PageTitle("Editar contato", { controller.navigate(Route.PROFILE) })
+    Text("O novo contato só será salvo depois da verificação.", color = Tokens.secondary)
+    if (state.contactChallenge == null) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Switch(email, { email = it; contact = "" })
+            Text(if (email) "E-mail" else "Celular")
+        }
+        OutlinedTextField(contact, { contact = it }, Modifier.fillMaxWidth(), label = { Text("Novo contato") }, shape = Tokens.control)
+        PrimaryButton("Verificar novo contato", !state.busy) {
+            controller.contact(contact, if (email) LoginChannel.EMAIL else LoginChannel.SMS)
+        }
+    } else {
+        if (controller.configuration.environment == Environment.DEMO) Text("Código demonstrativo: 123456")
+        OutlinedTextField(code, { code = it.filter(Char::isDigit).take(6) }, Modifier.fillMaxWidth(), label = { Text("Código recebido") })
+        PrimaryButton("Confirmar alteração", !state.busy && code.length == 6) { controller.verifyContact(code) }
+        val seconds = ((state.contactChallenge.resendAt - state.now + 999) / 1000).coerceAtLeast(0)
+        TextButton({ controller.contact(contact, if (email) LoginChannel.EMAIL else LoginChannel.SMS) }, enabled = !state.busy && seconds == 0L) {
+            Text(if (seconds > 0) "Reenviar em ${seconds}s" else "Reenviar código")
+        }
