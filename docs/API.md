@@ -10,6 +10,7 @@ A existência do cliente e dos testes com respostas controladas não comprova
 conectividade com homologação, entrega de mensagens nem operação de lockers reais.
 Consulte [OPENAPI.md](OPENAPI.md) e os registros datados de [VALIDATION.md](VALIDATION.md).
 
+## Implementado no aplicativo
 
 O transporte não presume Bearer, cookies ou renovação automática. Cabe ao futuro
 adaptador fornecer exatamente o método, caminho e autenticação documentados.
