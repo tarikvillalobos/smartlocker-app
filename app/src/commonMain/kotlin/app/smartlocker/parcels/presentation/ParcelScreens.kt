@@ -62,8 +62,6 @@ fun RecentParcels(state: AppState, controller: AppController) {
         Text("Recentes", Modifier.weight(1f), style = MaterialTheme.typography.titleMedium)
         TextButton({ controller.navigate(Route.HISTORY) }) { Text("Ver histórico") }
     }
-    state.parcels.take(4).forEach { item -> ParcelRow(item) { controller.select(item.id) } }
-    if (state.parcels.isEmpty()) Text("Suas próximas entregas aparecerão aqui.", color = Tokens.secondary)
 }
 
 @OptIn(ExperimentalLayoutApi::class)
