@@ -61,7 +61,6 @@ fun ProfileScreen(state: AppState, controller: AppController, platform: Platform
     }
     Panel {
         MenuRow("Meus locais e unidades", Symbol.LOCATION) { controller.navigate(Route.LOCATIONS) }
-        if (brand.features.residents) MenuRow("Moradores da unidade", Symbol.USER) { controller.navigate(Route.RESIDENTS) }
         MenuRow("Ajuda e suporte", Symbol.HELP) { controller.navigate(Route.SUPPORT) }
         MenuRow("Termos e privacidade", Symbol.HELP) { controller.navigate(Route.LEGAL) }
         if (controller.configuration.environment == Environment.DEMO) MenuRow("Cenários de demonstração", Symbol.PARCEL) {
