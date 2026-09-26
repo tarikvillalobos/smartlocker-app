@@ -38,3 +38,23 @@ class AndroidSecureStorageTest {
         val first = preferences.getString(key, null)!!
         assertFalse(first.contains(secret))
         assertFalse(String(Base64.decode(first, Base64.NO_WRAP)).contains(secret))
+        assertEquals(secret, AndroidSecureStorage(context).read(key))
+        storage.write(key, secret)
+        assertNotEquals(first, preferences.getString(key, null))
+        assertEquals(secret, storage.read(key))
+    }
+
+    @Test fun ciphertextCannotBeCopiedToAnotherScopeBecauseTheKeyIsAuthenticated() = runBlocking {
+        val source = "$prefix.brand-a.user-a.session"
+        val destination = "$prefix.brand-b.user-b.session"
+        storage.write(source, "source-session")
+        preferences.edit().putString(destination, preferences.getString(source, null)).commit()
+        val failure = runCatching { storage.read(destination) }.exceptionOrNull()
+        assertTrue(failure is AppFailure)
+        assertEquals(FailureKind.EXPIRED_SESSION, (failure as AppFailure).kind)
+        assertFalse(preferences.contains(destination))
+        assertEquals("source-session", storage.read(source))
+    }
+
+    @Test fun alteredAuthenticationTagFailsClosedAndOnlyRemovesCorruptRecord() = runBlocking {
+        val key = "$prefix.corrupt-session"
