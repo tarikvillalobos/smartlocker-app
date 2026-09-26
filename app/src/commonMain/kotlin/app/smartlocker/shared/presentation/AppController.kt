@@ -153,8 +153,6 @@ class AppController(
         val detail = readDetail(location, selectedId)
         if (generation != epoch) return
         mutable.update { it.copy(profile = profile, membershipId = location, parcels = page.items,
-            pending = pending, recent = recent, nextCursor = page.nextCursor, statistics = statistics, notices = notices,
-            issues = issues, selectedId = detail.parcel?.id, selected = detail.parcel, credential = detail.credential,
             credentialMessage = detail.message, stale = false, now = clock.now(), lastUpdated = clock.now()) }
     }
 
