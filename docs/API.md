@@ -47,6 +47,3 @@ O domínio de exemplo acima não oferece serviço. Substitua-o pelo ambiente rea
 A configuração do endpoint não muda uma preferência de demonstração já salva;
 na tela de login, selecione “Usar API externa” quando necessário.
 
-O servidor externo deverá emitir, consumir, revogar e autorizar credenciais;
-nenhuma validação no app prova a segurança interna desse servidor. Os QR Codes
-demonstrativos começam com `SMARTLOCKER-DEMO` e não funcionam em lockers reais.
