@@ -12,6 +12,9 @@ import java.io.InputStream
 import java.nio.file.AtomicMoveNotSupportedException
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.NoSuchFileException
+import java.nio.file.StandardCopyOption.ATOMIC_MOVE
+import java.nio.file.StandardCopyOption.REPLACE_EXISTING
 import java.util.Base64
 
 /** Keychain on macOS, DPAPI on Windows, Secret Service on Linux. Never plaintext fallback. */
