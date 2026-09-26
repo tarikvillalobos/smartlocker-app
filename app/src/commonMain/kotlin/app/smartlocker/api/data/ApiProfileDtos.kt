@@ -118,3 +118,23 @@ data class ApiProfile(
     val name: String,
     val phone: String?,
     val phoneVerifiedAt: String?,
+    val email: String?,
+    val emailVerifiedAt: String?,
+    val preferences: ApiCommunicationPreferences,
+    val memberships: List<ApiMembership>,
+) {
+    fun toDomain(memberships: List<Membership>): Profile {
+        apiUniqueIds(this.memberships.map { it.id })
+        apiUniqueIds(memberships.map { it.id })
+        phone?.let { apiRequire(Regex("^\\+[1-9][0-9]{7,14}$").matches(it)) }
+        email?.let(::validateApiEmail)
+        phoneVerifiedAt?.let { apiRequire(phone != null); apiInstant(it) }
+        emailVerifiedAt?.let { apiRequire(email != null); apiInstant(it) }
+        return Profile(apiId(id), apiText(name, 200), phone.orEmpty(), email.orEmpty(), memberships, preferences.toDomain())
+    }
+}
+
+internal fun validateApiEmail(value: String) {
+    apiRequire(value.length <= 254 && Regex("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$").matches(value))
+}
+
