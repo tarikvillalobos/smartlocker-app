@@ -153,12 +153,6 @@ macOS/Windows/Linux. Os jobs desktop incluem os cofres nativos separados.
 Consulte a revisão de cada execução antes de atribuir esse resultado a commits
 posteriores; novas alterações locais não são validadas retroativamente pela CI.
 
-obsoleto `tools`; os jobs agora especificam os pacotes suportados e isolam o SDK.
-Na [execução 36238579513](https://github.com/tarikvillalobos/smartlocker-app/actions/runs/36238579513),
-commit `f3497c4`, todos os seis jobs passaram: Android, iOS, auditoria e desktop
-nos três sistemas.
-Os ajustes seguintes de marca/paleta, foco com teclado e do XCTest foram validados
-localmente. Consulte os Actions da revisão desejada para o estado do último push.
 
 A auditoria exige um arquivo textual e até 20 linhas alteradas por commit de
 implementação, com autoria `tarik.villalobos@gmail.com`. O README inicial é
