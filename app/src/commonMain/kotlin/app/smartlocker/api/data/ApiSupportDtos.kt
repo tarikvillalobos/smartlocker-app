@@ -18,3 +18,23 @@ data class ApiDeliveryNotice(
     fun toDomain(): DeliveryNotice {
         apiId(membershipId)
         val created = apiInstant(createdAt)
+        readAt?.let { apiRequire(apiInstant(it) >= created) }
+        return DeliveryNotice(apiId(id), apiId(parcelId), apiText(title, 200), created, readAt != null)
+    }
+}
+
+@Serializable
+data class ApiNoticePage(val items: List<ApiDeliveryNotice>, val pageInfo: ApiPageInfo, val unreadCount: Int) {
+    fun toDomain(): NoticePage {
+        apiUniqueIds(items.map { it.id })
+        apiRequire(unreadCount >= 0 && unreadCount >= items.count { it.readAt == null })
+        return NoticePage(items.map { it.toDomain() }, pageInfo.validatedCursor(), unreadCount)
+    }
+}
+
+@Serializable
+data class ApiIssueRequest(val parcelId: String, val message: String)
+
+@Serializable
+data class ApiSupportIssue(
+    val id: String,
