@@ -1818,3 +1818,23 @@ components:
             properties:
               contact:
                 pattern: "^\\+55[1-9][0-9]9[0-9]{8}$"
+          else:
+            properties:
+              contact:
+                format: "email"
+                pattern: "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$"
+      examples:
+        -
+          contact: "new@example.test"
+          channel: "email"
+    Recipient:
+      type: "object"
+      properties:
+        id:
+          $ref: "#/components/schemas/Identifier"
+        name:
+          type: "string"
+          maxLength: 200
+        relationship:
+          type: "string"
+          maxLength: 100
