@@ -78,3 +78,23 @@ class ApiSessionClientTest {
         val refresh = "refresh-" + "R".repeat(8000)
         val first = client(clock, secure) { respond(tokens(clock, access = access, refresh = refresh), headers = JSON) }
         first.verifyLogin("challenge-1", "123456")
+        first.close()
+        assertTrue(secure.values.isNotEmpty())
+        assertTrue(secure.values.values.all { it.length <= 1500 && !it.contains(access) && !it.contains(refresh) })
+        var requests = 0
+        val restored = client(clock, secure) { requests++; error("Restore must use the vault") }
+        try {
+            assertTrue(restored.restoreSession()?.token == access)
+            assertEquals("ana", restored.currentSession()?.userId)
+            assertEquals(0, requests)
+        } finally { restored.close() }
+    }
+
+    @Test fun concurrentReadsShareOneRotationAndBothUseTheNewAccessToken() = runTest {
+        val clock = TestClock()
+        val entered = CompletableDeferred<Unit>()
+        val release = CompletableDeferred<Unit>()
+        var rotations = 0
+        val authorizations = mutableListOf<String?>()
+        val client = client(clock) { request ->
+            when (request.path()) {
