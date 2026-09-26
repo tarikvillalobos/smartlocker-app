@@ -1438,3 +1438,23 @@ components:
       description: "Segredo: não registrar em logs, métricas, URLs ou cache não seguro."
     Challenge:
       type: "object"
+      properties:
+        id:
+          $ref: "#/components/schemas/Identifier"
+        expiresAt:
+          $ref: "#/components/schemas/Instant"
+        resendAt:
+          $ref: "#/components/schemas/Instant"
+        channel:
+          type: "string"
+          enum:
+            - "sms"
+            - "email"
+        maskedDestination:
+          type: "string"
+          maxLength: 254
+        codeLength:
+          type: "integer"
+          const: 6
+        purpose:
+          type: "string"
