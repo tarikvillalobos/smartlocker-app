@@ -222,6 +222,7 @@ class AppController(
     }
     fun notice(value: DeliveryNotice) = execute { generation ->
         repository.markNoticeRead(state.value.membershipId, value.id)
+        if (generation != epoch) return@execute
         select(value.parcelId)
     }
     fun demoScenario(value: DemoScenario) = execute {
