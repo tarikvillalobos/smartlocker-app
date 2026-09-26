@@ -22,6 +22,18 @@ fun ProfileScreen(state: AppState, controller: AppController, platform: Platform
     var permission by remember { mutableStateOf("Consultar permissão do dispositivo") }
     PageTitle("Perfil")
     Panel(dark = true) {
+        Row(horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
+            Surface(shape = androidx.compose.foundation.shape.CircleShape, color = Color(brand.primary)) {
+                Text(profile.name.split(" ").take(2).joinToString("") { it.take(1) },
+                    Modifier.padding(16.dp), style = MaterialTheme.typography.titleLarge, color = Color.White)
+            }
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(profile.name, style = MaterialTheme.typography.titleLarge)
+                Text(brand.name, color = Tokens.soft, style = MaterialTheme.typography.bodySmall)
+                Text("${state.membership?.location} · ${state.membership?.unit}", color = Tokens.soft,
+                    style = MaterialTheme.typography.bodySmall)
+            }
+        }
     }
     Text("DADOS DE CONTATO", style = MaterialTheme.typography.labelMedium, color = Tokens.secondary)
     Panel {
