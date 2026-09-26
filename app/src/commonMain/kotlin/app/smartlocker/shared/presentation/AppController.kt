@@ -18,6 +18,7 @@ class AppController(
     val state = mutable.asStateFlow()
     private var epoch = 0
     private var readJob: Job? = null
+    private var actionJob: Job? = null
     private var previousUser: String? = null
     private var lastLogin: LoginRequest? = null
 
