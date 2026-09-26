@@ -47,7 +47,6 @@ class AppController(
         mutable.update { it.copy(busy = true, error = null) }
         val job = scope.launch(start = CoroutineStart.LAZY) {
             if (generation != epoch) return@launch
-            mutable.update { it.copy(busy = true, error = null) }
             try {
                 block(generation)
             } catch (error: CancellationException) {
