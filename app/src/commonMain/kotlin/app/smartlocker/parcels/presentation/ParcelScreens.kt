@@ -108,6 +108,7 @@ fun DetailScreen(state: AppState, controller: AppController, platform: PlatformS
     Panel {
         Text("Linha do tempo", style = MaterialTheme.typography.titleMedium)
         TimelineStep("Depositada", dateTime(parcel.depositedAt), true)
+        TimelineStep("Aviso disponibilizado", parcel.notifiedAt?.let { dateTime(it) } ?: "Ainda não informado", parcel.notifiedAt != null)
         TimelineStep(if (parcel.status == ParcelStatus.MANUAL) "Informada por você" else "Retirada física",
             (parcel.collectedAt ?: parcel.manualAt)?.let(::dateTime) ?: "Aguardando retirada", parcel.status != ParcelStatus.WAITING)
     }
