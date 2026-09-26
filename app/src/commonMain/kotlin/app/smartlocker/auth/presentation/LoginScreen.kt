@@ -43,7 +43,6 @@ fun LoginScreen(controller: AppController, state: AppState, legal: () -> Unit) {
         Column(Modifier.padding(24.dp), verticalArrangement = Arrangement.spacedBy(18.dp)) {
             if (state.challenge == null) {
                 OutlinedTextField(contact, { contact = it }, label = { Text(if (email) "E-mail" else "Celular") },
-                    modifier = Modifier.fillMaxWidth(), singleLine = true, shape = Tokens.control,
                     placeholder = { Text(if (email) "voce@exemplo.com" else "(11) 90000-0000") },
                     keyboardOptions = KeyboardOptions(keyboardType = if (email) KeyboardType.Email else KeyboardType.Phone))
                 OutlinedTextField(cpf, { cpf = it.take(14) }, label = { Text("CPF") },
