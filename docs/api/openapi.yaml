@@ -1598,3 +1598,23 @@ components:
       properties:
         manualPickup:
           type: "boolean"
+        undoManualPickup:
+          type: "boolean"
+        contactEditing:
+          type: "boolean"
+        recipients:
+          type: "boolean"
+        supportIssues:
+          type: "boolean"
+        pushRegistration:
+          type: "boolean"
+      required:
+        - "manualPickup"
+        - "undoManualPickup"
+        - "contactEditing"
+        - "recipients"
+        - "supportIssues"
+        - "pushRegistration"
+    Capabilities:
+      type: "object"
+      properties:
