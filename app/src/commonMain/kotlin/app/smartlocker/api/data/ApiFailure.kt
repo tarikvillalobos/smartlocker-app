@@ -19,6 +19,7 @@ internal fun apiFailure(status: Int, body: String): AppFailure {
         code in setOf("CREDENTIAL_EXPIRED", "CREDENTIAL_REVOKED", "CREDENTIAL_CONSUMED") ->
             FailureKind.EXPIRED_CODE to "Este código não está mais disponível. Atualize a encomenda."
         code == "LOCKER_UNAVAILABLE" -> FailureKind.UNAVAILABLE to "O armário está indisponível. Tente novamente mais tarde."
+        code == "OPERATION_IN_PROGRESS" -> FailureKind.UNAVAILABLE to "Operação ainda em andamento. Aguarde antes de tentar novamente."
         code == "CURSOR_EXPIRED" -> FailureKind.CONFLICT to "A consulta expirou. Atualize a lista para continuar."
         code == "FEATURE_UNAVAILABLE" -> FailureKind.DENIED to "Este recurso não está disponível neste local."
         status in setOf(403, 404) -> FailureKind.DENIED to "Recurso indisponível ou sem autorização de acesso."
