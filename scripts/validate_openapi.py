@@ -38,3 +38,23 @@ def visit(value):
         for child in value.values(): visit(child)
     elif isinstance(value, list):
         for child in value: visit(child)
+visit(spec)
+for name, item in spec['paths'].items():
+    for method in ['get', 'post', 'put', 'patch', 'delete']:
+        if method in item:
+            operation = item[method]
+            operations.append(operation['operationId'])
+            parameters = item.get('parameters', []) + operation.get('parameters', [])
+            declared = set()
+            for parameter in parameters:
+                if '$ref' in parameter:
+                    parameter = spec['components']['parameters'][parameter['$ref'].split('/')[-1]]
+                if parameter.get('in') == 'path': declared.add(parameter['name'])
+            assert declared == set(re.findall(r'\{([^}]+)\}', name)), f'Path parameters: {method} {name}'
+assert len(operations) == len(set(operations)), 'Duplicate operationId'
+examples = 0
+for name, schema in spec['components']['schemas'].items():
+    Draft202012Validator.check_schema(schema)
+    root = {'$ref': '#/components/schemas/' + name, 'components': spec['components']}
+    validator = Draft202012Validator(root, format_checker=FormatChecker())
+    for example in schema.get('examples', []):
