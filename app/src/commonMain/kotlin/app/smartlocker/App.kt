@@ -119,7 +119,6 @@ fun ScrollPage(maxWidth: Int = 600, content: @Composable ColumnScope.() -> Unit)
     Column(Modifier.widthIn(max = maxWidth.dp).fillMaxWidth().fillMaxHeight()
         .verticalScroll(rememberScrollState()).padding(Tokens.gutter),
         verticalArrangement = Arrangement.spacedBy(Tokens.gap), content = content)
-    }
 }
 
 @OptIn(ExperimentalLayoutApi::class)
