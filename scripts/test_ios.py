@@ -25,4 +25,5 @@ subprocess.run([
     "xcodebuild", "-project", "iosApp/SmartLocker.xcodeproj", "-scheme", "SmartLocker",
     "-configuration", "Debug", "-destination", f"platform=iOS Simulator,id={device}",
     "-derivedDataPath", str(output), "-resultBundlePath", str(output.with_suffix(".xcresult")),
+    "-parallel-testing-enabled", "NO", "CODE_SIGNING_ALLOWED=YES", "CODE_SIGN_IDENTITY=-", "test",
 ], cwd=root, check=True)
