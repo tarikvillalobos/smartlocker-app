@@ -111,3 +111,12 @@ compose.resources {
 tasks.withType<org.gradle.api.tasks.testing.Test>().configureEach {
     inputs.property("nativeVaultTests", providers.environmentVariable("SMARTLOCKER_NATIVE_SECURE_TESTS").getOrElse("0"))
 }
+
+val desktopTests = tasks.named<org.gradle.api.tasks.testing.Test>("desktopTest")
+tasks.register<org.gradle.api.tasks.testing.Test>("desktopNativeVaultTest") {
+    dependsOn("desktopTestClasses")
+    testClassesDirs = desktopTests.get().testClassesDirs
+    classpath = desktopTests.get().classpath
+    filter { includeTestsMatching("app.smartlocker.NativeSecureStorageTest") }
+    environment("SMARTLOCKER_NATIVE_SECURE_TESTS", "1")
+}
