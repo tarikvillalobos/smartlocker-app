@@ -47,6 +47,7 @@ fun LoginScreen(controller: AppController, state: AppState, legal: () -> Unit) {
                     placeholder = { Text(if (email) "voce@exemplo.com" else "(11) 90000-0000") },
                     keyboardOptions = KeyboardOptions(keyboardType = if (email) KeyboardType.Email else KeyboardType.Phone))
                 OutlinedTextField(cpf, { cpf = it.take(14) }, label = { Text("CPF") },
+                    modifier = Modifier.fillMaxWidth().keepAboveKeyboard(), singleLine = true, shape = Tokens.control,
                     placeholder = { Text("000.000.000-00") }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number))
                 PrimaryButton(if (email) "Receber código por e-mail" else "Receber código por SMS", !state.busy) {
                     controller.login(LoginRequest(contact.trim(), cpf, if (email) LoginChannel.EMAIL else LoginChannel.SMS))
