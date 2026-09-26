@@ -147,12 +147,6 @@ O plist contém `CADisableMinimumFrameDurationOnPhone=true`, exigido pelo Compos
 | Linux DEB | Duas marcas geradas em CI | Instalação e abertura do DEB não ensaiadas |
 | iOS simulador | Build, UI e Keychain aprovados | Não é IPA para aparelho físico |
 
-Android: `:androidApp:assembleDebug :androidApp:lintDebug`, com **0 erros e
-2 avisos** sobre atualização do SDK 35. APK em
-`androidApp/build/outputs/apk/debug/androidApp-debug.apk`.
-O APK abriu sem crash no emulador Google APIs Android 34 arm64, aproximadamente
-411 × 731 dp (1080 × 1920 px, 420 dpi). Login/teclado/rotação Android não foram
-exercitados nesse smoke test. O AVD temporário foi encerrado após a verificação.
 
 O lint do AGP utilizado falhou ao enumerar a plataforma global Android 37.0.
 A validação passou com cópia isolada dos componentes Android 35, sem modificar
