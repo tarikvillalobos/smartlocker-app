@@ -349,6 +349,8 @@ class AppController(
         load()
     }
     fun deposit() = execute { generation ->
+        val demo = repository as? DemoControls ?: return@execute
+        demo.deposit(state.value.membershipId)
         if (generation != epoch) return@execute
         load()
         if (generation == epoch) feedback("Depósito fictício criado. Veja a nova encomenda e o aviso.")
