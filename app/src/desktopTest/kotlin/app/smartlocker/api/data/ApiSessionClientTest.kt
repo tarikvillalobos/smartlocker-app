@@ -291,6 +291,8 @@ class ApiSessionClientTest {
                 keys += request.headers["Idempotency-Key"]
                 assertEquals("\"3\"", request.headers[HttpHeaders.IfMatch])
                 if (keys.size == 1) throw IOException("Synthetic lost response")
+                if (keys.size == 2) respond("""{"status":409,"code":"OPERATION_IN_PROGRESS"}""", HttpStatusCode.Conflict, PROBLEM)
+                else respond("{}", headers = JSON)
             }
         }
         try {
