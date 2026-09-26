@@ -2078,3 +2078,23 @@ components:
         until:
           $ref: "#/components/schemas/Instant"
         generatedAt:
+          $ref: "#/components/schemas/Instant"
+        complete:
+          type: "boolean"
+        totalReceived:
+          type:
+            - "integer"
+            - "null"
+          minimum: 0
+        physicalPickupCount:
+          type:
+            - "integer"
+            - "null"
+          minimum: 0
+        averagePickupDurationSeconds:
+          type:
+            - "number"
+            - "null"
+          minimum: 0
+      required:
+        - "since"
