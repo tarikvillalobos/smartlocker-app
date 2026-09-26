@@ -255,9 +255,6 @@ class AppController(
         mutable.update { it.copy(profile = profile, contactChallenge = null, contactValue = "", route = Route.PROFILE,
             feedback = "Contato verificado e atualizado.") }
     }
-    fun report(message: String) = mutateSelected {
-        val issue = repository.reportIssue(it.membershipId, it.selectedId!!, message)
-        "Solicitação ${issue.id} recebida. Acompanhe nesta tela."
     }
     fun notice(value: DeliveryNotice) = execute { generation ->
         repository.markNoticeRead(state.value.membershipId, value.id)
