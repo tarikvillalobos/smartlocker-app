@@ -21,6 +21,7 @@ Nenhum corpo de resposta de erro é exibido diretamente nem registrado em logs.
 
 ## Informações necessárias para integrar
 
+1. Aprovação ou revisão da minuta pelo fornecedor que implementará a API.
 2. URLs de homologação e produção por cliente/ambiente.
 3. Mecanismo de login por SMS/e-mail, desafio, verificação, expiração e reenvio.
 4. Formato e armazenamento de sessão, renovação, logout e revogação.
