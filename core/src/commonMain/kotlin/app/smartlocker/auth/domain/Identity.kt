@@ -1,6 +1,10 @@
 package app.smartlocker.auth.domain
 
 data class Session(val token: String, val userId: String, val expiresAt: Long)
+data class Challenge(
+    val id: String, val expiresAt: Long, val resendAt: Long,
+    val maskedDestination: String? = null, val channel: LoginChannel? = null,
+)
 enum class LoginChannel { SMS, EMAIL }
 data class LoginRequest(val contact: String, val cpf: String, val channel: LoginChannel)
 
