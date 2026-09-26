@@ -18,6 +18,8 @@ data class RuntimeState(val configuration: AppConfiguration, val controller: App
 /** Composition root: explicitly chooses one implementation; production has no demo fallback. */
 class AppRuntime(val platform: PlatformServices, initial: AppConfiguration? = null) {
     private val clock = AppClock { Clock.System.now().toEpochMilliseconds() }
+    private val endpoint = initial?.apiBaseUrl ?: platform.apiBaseUrl
+    private val initialConfig = (initial ?: AppConfiguration(
         Brands.all.find { it.id == platform.local.read("brand") } ?: Brands.smartLocker,
         platform.local.read("environment")?.let { runCatching { Environment.valueOf(it) }.getOrNull() } ?: Environment.PRODUCTION,
     )
