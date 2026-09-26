@@ -14,7 +14,6 @@ import app.smartlocker.shared.presentation.*
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun HomeScreen(state: AppState, controller: AppController, platform: PlatformServices) {
     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
         Column(Modifier.weight(1f)) {
             Text("Olá, ${state.profile?.name?.substringBefore(' ') ?: ""}", color = Tokens.secondary)
