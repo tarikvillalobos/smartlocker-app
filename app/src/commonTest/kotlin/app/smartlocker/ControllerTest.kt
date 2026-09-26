@@ -38,3 +38,23 @@ class ControllerTest {
         val controller = AppController(AppConfiguration(Brands.smartLocker, Environment.DEMO), repository, clock, backgroundScope)
         controller.state.first { it.profile != null }
         controller.select("demo-0")
+        advanceTimeBy(12)
+        controller.membership("office")
+        val current = controller.state.first { !it.busy && it.membershipId == "office" && it.lastUpdated != null }
+        assertTrue(current.parcels.all { it.locationId == "office" })
+        assertNotEquals("demo-0", current.credential?.parcelId)
+    }
+    @Test fun isolatesCacheAndProtectsDisabledNavigation() = runTest {
+        val cache = ScopedCache(MemoryStorage())
+        val scope = CacheScope("a", "u", "home")
+        cache.write(scope, "safe metadata")
+        assertNull(cache.read(scope.copy(user = "other")))
+        assertNull(cache.read(scope.copy(brand = "b")))
+        assertNull(cache.read(scope.copy(membership = "office")))
+        val clock = TestClock()
+        val controller = AppController(AppConfiguration(Brands.aurora, Environment.DEMO),
+            DemoRepository(MemoryStorage(), MemorySecure(), Brands.aurora, clock, 0), clock, backgroundScope)
+        controller.navigate(Route.RESIDENTS)
+        assertEquals(Route.HOME, controller.state.value.route)
+    }
+}
