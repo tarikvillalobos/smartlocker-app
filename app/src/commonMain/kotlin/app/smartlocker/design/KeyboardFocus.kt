@@ -18,3 +18,12 @@ fun Modifier.keepAboveKeyboard(): Modifier {
     val requester = remember { BringIntoViewRequester() }
     var focused by remember { mutableStateOf(false) }
     val keyboardBottom = WindowInsets.ime.getBottom(LocalDensity.current)
+    val windowSize = LocalWindowInfo.current.containerSize
+    LaunchedEffect(focused, keyboardBottom, windowSize) {
+        if (focused && keyboardBottom > 0) {
+            withFrameNanos { }
+            requester.bringIntoView()
+        }
+    }
+    return bringIntoViewRequester(requester).onFocusChanged { focused = it.hasFocus }
+}
