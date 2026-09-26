@@ -98,3 +98,20 @@ implementação ou segurança do servidor futuro.
 - JSON Schema: schemas válidos e oito exemplos válidos.
 - 21 casos positivos/negativos de schema: CPF, telefone, canal, e-mail, OTP,
   preferências, métricas incompletas, UTC e combinação plataforma/provedor push.
+- Máximo de 137 caracteres por linha; sem whitespace final.
+- Nenhuma chamada a backend/hardware, nenhum teste de homologação.
+
+## Executar a validação
+
+```sh
+python3 -m venv .tools/openapi
+.tools/openapi/bin/python -m pip install -r scripts/openapi-requirements.txt
+.tools/openapi/bin/python scripts/validate_openapi.py
+.tools/openapi/bin/python scripts/check_openapi_cases.py
+```
+
+No Windows, use `.tools/openapi/Scripts/python.exe`. A CI executa as mesmas
+verificações em cada push. Não é preciso iniciar nem acessar um servidor.
+
+Referências normativas: [OpenAPI 3.1.1](https://spec.openapis.org/oas/v3.1.1.html)
+e [Problem Details RFC 9457](https://www.rfc-editor.org/rfc/rfc9457.html).
