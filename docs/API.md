@@ -1,9 +1,5 @@
 # Integração com a API externa
 
-Nenhum contrato foi encontrado no repositório ou nos anexos. A documentação e a
-URL de homologação foram solicitadas. Não foram inventados endpoints, DTOs de
-produção, parâmetros de autenticação, renovação, idempotência ou payloads reais.
-Não há projeto de servidor, banco de servidor, migrações ou simulador HTTP.
 
 ## Implementado independentemente do contrato
 
