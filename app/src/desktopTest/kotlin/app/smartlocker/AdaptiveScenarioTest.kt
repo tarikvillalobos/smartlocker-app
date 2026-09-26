@@ -38,3 +38,23 @@ class AdaptiveScenarioTest {
             waitUntil(10_000) { controller.state.value.challenge != null }
             runOnIdle { controller.verify("123456") }
             waitUntil(15_000) { controller.state.value.profile != null && !controller.state.value.busy }
+            runOnIdle { controller.filter(ParcelFilter.WAITING); controller.select("demo-1") }
+            waitUntil(15_000) { controller.state.value.selected?.id == "demo-1" && !controller.state.value.busy }
+            for ((w, h) in listOf(1200 to 840, 600 to 840, 320 to 600, 840 to 390, 390 to 400)) {
+                runOnIdle { width = w; height = h }
+                waitForIdle()
+                assertEquals(Route.DETAIL, controller.state.value.route)
+                assertEquals(ParcelFilter.WAITING, controller.state.value.filter)
+                assertEquals("demo-1", controller.state.value.selected?.id)
+                onNodeWithText("Já retirei a encomenda").performScrollTo().assertIsDisplayed()
+                capture("resize-$w-$h")
+            }
+        } finally { runOnIdle { runtime.close() } }
+    }
+
+    @Test fun longManyAndEmptyContentRemainUsableWithDoubleFontScale() = runDesktopComposeUiTest(width = 390, height = 960) {
+        val runtime = AppRuntime(TestPlatform(), AppConfiguration(Brands.smartLocker, Environment.DEMO))
+        val controller = runtime.state.value.controller
+        try {
+            setContent { CompositionLocalProvider(LocalDensity provides Density(1f, 2f)) { SmartLockerApp(runtime) } }
+            waitUntil(10_000) { controller.state.value.initialized }
