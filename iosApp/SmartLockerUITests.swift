@@ -28,6 +28,7 @@ final class SmartLockerUITests: XCTestCase {
         reveal(phone, in: app)
         phone.tap()
         XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 5))
+        waitUntilUncovered(phone, in: app)
         XCTAssertEqual(phone.value as? String, "11987654321")
         let portrait = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
         portrait.name = "Portrait with keyboard"
