@@ -18,3 +18,20 @@ final class SmartLockerUITests: XCTestCase {
         landscape.name = "Landscape with keyboard"
         landscape.lifetime = .keepAlways
         add(landscape)
+        XCUIDevice.shared.orientation = .portrait
+        XCTAssertEqual(phone.value as? String, "11987654321")
+        let portrait = XCTAttachment(screenshot: app.screenshot())
+        portrait.name = "Portrait with keyboard"
+        portrait.lifetime = .keepAlways
+        add(portrait)
+        app.terminate()
+    }
+
+    private func reveal(_ element: XCUIElement, in app: XCUIApplication) {
+        for _ in 0..<6 {
+            if element.isHittable { return }
+            app.swipeUp()
+        }
+        XCTAssertTrue(element.isHittable)
+    }
+}
