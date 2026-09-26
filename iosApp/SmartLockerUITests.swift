@@ -3,6 +3,8 @@ import XCTest
 final class SmartLockerUITests: XCTestCase {
     func testStartupKeyboardAndRotationPreserveContact() {
         continueAfterFailure = false
+        XCUIDevice.shared.orientation = .portrait
+        defer { XCUIDevice.shared.orientation = .portrait }
         let app = XCUIApplication()
         app.launchArguments = ["-smartlocker.environment", "DEMO"]
         app.launch()
