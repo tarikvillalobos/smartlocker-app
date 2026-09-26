@@ -58,3 +58,10 @@ compose.desktop {
     application {
         mainClass = "app.smartlocker.MainKt"
         nativeDistributions {
+            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            packageName = "SmartLocker"
+            packageVersion = "0.1.0"
+            modules("java.sql", "java.net.http", "jdk.unsupported")
+        }
+    }
+}
