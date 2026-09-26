@@ -38,3 +38,23 @@ class ApiSessionClientTest {
                     assertEquals("+5511987654321", body.getValue("contact").jsonPrimitive.content)
                     assertEquals("52998224725", body.getValue("cpf").jsonPrimitive.content)
                     assertEquals("sms", body.getValue("channel").jsonPrimitive.content)
+                    respond(challenge(clock), HttpStatusCode.Accepted, JSON)
+                }
+                else -> error("Unexpected fixture path")
+            }
+        }
+        try {
+            val result = client.requestLogin(LoginRequest("(11) 98765-4321", "529.982.247-25", LoginChannel.SMS))
+            assertEquals("challenge-1", result.id)
+            assertEquals(1, challenges)
+        } finally { client.close() }
+    }
+
+    @Test fun invalidOtpUsesSafeLocalTextAndInvalidInputDoesNotReachTheServer() = runTest {
+        val clock = TestClock()
+        val secure = MemorySecure()
+        var calls = 0
+        val client = client(clock, secure) {
+            calls++
+            respond("""{"status":422,"code":"INVALID_OTP","detail":"SECRET_FIXTURE_BODY"}""",
+                HttpStatusCode.UnprocessableEntity, PROBLEM)
