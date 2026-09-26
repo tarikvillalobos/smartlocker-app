@@ -78,3 +78,23 @@ class ApiMappingTest {
         assertEquals("membership", mapped.locationId)
         assertEquals("3", mapped.version)
         assertEquals(ParcelStatus.WAITING, mapped.status)
+        assertTrue(mapped.canReportIssue)
+        failsSafely { parcel.copy(status = "future").toDomain() }
+        failsSafely { parcel.copy(credentialStatus = "future").toDomain() }
+        failsSafely { parcel.copy(status = "manual", credentialStatus = "revoked").toDomain() }
+        failsSafely { parcel.copy(status = "collected", collectedAt = start, credentialStatus = "active").toDomain() }
+        failsSafely { parcel.copy(collectedAt = earlier, status = "collected", credentialStatus = "consumed").toDomain() }
+        failsSafely { parcel.copy(version = 0).toDomain() }
+    }
+
+    @Test fun pickupUsesServerRevalidationAndPreservesLeadingZeroes() {
+        val revalidate = "2026-09-26T12:02:00.000Z"
+        val dto = ApiPickupCredential("parcel", "membership", "001234", "AUTHORIZED-SYNTHETIC-PAYLOAD",
+            "active", start, end, revalidate)
+        val mapped = dto.toDomain()
+        assertEquals("001234", mapped.code)
+        assertEquals(startMillis + 120_000, mapped.revalidateAt)
+        assertEquals(CredentialStatus.ACTIVE, mapped.status)
+        assertFalse(dto.toString().contains(dto.code))
+        failsSafely { dto.copy(status = "revoked").toDomain() }
+        failsSafely { dto.copy(revalidateAfter = earlier).toDomain() }
