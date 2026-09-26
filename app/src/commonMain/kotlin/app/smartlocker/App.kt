@@ -66,6 +66,23 @@ fun SmartLockerApp(runtime: AppRuntime, modifier: Modifier = Modifier) {
                                         ScrollPage { DetailScreen(state, controller, runtime.platform) }
                                     }
                                 }
+                            } else if (split && state.route == Route.HOME) {
+                                Row(Modifier.widthIn(max = Tokens.maxContent).fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                                    Box(Modifier.weight(1f)) {
+                                        ScrollPage { HomeScreen(state, controller, runtime.platform, showRecent = false) }
+                                    }
+                                    Box(Modifier.weight(1f)) {
+                                        ScrollPage {
+                                            PageTitle("Suas entregas")
+                                            Panel {
+                                                Metadata("Local selecionado", state.membership?.location.orEmpty())
+                                                MenuRow("Trocar local", Symbol.LOCATION) { controller.navigate(Route.LOCATIONS) }
+                                            }
+                                            RecentParcels(state, controller)
+                                        }
+                                    }
+                                }
                             } else {
                                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
                                     ScrollPage(maxWidth = if (state.route == Route.HOME && split) 720 else 600) {
