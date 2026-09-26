@@ -19,6 +19,7 @@ import androidx.compose.ui.platform.LocalWindowInfo
 fun Modifier.keepAboveKeyboard(): Modifier {
     val requester = remember { BringIntoViewRequester() }
     var focused by remember { mutableStateOf(false) }
+    var fieldSize by remember { mutableStateOf(IntSize.Zero) }
     val keyboardBottom = WindowInsets.ime.getBottom(LocalDensity.current)
     val windowSize = LocalWindowInfo.current.containerSize
     LaunchedEffect(focused, keyboardBottom, windowSize) {
