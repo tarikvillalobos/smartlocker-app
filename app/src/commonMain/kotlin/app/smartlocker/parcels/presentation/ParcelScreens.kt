@@ -78,3 +78,23 @@ fun HistoryScreen(state: AppState, controller: AppController) {
 fun DetailScreen(state: AppState, controller: AppController, platform: PlatformServices) {
     var confirmation by remember { mutableStateOf(false) }
     val parcel = state.selected
+    PageTitle("Detalhe da encomenda", { controller.navigate(Route.HISTORY) })
+    if (parcel == null) {
+        if (!state.busy) EmptyState("Encomenda indisponível", "Atualize ou volte ao histórico para selecionar outra entrega.")
+        return
+    }
+    PickupCard(state, controller, platform, detail = true)
+    Panel {
+        Metadata("Localização do armário", "${parcel.locker} · ${parcel.address}")
+        Metadata("Compartimento", "Porta ${parcel.compartment} · ${parcel.size ?: "Tamanho não informado"}")
+    }
+    Panel {
+        Text("Linha do tempo", style = MaterialTheme.typography.titleMedium)
+        TimelineStep("Depositada", dateTime(parcel.depositedAt), true)
+        TimelineStep("Aviso disponibilizado", parcel.notifiedAt?.let(::dateTime) ?: "Ainda não informado", parcel.notifiedAt != null)
+        TimelineStep(if (parcel.status == ParcelStatus.MANUAL) "Informada por você" else "Retirada física",
+            (parcel.collectedAt ?: parcel.manualAt)?.let(::dateTime) ?: "Aguardando retirada", parcel.status != ParcelStatus.WAITING)
+    }
+    if (parcel.status == ParcelStatus.WAITING && parcel.canMarkManually && controller.configuration.brand.features.manualPickup) {
+        PrimaryButton("Já retirei a encomenda", !state.busy && !state.stale) { confirmation = true }
+    }
