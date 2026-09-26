@@ -95,6 +95,7 @@ fun ContactScreen(state: AppState, controller: AppController) {
             Switch(email, { email = it; contact = "" })
             Text(if (email) "E-mail" else "Celular")
         }
+        OutlinedTextField(contact, { contact = it }, Modifier.fillMaxWidth().keepAboveKeyboard(), label = { Text("Novo contato") }, shape = Tokens.control)
         PrimaryButton("Verificar novo contato", !state.busy) {
             controller.contact(contact, if (email) LoginChannel.EMAIL else LoginChannel.SMS)
         }
