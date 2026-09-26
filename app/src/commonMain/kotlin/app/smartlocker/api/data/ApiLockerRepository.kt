@@ -158,3 +158,23 @@ class ApiLockerRepository(private val session: ApiSessionClient) : LockerReposit
         val user = currentUser()
         membership(locationId, user)
         val response = request<ApiNoticePage>(user, pagePath("${membershipPath(locationId)}/notifications", cursor))
+        requireResponse(response.items.all { it.membershipId == locationId })
+        val page = response.toDomain()
+        requireResponse(page.unreadCount >= page.items.count { !it.read })
+        validateCursor(cursor, page.nextCursor)
+        return page
+    }
+
+    override suspend fun markNoticeRead(locationId: String, id: String) {
+        val user = currentUser()
+        membership(locationId, user)
+        val response = request<ApiDeliveryNotice>(user,
+            "${membershipPath(locationId)}/notifications/${identifier(id)}/read", HttpMethod.Put)
+        requireResponse(response.membershipId == locationId && response.id == id)
+        requireResponse(response.toDomain().read)
+    }
+
+    override suspend fun reportIssue(locationId: String, parcelId: String, message: String): SupportIssue {
+        val user = currentUser()
+        val membership = membership(locationId, user)
+        if (!membership.capabilities.features.supportIssues || !configuration().capabilities.features.supportIssues) unavailableFeature()
