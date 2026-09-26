@@ -18,3 +18,12 @@ devices = [device for values in json.loads(result)["devices"].values() for devic
 device = args.device or next((item["udid"] for item in devices if "iPhone" in item["name"]), None)
 if device is None or not any(item["udid"] == device for item in devices):
     raise SystemExit("An available iPhone simulator is required.")
+subprocess.run(["python3", "scripts/prepare_resources.py"], cwd=root, check=True)
+subprocess.run(["python3", "scripts/prepare_icons.py"], cwd=root, check=True)
+subprocess.run(["xcodegen", "generate", "--spec", "iosApp/project.yml"], cwd=root, check=True)
+subprocess.run([
+    "xcodebuild", "-project", "iosApp/SmartLocker.xcodeproj", "-scheme", "SmartLocker",
+    "-configuration", "Debug", "-destination", f"platform=iOS Simulator,id={device}",
+    "-derivedDataPath", str(output), "-resultBundlePath", str(output.with_suffix(".xcresult")),
+    "-parallel-testing-enabled", "NO", "CODE_SIGNING_ALLOWED=NO", "test",
+], cwd=root, check=True)
