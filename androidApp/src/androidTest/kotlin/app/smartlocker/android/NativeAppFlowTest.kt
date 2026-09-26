@@ -85,6 +85,26 @@ class NativeAppFlowTest {
         ui.onNodeWithText("Copiar código").assertDoesNotExist()
     }
 
+    private fun focusWithVisibleIme(label: String): SemanticsNodeInteraction {
+        val field = ui.onNode(hasSetTextAction() and hasText(label))
+        field.performScrollTo().performClick()
+        assertFieldAboveVisibleIme(label)
+        return field
+    }
+
+    private fun assertFieldAboveVisibleIme(label: String) {
+        val field = ui.onNode(hasSetTextAction() and hasText(label))
+        var latest: FieldImeSample? = null
+        var stableSince = 0L
+        try {
+            ui.waitUntil(10_000) {
+                val window = keyboardWindow() ?: return@waitUntil false
+                val node = runCatching { field.fetchSemanticsNode() }.getOrNull() ?: return@waitUntil false
+                val sample = ui.runOnIdle {
+                    FieldImeSample(window, node.boundsInWindow, Rect(node.positionInWindow, node.size.toSize()),
+                        node.config.getOrNull(SemanticsProperties.Focused) == true)
+                }
+                val now = SystemClock.uptimeMillis()
     private fun login() {
         ui.onNodeWithText("Preencher dados de demonstração").performScrollTo().performClick()
         ui.onNodeWithText("Receber código por SMS").performScrollTo().performClick()
