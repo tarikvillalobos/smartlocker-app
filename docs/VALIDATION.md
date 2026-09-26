@@ -155,7 +155,6 @@ Consulte a revisão de cada execução antes de atribuir esse resultado a commit
 posteriores; novas alterações locais não são validadas retroativamente pela CI.
 
 O [workflow de instaladores 36242543761](https://github.com/tarikvillalobos/smartlocker-app/actions/runs/36242543761)
-gerou os DEBs das duas marcas após corrigir o argumento de dependências no
 arquivo de entrada do jpackage. DMGs e MSIs também foram gerados na CI. O
 launcher do pacote macOS foi aberto localmente com seu runtime Java incluído,
 sem erro de inicialização; isso não substitui instalação em uma máquina limpa.
