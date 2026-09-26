@@ -70,6 +70,7 @@ val nativeId = if (auroraPackage) "app.aurora.lockers.demo" else "app.smartlocke
 compose.desktop {
     application {
         mainClass = "app.smartlocker.MainKt"
+        args += "--brand=$packageBrand"
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "SmartLocker"
