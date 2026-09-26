@@ -36,6 +36,9 @@ class AppController(
             }
         }
         execute { generation ->
+            val remoteBrand = repository.brandConfiguration()
+            if (generation != epoch) return@execute
+            mutable.update { it.copy(remoteBrand = remoteBrand) }
             val session = repository.restoreSession()
             if (generation != epoch) return@execute
             mutable.update { it.copy(session = session, initialized = true) }
