@@ -7,8 +7,6 @@ import kotlin.time.Instant
 /** Only documented error codes select local text; never display a remote error body. */
 internal fun apiFailure(status: Int, body: String): AppFailure {
     val problem = runCatching { Json.parseToJsonElement(body).jsonObject }.getOrNull()
-    val code = problem?.takeIf { it["status"]?.jsonPrimitive?.intOrNull == status }
-        ?.get("code")?.jsonPrimitive?.contentOrNull
     val retryAt = runCatching { Instant.parse(problem?.get("retryAt")?.jsonPrimitive?.content.orEmpty()).toEpochMilliseconds() }.getOrNull()
     val (kind, message) = when {
         status == 401 -> FailureKind.EXPIRED_SESSION to "Sua sessão expirou. Entre novamente."
