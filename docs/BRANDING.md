@@ -19,8 +19,6 @@ funcionalidade de moradores; a rota também é bloqueada no controller.
    o registro `design/BrandSymbol.kt`; as telas permanecem genéricas. Personalize
    o vetor de launcher Android por recurso de build. Não há WebView.
 5. Android: use `-PapplicationId=seu.pacote -PappName=SuaMarca` e recursos de ícone
-   específicos. iOS: ajuste bundle ID, display name e ícones em `project.yml`.
-6. Desktop: ajuste packageName e ícones em nativeDistributions no build do app.
 7. Configure endpoint e autenticação somente com o contrato externo documentado.
 8. Execute os testes e compare contrastes, textos longos e fonte a 200%.
 
