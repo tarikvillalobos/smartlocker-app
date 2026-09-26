@@ -347,6 +347,7 @@ class AppController(
         val reload = acceptProfile(profile)
         mutable.update { it.copy(contactChallenge = null, contactValue = "", route = Route.PROFILE,
             feedback = "Contato verificado e atualizado.") }
+        if (reload) refreshAfterMutation(generation, profile)
     }
     fun report(message: String) = execute { generation ->
         val context = state.value
