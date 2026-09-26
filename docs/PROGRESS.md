@@ -10,6 +10,13 @@ Atualizado em 26/09/2026. Consulte [VALIDATION.md](VALIDATION.md) para as evidê
 - [x] Persistência demonstrativa, isolamento, sessão e tratamento de erros.
 - [x] Serviços nativos e duas marcas, com logos, canais e rotas opcionais.
 - [x] Layout adaptativo, fonte a 200%, paisagem e redimensionamento.
+- [x] 35 testes compartilhados/desktop aprovados; 68 capturas de layout geradas.
+- [x] Dois testes de cofres nativos aprovados em macOS, Windows e Linux.
+- [x] Base OpenAPI 3.1.1 proposta, oito exemplos e 21 casos de schema validados.
+- [x] Regressões de sessão/local, paginação, contato, avisos e concorrência corrigidas.
+- [x] Sete testes Android ampliados aprovados: Keystore, IME real, rotação e recriação.
+- [x] Três testes iOS aprovados em simulador isolado, incluindo UI/teclado e Keychain.
+- [x] DMG, MSI e DEB das duas marcas gerados em CI; DMG também executado localmente.
 - [x] Documentação de arquitetura, API, marcas, execução e distribuição.
 - [x] Base OpenAPI 3.1.1 proposta, validada e documentada, solicitada pelo usuário.
 - [x] Regressões de sessão/local, paginação, contato, avisos e concorrência corrigidas.
