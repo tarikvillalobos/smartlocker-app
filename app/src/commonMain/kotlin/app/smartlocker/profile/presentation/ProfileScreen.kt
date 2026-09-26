@@ -98,3 +98,5 @@ fun ContactScreen(state: AppState, controller: AppController) {
         TextButton({ controller.contact(contact, if (email) LoginChannel.EMAIL else LoginChannel.SMS) }, enabled = !state.busy && seconds == 0L) {
             Text(if (seconds > 0) "Reenviar em ${seconds}s" else "Reenviar código")
         }
+    }
+}
