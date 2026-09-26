@@ -22,6 +22,8 @@ ktor-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = 
 activity = { module = "androidx.activity:activity-compose", version.ref = "activity" }
 jna = { module = "net.java.dev.jna:jna-platform", version.ref = "jna" }
 
+ktor-client-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
+
 [plugins]
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
