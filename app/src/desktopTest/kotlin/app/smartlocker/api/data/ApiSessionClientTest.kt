@@ -390,6 +390,26 @@ class ApiSessionClientTest {
             secure.failClearing = false
             try { client.logout() } finally { client.close() }
         }
+    }
+
+    @Test fun logoutAttemptsRevocationWhenLocalCleanupFailsAndReportsBothOutcomesHonestly() = runTest {
+        for (remoteFails in listOf(false, true)) {
+            val clock = TestClock()
+            val secure = DeleteFailureSecure()
+            var revocations = 0
+            val client = client(clock, secure) { request ->
+                if (request.path().endsWith("/verify")) respond(tokens(clock), headers = JSON)
+                else {
+                    assertEquals("/auth/logout", request.path())
+                    assertEquals("Bearer access-old", request.headers[HttpHeaders.Authorization])
+                    revocations++
+                    if (remoteFails) throw IOException("Synthetic remote outage")
+                    respond("", HttpStatusCode.NoContent)
+                }
+            }
+            try {
+                client.verifyLogin("challenge-1", "123456")
+                secure.failClearing = true
     private fun TestScope.client(
         clock: TestClock, secure: SecureStorage = MemorySecure(), baseUrl: String = BASE,
         handler: suspend MockRequestHandleScope.(HttpRequestData) -> HttpResponseData,
