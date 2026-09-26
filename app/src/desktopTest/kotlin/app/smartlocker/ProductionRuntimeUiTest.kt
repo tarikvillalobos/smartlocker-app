@@ -38,3 +38,23 @@ class ProductionRuntimeUiTest {
                 assertEquals("004321", platform.copied)
                 onNodeWithText("Fechar").performClick()
                 onNodeWithContentDescription("Ver detalhes").performScrollTo().performClick()
+                waitUntil(10_000) { controller.state.value.route == Route.DETAIL && !controller.state.value.busy }
+                onNodeWithText("Já retirei a encomenda").performScrollTo().performClick()
+                onNodeWithText("Sim, retirei").performClick()
+                waitUntil(10_000) { controller.state.value.selected?.status == ParcelStatus.MANUAL && !controller.state.value.busy }
+                assertNull(controller.state.value.credential)
+                onAllNodesWithText("Retirada informada").onFirst().assertExists()
+                onAllNodesWithText("Histórico").onFirst().performClick()
+                onNodeWithText("Retiradas").performScrollTo().performClick()
+                waitUntil(10_000) { controller.state.value.route == Route.HISTORY && !controller.state.value.busy }
+                assertEquals(listOf(ParcelStatus.MANUAL), controller.state.value.parcels.map { it.status })
+                assertTrue(fixture.requests.any { it.url.parameters["status"] == "collected" })
+                fixture.unavailable = true
+                onNodeWithContentDescription("Atualizar encomendas").performClick()
+                waitUntil(10_000) { controller.state.value.error != null && !controller.state.value.busy }
+                assertNotNull(controller.state.value.session)
+                assertTrue(controller.state.value.stale)
+                assertNull(controller.state.value.credential)
+                runOnIdle { controller.navigate(Route.DEMO) }
+                assertEquals(Route.HISTORY, controller.state.value.route)
+                val requestsBeforeDemoActions = fixture.requests.size
