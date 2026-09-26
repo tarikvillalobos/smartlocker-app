@@ -115,6 +115,7 @@ fun DetailScreen(state: AppState, controller: AppController, platform: PlatformS
     if (parcel.status == ParcelStatus.WAITING && parcel.canMarkManually && controller.features.manualPickup) {
         PrimaryButton("Já retirei a encomenda", !state.busy && !state.stale) { confirmation = true }
     }
+    if (parcel.canUndo && controller.features.manualPickup) {
         TextButton(controller::undo, Modifier.fillMaxWidth(), enabled = !state.busy && !state.stale) { Text("Desfazer marcação manual") }
     }
     if (parcel.status != ParcelStatus.WAITING) PrimaryButton("Ver histórico") { controller.navigate(Route.HISTORY) }
