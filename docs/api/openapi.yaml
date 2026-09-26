@@ -1858,3 +1858,23 @@ components:
         id:
           $ref: "#/components/schemas/Identifier"
         name:
+          type: "string"
+          maxLength: 200
+        address:
+          type: "string"
+          maxLength: 500
+        available:
+          type: "boolean"
+      required:
+        - "id"
+        - "name"
+        - "address"
+        - "available"
+    ParcelActions:
+      type: "object"
+      properties:
+        canMarkManually:
+          type: "boolean"
+        canUndoManual:
+          type: "boolean"
+        undoUntil:
