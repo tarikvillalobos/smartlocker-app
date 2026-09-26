@@ -38,3 +38,23 @@ class DemoParcels(private val db: DemoDatabase, private val clock: AppClock) {
         if (physical) credential(location, id)
         else if (item.manualAt != null) return item
         change(id) {
+            if (physical) it.copy(collected = clock.now(), credential = "CONSUMED")
+            else it.copy(manual = clock.now(), credential = "REVOKED")
+        }
+        return get(location, id)
+    }
+
+    fun undo(location: String, id: String): Parcel {
+        val item = get(location, id)
+        if (!item.canUndo) throw AppFailure(FailureKind.CONFLICT, "Esta retirada não pode ser desfeita.")
+        // Undo never reactivates a revoked or consumed credential.
+        change(id) { it.copy(manual = null) }
+        return get(location, id)
+    }
+
+    fun deposit(location: String) {
+        requireLocation(location)
+        val index = db.snapshot.sequence
+        val now = clock.now()
+        val item = ParcelRecord("demo-$index", "ana", location, "Nova entrega demonstrativa",
+            null, "Portaria principal", "Residencial Jardim · Rua das Flores, 120",
