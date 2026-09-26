@@ -140,7 +140,6 @@ class AppController(
         // Apply confirmed revocation before any scoped read can fail or suspend.
         if (state.value.profile != null) acceptProfile(profile)
         val context = state.value
-        val profile = repository.profile()
         val location = profile.memberships.find { it.id == context.membershipId }?.id
             ?: profile.memberships.firstOrNull()?.id
             ?: throw AppFailure(FailureKind.DENIED, "Nenhum local autorizado para esta conta.")
