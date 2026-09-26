@@ -58,3 +58,23 @@ class ApiSessionClient(
             throw AppFailure(FailureKind.UNAVAILABLE, "Este canal de login está indisponível. Escolha outro canal.")
         }
         val body = ApiJson.encodeToString(ApiLoginRequest(contact, value.cpf.filter(Char::isDigit), value.channel.apiValue()))
+        return decodeApi<ApiChallenge>(request("/auth/challenges", HttpMethod.Post, body, authenticated = false)).toDomain("login")
+    }
+
+    suspend fun resendLogin(challengeId: String): Challenge = decodeApi<ApiChallenge>(request(
+        "/auth/challenges/${apiId(challengeId)}/resend", HttpMethod.Post, authenticated = false,
+    )).toDomain("login")
+
+    suspend fun verifyLogin(challengeId: String, code: String): Session = mutex.withLock {
+        validateApiOtp(code)
+        val epoch = generation
+        val verification = challengeId to code
+        val key = verificationKeys.getOrPut(verification) { Uuid.random().toString() }
+        val response = try {
+            request("/auth/challenges/${apiId(challengeId)}/verify", HttpMethod.Post,
+                ApiJson.encodeToString(ApiOtpVerification(code)), mapOf("Idempotency-Key" to key), authenticated = false)
+        } catch (error: AppFailure) {
+            if (error.kind !in setOf(FailureKind.NETWORK, FailureKind.UNAVAILABLE)) verificationKeys.remove(verification)
+            throw error
+        }
+        val tokens = decodeApi<ApiSessionTokens>(response)
