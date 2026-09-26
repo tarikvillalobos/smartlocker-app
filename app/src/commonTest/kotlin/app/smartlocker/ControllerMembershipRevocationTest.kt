@@ -58,3 +58,23 @@ class ControllerMembershipRevocationTest {
         val clock = TestClock()
         val demo = DemoRepository(MemoryStorage(), MemorySecure(), Brands.smartLocker, clock, 0)
         demo.signIn()
+        var revoked = false
+        val repository = object : LockerRepository by demo {
+            override suspend fun updatePreferences(value: CommunicationPreferences): Profile {
+                val profile = demo.updatePreferences(value)
+                revoked = true
+                return profile.copy(memberships = profile.memberships.filter { it.id == "office" })
+            }
+            override suspend fun parcels(locationId: String, filter: ParcelFilter, cursor: String?): ParcelPage {
+                if (revoked) throw AppFailure(FailureKind.NETWORK, "Sem rede")
+                return demo.parcels(locationId, filter, cursor)
+            }
+        }
+        val controller = start(repository, clock)
+        controller.preferences(CommunicationPreferences(sms = false))
+        val current = controller.state.first { !it.busy && it.feedback != null }
+        assertEquals("office", current.membershipId)
+        assertCleared(current)
+        assertTrue(current.stale)
+        assertTrue(current.error!!.contains("operação foi concluída"))
+        assertEquals("Preferências salvas.", current.feedback)
