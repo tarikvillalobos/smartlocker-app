@@ -58,3 +58,23 @@ class ApiMappingTest {
             ApiCommunicationPreferences(true, false, false), listOf(member)).toDomain(listOf(mapped))
         assertEquals("", profile.phone)
         assertEquals("", profile.email)
+        failsSafely { member.copy(unitId = "unit", unitLabel = null).toDomain() }
+        failsSafely { member.copy(timeZone = "Invalid/Nowhere").toDomain() }
+    }
+
+    @Test fun remoteConfigurationCannotEnableBundledDisabledFeatures() {
+        val config = ApiBrandConfiguration("aurora", "Aurora Lockers", capabilities, null,
+            "https://example.test/terms", "https://example.test/privacy")
+        val brand = config.toDomain(Brands.aurora)
+        assertFalse(brand.features.residents)
+        assertFalse("whatsapp" in brand.channels)
+        assertFalse("push" in brand.channels)
+        failsSafely { config.copy(brandId = "other").toDomain(Brands.aurora) }
+        failsSafely { config.copy(termsUrl = "http://example.test/terms").validate("aurora") }
+    }
+
+    @Test fun parcelMappingPreservesScopeVersionAndRejectsImpossibleStatuses() {
+        val mapped = parcel.toDomain()
+        assertEquals("membership", mapped.locationId)
+        assertEquals("3", mapped.version)
+        assertEquals(ParcelStatus.WAITING, mapped.status)
