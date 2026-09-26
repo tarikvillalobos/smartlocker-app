@@ -18,3 +18,23 @@ class ControllerMembershipRevocationTest {
     @Test fun preferencesClearRevokedMembershipBeforeLoadingTheRemainingMembership() = runTest {
         val clock = TestClock()
         val demo = DemoRepository(MemoryStorage(), MemorySecure(), Brands.smartLocker, clock, 0)
+        demo.signIn()
+        var confirmedProfile: Profile? = null
+        val started = CompletableDeferred<Unit>()
+        val allowReload = CompletableDeferred<Unit>()
+        val repository = object : LockerRepository by demo {
+            override suspend fun profile(): Profile = confirmedProfile ?: demo.profile()
+            override suspend fun updatePreferences(value: CommunicationPreferences): Profile =
+                demo.updatePreferences(value).let { it.copy(memberships = it.memberships.filter { m -> m.id == "office" }) }
+                    .also { confirmedProfile = it }
+            override suspend fun parcels(locationId: String, filter: ParcelFilter, cursor: String?): ParcelPage {
+                if (confirmedProfile != null) {
+                    assertEquals("office", locationId)
+                    started.complete(Unit)
+                    allowReload.await()
+                }
+                return demo.parcels(locationId, filter, cursor)
+            }
+        }
+        val controller = start(repository, clock)
+        assertNotNull(controller.state.value.credential)
