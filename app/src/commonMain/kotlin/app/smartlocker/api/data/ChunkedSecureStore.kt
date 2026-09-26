@@ -38,3 +38,23 @@ class ChunkedSecureStore(private val storage: SecureStorage, private val key: St
     suspend fun write(value: String?) = guarded {
         // Check limits before any mutation, including journal recovery.
         if (value != null && value.length > MAX_BYTES) throw failure()
+        val bytes = value?.encodeToByteArray(throwOnInvalidSequence = true)
+        if (bytes != null && bytes.size > MAX_BYTES) throw failure()
+        val encoded = bytes?.let { Base64.encode(it) }
+        val next = if (bytes == null || encoded == null) null else Manifest(
+            Uuid.random().toString(), bytes.size, encoded.length,
+            (encoded.length + CHUNK_SIZE - 1) / CHUNK_SIZE, checksum(bytes),
+        )
+        val previous = readHead()
+        // Never replace a journal until all of its obsolete generations were removed.
+        cleanup(previous, required = true)
+        val generations = listOfNotNull(previous, next)
+        if (generations.isEmpty()) return@guarded
+        storage.write(journalKey, generations.joinToString("\n", transform = Manifest::encode))
+        if (next != null && encoded != null) repeat(next.chunks) { index ->
+            storage.write(chunkKey(next, index), encoded.substring(index * CHUNK_SIZE,
+                minOf((index + 1) * CHUNK_SIZE, encoded.length)))
+        }
+        // The small pointer is the commit point. A failed/uncertain write leaves a recoverable journal.
+        storage.write(headKey, next?.encode())
+        // A cleanup failure must not turn a successfully committed session into a failed write.
