@@ -2,9 +2,6 @@
 
 - [x] Repositório e cinco templates do HTML inspecionados.
 - [x] Regra de commits instalada: um arquivo, até 20 linhas.
-- [x] Versões estáveis verificadas na documentação oficial.
-- [ ] Backend persistente, autenticação e simulador de locker.
-- [ ] Domínio, autorização, retirada e testes.
 - [ ] Cinco telas Compose e fluxos auxiliares.
 - [ ] Plataformas, armazenamento seguro e white-label.
 - [ ] Builds, testes funcionais e validação visual adaptativa.
