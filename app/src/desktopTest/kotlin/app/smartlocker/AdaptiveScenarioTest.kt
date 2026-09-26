@@ -27,7 +27,6 @@ class AdaptiveScenarioTest {
         var height by mutableStateOf(900)
         try {
             setContent { Box(Modifier.size(width.dp, height.dp)) { SmartLockerApp(runtime) } }
-            waitUntil(10_000) { controller.state.value.initialized }
             onNodeWithText("Celular").performScrollTo().performTextInput("11987654321")
             onNodeWithText("CPF").performScrollTo().performTextInput("52998224725")
             runOnIdle { width = 840; height = 390 }
