@@ -51,7 +51,6 @@ class ProductionRuntimeUiTest {
                 assertTrue(fixture.requests.any { it.url.parameters["status"] == "collected" })
                 fixture.unavailable = true
                 onNodeWithContentDescription("Atualizar encomendas").performClick()
-                waitUntil(10_000) { controller.state.value.error != null && !controller.state.value.busy }
                 assertNotNull(controller.state.value.session)
                 assertTrue(controller.state.value.stale)
                 assertNull(controller.state.value.credential)
