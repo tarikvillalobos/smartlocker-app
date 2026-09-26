@@ -289,6 +289,12 @@ class AppController(
         if (generation != epoch) return@execute
         mutable.update { it.copy(contactChallenge = challenge, contactValue = value, contactChannel = channel) }
     }
+    fun resendContact() = execute { generation ->
+        val context = state.value
+        val challenge = context.contactChallenge ?: return@execute
+        val updated = repository.resendContactChange(challenge.id, context.contactValue, context.contactChannel)
+        if (generation == epoch) mutable.update { it.copy(contactChallenge = updated) }
+    }
     fun correctProfileContact() {
         epoch++
         readJob?.cancel()
