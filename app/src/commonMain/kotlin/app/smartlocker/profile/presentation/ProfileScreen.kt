@@ -50,6 +50,7 @@ fun ProfileScreen(state: AppState, controller: AppController, platform: Platform
         if ("sms" in state.channels(brand)) PreferenceRow("SMS", profile.preferences.sms, !state.busy) {
             controller.preferences(profile.preferences.copy(sms = it))
         }
+        if ("whatsapp" in state.channels(brand)) PreferenceRow("WhatsApp", profile.preferences.whatsapp, !state.busy) {
             controller.preferences(profile.preferences.copy(whatsapp = it))
         }
         Text("Preferência salva no app. O envio depende do fornecedor e da permissão do dispositivo.",
