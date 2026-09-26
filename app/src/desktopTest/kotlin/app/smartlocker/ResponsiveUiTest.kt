@@ -38,3 +38,23 @@ class ResponsiveUiTest {
                         waitUntil(10_000) { controller.state.value.initialized }
                         capture("login", width, fontScale)
                         runOnIdle { controller.login(demoLogin) }
+                        waitUntil(10_000) { controller.state.value.challenge != null && !controller.state.value.busy }
+                        runOnIdle { controller.verify("123456") }
+                        waitUntil(15_000) { controller.state.value.profile != null && !controller.state.value.busy }
+                        for ((route, name) in listOf(Route.HOME to "home", Route.HISTORY to "history",
+                            Route.DETAIL to "detail", Route.PROFILE to "profile")) {
+                            runOnIdle { controller.navigate(route) }
+                            waitForIdle()
+                            capture(name, width, fontScale)
+                            val root = onRoot().fetchSemanticsNode().boundsInRoot
+                            assertEquals(width.toFloat(), root.width)
+                            onAllNodes(hasClickAction()).fetchSemanticsNodes().forEach { node ->
+                                val bounds = node.boundsInRoot
+                                if (bounds.width > 0 && bounds.height > 0) {
+                                    assertTrue(bounds.left >= -1 && bounds.right <= width + 1, "$name: horizontal overflow $bounds")
+                                }
+                            }
+                        }
+                    } finally { runOnIdle { runtime.close() } }
+                }
+            }
