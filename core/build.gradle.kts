@@ -18,3 +18,8 @@ kotlin {
         commonTest.dependencies { implementation(kotlin("test")) }
     }
 }
+android {
+    namespace = "app.smartlocker.core"
+    compileSdk = 35
+    defaultConfig { minSdk = 26 }
+}
