@@ -58,3 +58,19 @@ data class ApiParcelMetrics(
     val complete: Boolean,
     val totalReceived: Int?,
     val physicalPickupCount: Int?,
+    val averagePickupDurationSeconds: Double?,
+)
+
+@Serializable
+data class ApiPickupCredential(
+    val parcelId: String,
+    val membershipId: String,
+    val code: String,
+    val qrPayload: String,
+    val status: String,
+    val verifiedAt: String,
+    val expiresAt: String,
+    val revalidateAfter: String,
+) {
+    override fun toString() = "ApiPickupCredential(redacted)"
+}
