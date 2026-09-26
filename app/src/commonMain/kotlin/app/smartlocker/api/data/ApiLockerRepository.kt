@@ -298,3 +298,12 @@ class ApiLockerRepository(private val session: ApiSessionClient) : LockerReposit
         return "$path?limit=20" + (cursor?.let { "&cursor=${it.encodeURLParameter()}" } ?: "")
     }
     private fun validateCursor(current: String?, next: String?) {
+        requireResponse(next == null || (next.isNotEmpty() && next.length <= 2048 && next != current))
+    }
+    private fun otp(value: String): String = value.also(::validateApiOtp)
+    private fun intersect(a: Features, b: Features) = Features(a.residents && b.residents, a.issues && b.issues,
+        a.manualPickup && b.manualPickup, a.contactEditing && b.contactEditing)
+    private fun requireResponse(valid: Boolean) { if (!valid) invalidResponse() }
+    private fun invalidResponse(): Nothing = throw AppFailure(FailureKind.UNAVAILABLE, "O serviço retornou dados inválidos. Tente atualizar.")
+    private fun unavailableFeature(): Nothing = throw AppFailure(FailureKind.DENIED, "Este recurso não está disponível para o local.")
+}
