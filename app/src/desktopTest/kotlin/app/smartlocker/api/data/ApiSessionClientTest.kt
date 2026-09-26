@@ -198,3 +198,23 @@ class ApiSessionClientTest {
                 assertEquals("/auth/logout", request.path())
                 assertEquals("Bearer access-old", request.headers[HttpHeaders.Authorization])
                 revocations++
+                throw IOException("Synthetic remote outage")
+            }
+        }
+        try {
+            client.verifyLogin("challenge-1", "123456")
+            val failure = assertFailsWith<AppFailure> { client.logout() }
+            assertEquals(FailureKind.NETWORK, failure.kind)
+            assertTrue(failure.message.contains("Não foi possível confirmar a revogação remota"))
+            assertEquals(1, revocations)
+            assertNull(client.currentSession())
+            assertTrue(secure.values.isEmpty())
+            assertNull(client.restoreSession())
+        } finally { client.close() }
+    }
+
+    @Test fun logoutOrCloseRejectsAnUncooperativeLateVerificationResponse() = runTest {
+        for (logout in listOf(false, true)) {
+            val clock = TestClock()
+            val secure = MemorySecure()
+            val entered = CompletableDeferred<Unit>()
