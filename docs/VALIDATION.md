@@ -18,3 +18,23 @@ segurança ou funcionamento de um backend ou de hardware externo.
 | ResponsiveUiTest | 2 | Matriz visual e percurso de login, cópia e retirada manual |
 | AdaptiveScenarioTest | 2 | Redimensionamento, paisagem, campos e conteúdo extremo |
 
+O fluxo de retirada distingue marcação manual, desfazimento e evento físico
+simulado. O desfazimento nunca reativa códigos. Métricas são calculadas sobre
+dados completos mesmo quando a listagem mostra apenas 20 de 73 registros.
+Cofres em memória são usados nos testes; isso não valida os cofres dos sistemas.
+
+O transporte é testado com Ktor MockEngine, sem endpoints inventados no produto.
+Os testes verificam respostas 401/403/409/429/503, cancelamento e ausência de
+retentativa automática. ZXing decodifica o QR e confirma o payload de origem.
+Relatórios: `core/build/reports/tests/jvmTest/index.html` e
+`app/build/reports/tests/desktopTest/index.html`.
+
+## Layout e acessibilidade
+
+As cinco telas são renderizadas em 320, 390, 430, 600, 840 e 1200 dp, com fontes
+em 100% e 200%: 60 imagens. Mais oito capturas verificam conteúdo longo, vazio,
+73 encomendas e mudanças da mesma composição entre 320/390/600/840/1200 dp,
+incluindo janelas de 840 × 390 e 390 × 400 dp. Total: **68 capturas** em
+`app/build/reports/screenshots/`.
+
+O redimensionamento mantém contato digitado, filtro e encomenda selecionada.
