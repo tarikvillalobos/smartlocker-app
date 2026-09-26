@@ -110,7 +110,6 @@ fun DetailScreen(state: AppState, controller: AppController, platform: PlatformS
         TimelineStep("Depositada", dateTime(parcel.depositedAt), true)
         TimelineStep("Aviso disponibilizado", parcel.notifiedAt?.let { dateTime(it) } ?: "Ainda não informado", parcel.notifiedAt != null)
         TimelineStep(if (parcel.status == ParcelStatus.MANUAL) "Informada por você" else "Retirada física",
-            (parcel.collectedAt ?: parcel.manualAt)?.let(::dateTime) ?: "Aguardando retirada", parcel.status != ParcelStatus.WAITING)
     }
     if (parcel.status == ParcelStatus.WAITING && parcel.canMarkManually && controller.features.manualPickup) {
         PrimaryButton("Já retirei a encomenda", !state.busy && !state.stale) { confirmation = true }
