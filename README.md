@@ -31,6 +31,9 @@ compilação, testes e integração real.
 - Windows 10 ou posterior, macOS compatível com a JVM ou Linux com bibliotecas
   gráficas suportadas pelo Compose Desktop.
 
+Versões fixadas em `gradle/libs.versions.toml`. O bootstrap baixa Gradle de sua
+origem oficial, confere SHA-256 e não exige um JAR binário no repositório.
+Fontes são baixadas de revisões fixas do Google Fonts e geradas localmente.
 
 🚧 This project is currently under development.
 
