@@ -38,3 +38,23 @@ class NativeSecureStorageTest {
     @Test(timeout = 90_000) fun longValuesNeverSilentlyReplaceThePreviousSessionWithTruncatedData() =
         fixture { storage, directory, first, _ ->
             val prior = "prior-${UUID.randomUUID()}"
+            val longValue = "prefix-${UUID.randomUUID()}-" + "T".repeat(10_000) + "-complete-tail"
+            storage.write(first, prior)
+            val failure = runCatching { storage.write(first, longValue) }.exceptionOrNull()
+            if (failure == null) assertSecret(longValue, storage.read(first))
+            else {
+                assertTrue(failure is AppFailure || failure is IllegalArgumentException,
+                    "Native storage must fail safely for unsupported payloads")
+                assertSecret(prior, storage.read(first))
+            }
+            assertNoPlaintext(directory, prior, longValue)
+        }
+
+    private fun fixture(test: suspend (DesktopSecureStorage, Path, String, String) -> Unit) {
+        assumeTrue("Native vault tests require explicit opt-in", System.getenv("SMARTLOCKER_NATIVE_SECURE_TESTS") == "1")
+        val directory = Files.createTempDirectory("smartlocker-vault-test-")
+        val storage = DesktopSecureStorage(directory)
+        val first = "test.smartlocker.${UUID.randomUUID()}"
+        val second = "$first.second"
+        var failure: Throwable? = null
+        try {
