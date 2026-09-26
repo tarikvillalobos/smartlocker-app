@@ -38,3 +38,23 @@ data class ApiFeatures(
     fun toDomain() = Features(residents = recipients, issues = supportIssues,
         manualPickup = manualPickup, contactEditing = contactEditing)
 }
+
+@Serializable
+data class ApiCapabilities(val features: ApiFeatures, val channels: ApiChannels)
+
+@Serializable
+data class ApiBrandConfiguration(
+    val brandId: String,
+    val appName: String,
+    val capabilities: ApiCapabilities,
+    val supportEmail: String?,
+    val termsUrl: String?,
+    val privacyUrl: String?,
+) {
+    fun validate(expectedBrandId: String) {
+        apiRequire(apiId(brandId) == expectedBrandId)
+        apiText(appName, 100)
+        supportEmail?.let(::validateApiEmail)
+        listOfNotNull(termsUrl, privacyUrl).forEach { value ->
+            val parsed = try { Url(value) } catch (_: IllegalArgumentException) { invalidApiResponse() }
+            apiRequire(parsed.protocol.name == "https" && parsed.host.isNotBlank() && value.none(Char::isWhitespace))
