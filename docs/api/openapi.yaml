@@ -1711,6 +1711,22 @@ components:
         - "unitLabel"
         - "timeZone"
         - "capabilities"
+      allOf:
+        - if:
+            properties:
+              unitId:
+                type: "null"
+          then:
+            properties:
+              unitLabel:
+                type: "null"
+          else:
+            properties:
+              unitLabel:
+                type: "string"
+      description: >-
+        Vínculo autorizado a um local. Lockers independentes de condomínio podem
+        retornar unitId e unitLabel nulos; quando há unidade, ambos são preenchidos.
     MembershipList:
       type: "object"
       properties:
