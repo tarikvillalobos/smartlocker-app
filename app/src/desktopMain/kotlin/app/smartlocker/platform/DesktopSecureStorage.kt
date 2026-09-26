@@ -82,6 +82,26 @@ class DesktopSecureStorage(private val directory: Path) : SecureStorage {
         }
     }
 
+    private fun writeProtected(path: Path, value: String) {
+        val protected = Crypt32Util.cryptProtectData(value.toByteArray(Charsets.UTF_8))
+        Files.createDirectories(directory)
+        val temporary = Files.createTempFile(directory, "session-", ".protected.tmp")
+        try {
+            Files.write(temporary, protected)
+            try { Files.move(temporary, path, ATOMIC_MOVE, REPLACE_EXISTING) }
+            catch (_: AtomicMoveNotSupportedException) { Files.move(temporary, path, REPLACE_EXISTING) }
+        } finally {
+            Files.deleteIfExists(temporary)
+        }
+    }
+
+    private suspend fun <T> nativeOperation(operation: suspend () -> T): T = try {
+        currentCoroutineContext().ensureActive()
+        operation()
+    } catch (cancelled: CancellationException) {
+        throw cancelled
+    } catch (failure: AppFailure) {
+        throw failure
         throw unavailable()
     }
     private fun unavailable() = AppFailure(FailureKind.UNAVAILABLE,
