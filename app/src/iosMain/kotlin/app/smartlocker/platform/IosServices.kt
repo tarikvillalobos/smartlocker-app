@@ -18,3 +18,23 @@ class IosServices(
         private val defaults = NSUserDefaults.standardUserDefaults
         override fun read(key: String) = defaults.stringForKey("smartlocker.$key")
         override fun write(key: String, value: String?) {
+            if (value == null) defaults.removeObjectForKey("smartlocker.$key")
+            else defaults.setObject(value, "smartlocker.$key")
+        }
+    }
+    override val secure = object : SecureStorage {
+        override suspend fun read(key: String): String? = readSecret(key)
+        override suspend fun write(key: String, value: String?) {
+            if (!writeSecret(key, value)) throw AppFailure(FailureKind.UNAVAILABLE, "Não foi possível acessar o Chaves do dispositivo.")
+        }
+    }
+    override fun copyText(value: String) { UIPasteboard.generalPasteboard.string = value }
+    override fun openLink(url: String): Boolean {
+        val value = NSURL.URLWithString(url) ?: return false
+        if (value.scheme !in setOf("https", "mailto")) return false
+        if (!UIApplication.sharedApplication.canOpenURL(value)) return false
+        UIApplication.sharedApplication.openURL(value, emptyMap<Any?, Any>(), null)
+        return true
+    }
+    override suspend fun notificationPermission(): String = suspendCancellableCoroutine { continuation ->
+        UNUserNotificationCenter.currentNotificationCenter().getNotificationSettingsWithCompletionHandler { settings ->
