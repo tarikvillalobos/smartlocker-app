@@ -738,3 +738,23 @@ paths:
           $ref: "#/components/responses/Problem"
         default:
           $ref: "#/components/responses/Problem"
+  "/memberships/{membershipId}/parcels/{parcelId}":
+    parameters:
+      -
+        $ref: "#/components/parameters/MembershipId"
+      -
+        $ref: "#/components/parameters/ParcelId"
+    get:
+      operationId: "getParcel"
+      tags:
+        - "Parcels"
+      summary: "Consultar detalhe e ações permitidas"
+      x-required-permission: "parcels:read"
+      parameters:
+        -
+          $ref: "#/components/parameters/BrandId"
+      responses:
+        "200":
+          description: "Resultado confirmado pelo servidor."
+          headers:
+            X-Request-Id:
