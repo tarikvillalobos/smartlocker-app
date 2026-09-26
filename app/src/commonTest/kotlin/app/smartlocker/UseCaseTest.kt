@@ -18,3 +18,7 @@ class UseCaseTest {
                 repository.credential(locationId, "demo-1")
         }
         assertFailsWith<AppFailure> { LoadPickupCredential(wrongResponse, clock)("home", parcel) }
+        assertFailsWith<AppFailure> { LoadPickupCredential(repository, clock)("office", parcel) }
+        assertEquals(parcel.id, LoadPickupCredential(repository, clock)("home", parcel).parcelId)
+    }
+}
