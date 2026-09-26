@@ -148,6 +148,7 @@ private fun EnvironmentHeader(runtime: AppRuntime, holder: RuntimeState, state: 
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun AppNavigation(state: AppState, controller: AppController, rail: Boolean) {
     val items = listOf(Triple(Route.HOME, "Início", Symbol.HOME), Triple(Route.HISTORY, "Histórico", Symbol.HISTORY),
