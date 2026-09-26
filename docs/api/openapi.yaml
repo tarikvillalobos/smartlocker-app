@@ -1258,3 +1258,23 @@ components:
     BrandId:
       name: "X-Brand-Id"
       in: "header"
+      required: true
+      schema:
+        $ref: "#/components/schemas/Identifier"
+      description: "Identificador público da distribuição. Deve corresponder à marca da sessão/desafio."
+    MembershipId:
+      name: "membershipId"
+      in: "path"
+      required: true
+      schema:
+        $ref: "#/components/schemas/Identifier"
+    ParcelId:
+      name: "parcelId"
+      in: "path"
+      required: true
+      schema:
+        $ref: "#/components/schemas/Identifier"
+    ChallengeId:
+      name: "challengeId"
+      in: "path"
+      required: true
