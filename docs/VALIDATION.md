@@ -72,6 +72,26 @@ física nem verificação completa de foco por teclado em cada sistema.
 
 ## Cofres nativos desktop
 
+`python3 scripts/run_native_secure_tests.py` executa **dois testes nativos** com
+chaves sintéticas exclusivas, cobrindo gravação, leitura por outra instância,
+atualização, isolamento, remoção e tratamento de valores longos sem truncamento.
+Esses testes passaram no macOS local e nos três runners da CI: Keychain no macOS,
+DPAPI no Windows e Secret Service no Linux.
+
+O runner Linux abre uma sessão D-Bus e um cofre temporários, sem reutilizar o
+cofre pessoal. Os testes removem apenas suas próprias entradas. Relatório separado:
+`app/build/reports/tests/desktopNativeVaultTest/`. Isso verifica os caminhos do
+aplicativo nos ambientes testados, sem constituir auditoria do sistema operacional.
+Limites de tamanho dos cofres devem ser compatibilizados com os tokens reais do
+futuro fornecedor antes de integrar a API; não há fallback para texto puro.
+
+## Android
+
+Build do APK e lint foram executados. A execução registrada do lint teve zero
+erros e dois avisos sobre atualização do SDK 35. APK de desenvolvimento:
+`androidApp/build/outputs/apk/debug/androidApp-debug.apk`.
+
+A suíte nativa ampliada teve **sete testes aprovados**: cinco de Keystore e dois
 | --- | --- | --- |
 | Desktop macOS | Compilação e testes Compose/JVM aprovados | DMG e assinatura não ensaiados |
 | Android | APK, lint e abertura no emulador API 34 aprovados | Distribuição e aparelho físico pendentes |
