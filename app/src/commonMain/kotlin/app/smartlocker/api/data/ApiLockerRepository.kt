@@ -38,3 +38,23 @@ class ApiLockerRepository(private val session: ApiSessionClient) : LockerReposit
     }
     override fun close() = session.close()
 
+    override suspend fun profile(): Profile {
+        val user = currentUser()
+        val value = request<ApiProfile>(user, "/me")
+        requireResponse(value.id == user)
+        val list = request<ApiMembershipList>(user, "/me/memberships")
+        return profile(value, list.items, user)
+    }
+
+    override suspend fun parcels(locationId: String, filter: ParcelFilter, cursor: String?): ParcelPage {
+        val user = currentUser()
+        val membership = membership(locationId, user)
+        val status = when (filter) {
+            ParcelFilter.ALL -> "all"
+            ParcelFilter.WAITING -> "waiting"
+            ParcelFilter.COLLECTED -> "collected"
+        }
+        val path = pagePath("${membershipPath(locationId)}/parcels", cursor) + "&status=$status"
+        val response = request<ApiParcelPage>(user, path)
+        requireResponse(response.items.all { it.membershipId == locationId })
+        val page = response.toDomain()
