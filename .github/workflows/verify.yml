@@ -40,6 +40,10 @@ jobs:
         run: xvfb-run python3 scripts/gradle.py :core:jvmTest :app:desktopTest
       - if: runner.os != 'Linux'
         run: python scripts/gradle.py :core:jvmTest :app:desktopTest
+      - if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libsecret-tools gnome-keyring dbus-x11
+      - name: Verify the native session vault
+        run: python scripts/run_native_secure_tests.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:
