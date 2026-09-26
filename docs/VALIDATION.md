@@ -153,26 +153,6 @@ macOS/Windows/Linux. Os jobs desktop incluem os cofres nativos separados.
 Consulte a revisão de cada execução antes de atribuir esse resultado a commits
 posteriores; novas alterações locais não são validadas retroativamente pela CI.
 
-O lint do AGP utilizado falhou ao enumerar a plataforma global Android 37.0.
-A validação passou com cópia isolada dos componentes Android 35, sem modificar
-o SDK global. `scripts/prepare_android_sdk.py` reproduz essa preparação; a CI
-também usa essa cópia. Não foram ocultadas regras de lint.
-
-O build iOS usa `CODE_SIGNING_ALLOWED=NO`. O plist final contém a chave booleana
-`CADisableMinimumFrameDurationOnPhone=true`, exigida pelo Compose. O app abriu
-e renderizou o login no iOS 26.2. O target `SmartLockerUITests` passou: **1 teste
-nativo adicional**, digitando um contato com o teclado aberto e preservando seu
-valor ao girar de retrato para paisagem e voltar. O teste também exige que o
-campo inteiro permaneça acima do teclado. Essa verificação revelou e validou
-a correção de rolagem do foco após a rotação. iPhone 17 Pro: 402 × 874 pt.
-As capturas do XCTest acompanham `artifacts/ios-keyboard-final`;
-`artifacts/native-keyboard-screenshots/` contém a exportação. Artefatos são ignorados pelo Git.
-Resultado local total: 26 testes JVM/Compose e 1 teste XCTest aprovados.
-
-## Integração contínua e histórico
-
-A CI configura auditoria de commits, desktop em macOS/Windows/Linux, build/lint
-Android e build do simulador iOS. A primeira execução encontrou o pacote Android
 obsoleto `tools`; os jobs agora especificam os pacotes suportados e isolam o SDK.
 Na [execução 36238579513](https://github.com/tarikvillalobos/smartlocker-app/actions/runs/36238579513),
 commit `f3497c4`, todos os seis jobs passaram: Android, iOS, auditoria e desktop
