@@ -134,7 +134,6 @@ class AppController(
         }
     }
 
-    private suspend fun load(generation: Int = epoch) {
         val context = state.value
         val profile = repository.profile()
         val location = profile.memberships.find { it.id == context.membershipId }?.id
