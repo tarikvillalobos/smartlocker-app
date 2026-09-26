@@ -12,6 +12,9 @@ A UI mede as restrições da janela. Não utiliza uma tela fixa de 390 × 844.
 - QR Code usa módulos quadrados inteiros, preto/branco, quatro módulos livres
   em cada lado, proporção 1:1 e máximo de 208/232 dp.
 - Safe areas e IME insets são aplicados à área disponível.
+- Campos focados solicitam rolagem ao mudar janela/teclado. No iOS, o Compose
+  controla os insets, sem deslocamento adicional do controlador nativo.
+- O XCTest exige que o campo fique inteiro acima do teclado após rotação.
 - Android observa FoldingFeature separadora e usa o maior painel livre da
   dobradiça, recalculando o layout pela largura desse painel.
 - Estado e seleção ficam fora da composição; mudar o tamanho não reinicia login,
