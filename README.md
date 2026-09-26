@@ -17,6 +17,9 @@ O modo de produção informa essa indisponibilidade e nunca usa demonstração
 como fallback. Nenhum SMS, e-mail, WhatsApp, push ou comando de hardware é enviado.
 O produto ainda não está pronto para produção.
 
+Consulte [o registro de progresso](docs/PROGRESS.md) e
+[a matriz de validação](docs/VALIDATION.md) para distinguir configuração,
+compilação, testes e integração real.
 
 This project is designed to support multiple brands and clients.
 
