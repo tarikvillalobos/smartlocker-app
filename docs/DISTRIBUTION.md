@@ -56,6 +56,8 @@ Gere recursos e ícones antes de gerar o projeto Xcode. `python3 scripts/test_io
 executa Keychain e UI em um iPhone temporário, removido ao final; `--device UUID`
 usa um simulador existente e o preserva. `--output artifacts/nova-execucao` preserva resultados anteriores.
 
+O ZIP de CI contém `SmartLocker.app` para simulador arm64, com assinatura local
+para habilitar o Keychain. Não é um IPA nem uma assinatura de distribuição Apple.
 Distribuição em aparelho exige equipe Apple, provisioning e exportação assinada.
 O projeto inclui ícones; selecione `AuroraIcon` e ajuste nome/bundle ID para outra marca,
 além de configurar a identidade inicial do runtime. Veja [BRANDING.md](BRANDING.md).
