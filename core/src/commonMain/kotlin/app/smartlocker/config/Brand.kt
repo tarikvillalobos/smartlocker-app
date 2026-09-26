@@ -24,6 +24,7 @@ data class Brand(
     val bodyFont: String = "jakarta",
     val headingFont: String = "sora",
     val applicationId: String = "app.smartlocker.demo",
+    val mark: BrandMark = BrandMark.PARCEL,
 )
 
 object Brands {
