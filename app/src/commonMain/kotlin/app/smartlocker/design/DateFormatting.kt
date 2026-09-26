@@ -18,3 +18,6 @@ fun dateTime(timestamp: Long): String = formatDateTime(timestamp, LocalDisplayTi
 
 fun formatDateTime(timestamp: Long, timeZone: TimeZone): String {
     val value = Instant.fromEpochMilliseconds(timestamp).toLocalDateTime(timeZone)
+    fun Int.pad() = toString().padStart(2, '0')
+    return "${value.day.pad()}/${value.month.number.pad()} · ${value.hour.pad()}:${value.minute.pad()}"
+}
