@@ -12,6 +12,7 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "0.1.0"
+        manifestPlaceholders["appName"] = providers.gradleProperty("appName").getOrElse("SmartLocker")
     }
     buildFeatures { compose = true }
 }
