@@ -150,6 +150,7 @@ Veja [arquitetura e segurança local](docs/ARCHITECTURE.md),
 
 [Instruções de instalação e distribuição](docs/DISTRIBUTION.md) descrevem APK,
 DMG, MSI, DEB e app de simulador iOS. Execute `python3 scripts/prepare_icons.py`
+antes de empacotar. O workflow **Build installable artifacts** configura pacotes
 das duas marcas, com Java incluído no desktop, como artefatos privados de CI.
 Assinatura comercial, notarização e exportação para aparelhos iOS dependem das
 identidades do proprietário. Não inclua segredos no repositório.
