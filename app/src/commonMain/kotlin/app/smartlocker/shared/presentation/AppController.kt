@@ -162,6 +162,7 @@ class AppController(
     fun select(id: String, openDetail: Boolean = true) {
         mutable.update { it.copy(selectedId = id, selected = null, credential = null,
             route = if (openDetail) Route.DETAIL else it.route) }
+        refreshData(detailOnly = true)
     }
     fun navigate(route: Route) {
         val features = configuration.brand.features
