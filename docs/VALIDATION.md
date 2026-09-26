@@ -168,12 +168,6 @@ macOS/Windows/Linux. Os jobs desktop incluem os três testes de cofre nativo.
 A revisão verificada foi `d5ecef3`, com o cliente HTTP completo. Commits posteriores
 que apenas atualizam documentação não alteram o código dos artefatos verificados.
 
-O [workflow de instaladores 36242543761](https://github.com/tarikvillalobos/smartlocker-app/actions/runs/36242543761)
-terminou com os sete jobs aprovados. Gerou DEBs das duas marcas após corrigir
-o argumento de dependências no
-arquivo de entrada do jpackage. DMGs e MSIs também foram gerados na CI. O
-launcher do pacote macOS foi aberto localmente com seu runtime Java incluído,
-sem erro de inicialização; isso não substitui instalação em uma máquina limpa.
 
 A auditoria exige um arquivo textual e até 20 linhas alteradas por commit de
 implementação, com autoria `tarik.villalobos@gmail.com`. O README inicial precede
