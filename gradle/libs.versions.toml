@@ -6,8 +6,6 @@ ktor = "3.4.3"
 coroutines = "1.10.2"
 serialization = "1.9.0"
 datetime = "0.6.2"
-sqlite = "3.49.1.0"
-zxing = "3.5.3"
 activity = "1.10.1"
 jna = "5.17.0"
 
