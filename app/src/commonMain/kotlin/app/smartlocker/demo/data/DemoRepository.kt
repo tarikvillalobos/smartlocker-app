@@ -18,3 +18,23 @@ class DemoRepository(
 ) : LockerRepository, DemoControls {
     private val db = DemoDatabase(storage, brand.id, clock)
     private val auth = DemoAuth(secure, brand.id, clock)
+    private val parcels = DemoParcels(db, clock)
+    private val mutex = Mutex()
+    private var scenario = DemoScenario.NORMAL
+    private var pendingContact: Pair<String, LoginChannel>? = null
+
+    private suspend fun check() {
+        delay(latency)
+        when (scenario) {
+            DemoScenario.NETWORK -> throw AppFailure(FailureKind.NETWORK, "Sem conexão. Tente atualizar novamente.")
+            DemoScenario.DENIED -> throw AppFailure(FailureKind.DENIED, "Acesso negado para este contexto.")
+            DemoScenario.EXPIRED_SESSION -> throw AppFailure(FailureKind.EXPIRED_SESSION, "Sua sessão expirou.")
+            else -> Unit
+        }
+        auth.requireSession()
+    }
+
+    override suspend fun requestLogin(request: LoginRequest): Challenge = mutex.withLock {
+        delay(latency)
+        auth.request(request)
+    }
