@@ -118,3 +118,23 @@ private fun EnvironmentHeader(runtime: AppRuntime, holder: RuntimeState, state: 
                         Brands.all.forEach { brand -> DropdownMenuItem(text = { Text(brand.name) },
                             onClick = { menu = false; runtime.configure(brand = brand) }) }
                     }
+                }
+                TextButton({ runtime.configure(environment = if (demo) Environment.PRODUCTION else Environment.DEMO) }) {
+                    Text(if (demo) "Usar API externa" else "Experimentar demonstração", style = MaterialTheme.typography.labelSmall)
+                }
+            } else {
+                IconButton(holder.controller::refresh, enabled = !state.busy) { AppIcon(Symbol.REFRESH, "Atualizar encomendas") }
+            }
+        }
+    }
+}
+
+@Composable
+private fun AppNavigation(state: AppState, controller: AppController, rail: Boolean) {
+    val items = listOf(Triple(Route.HOME, "Início", Symbol.HOME), Triple(Route.HISTORY, "Histórico", Symbol.HISTORY),
+        Triple(Route.PROFILE, "Perfil", Symbol.USER))
+    if (rail) NavigationRail(containerColor = MaterialTheme.colorScheme.surface) {
+        Spacer(Modifier.height(16.dp))
+        items.forEach { (route, title, symbol) ->
+            NavigationRailItem(state.route == route || route == Route.HISTORY && state.route == Route.DETAIL,
+                { controller.navigate(route) }, icon = { AppIcon(symbol) }, label = { Text(title) })
