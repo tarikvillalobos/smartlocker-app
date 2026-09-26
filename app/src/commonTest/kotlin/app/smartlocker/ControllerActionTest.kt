@@ -58,3 +58,23 @@ class ControllerActionTest {
                 return demo.parcel(locationId, id)
             }
         }
+        val controller = start(repository, clock)
+        val initial = controller.state.value
+        val notice = initial.notices.first { !it.read }
+        suspendDetail = true
+        controller.notice(notice)
+        runCurrent()
+        assertTrue(controller.state.value.busy)
+        assertEquals(initial.unreadCount - 1, controller.state.value.unreadCount)
+        assertTrue(controller.state.value.notices.first { it.id == notice.id }.read)
+        assertEquals(Route.DETAIL, controller.state.value.route)
+        response.complete(Unit)
+        val current = controller.state.first { !it.busy && it.selected?.id == notice.parcelId }
+        assertEquals(initial.unreadCount - 1, current.unreadCount)
+    }
+
+    @Test fun logoutCancelsActionAndIgnoresAnUncooperativeLateResponse() = runTest {
+        val clock = TestClock()
+        val demo = DemoRepository(MemoryStorage(), MemorySecure(), Brands.smartLocker, clock, 0)
+        demo.signIn()
+        val response = CompletableDeferred<Parcel>()
