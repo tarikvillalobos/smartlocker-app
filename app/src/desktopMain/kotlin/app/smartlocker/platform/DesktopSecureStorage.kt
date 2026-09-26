@@ -2,6 +2,7 @@ package app.smartlocker.platform
 
 import app.smartlocker.shared.domain.*
 import com.sun.jna.platform.win32.Crypt32Util
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.nio.file.Files
