@@ -240,6 +240,13 @@ class AppController(
     fun contact(value: String, channel: LoginChannel) = execute { generation ->
         val challenge = repository.requestContactChange(value, channel)
         if (generation != epoch) return@execute
+        mutable.update { it.copy(contactChallenge = challenge, contactValue = value, contactChannel = channel) }
+    }
+    fun resendContact() = contact(state.value.contactValue, state.value.contactChannel)
+    fun correctProfileContact() {
+        epoch++
+        readJob?.cancel()
+        mutable.update { it.copy(contactChallenge = null, error = null, busy = false) }
     }
     fun verifyContact(code: String) = execute { generation ->
         val challenge = state.value.contactChallenge ?: return@execute
