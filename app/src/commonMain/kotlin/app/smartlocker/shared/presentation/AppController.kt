@@ -355,6 +355,12 @@ class AppController(
         load()
         if (generation == epoch) feedback("Depósito fictício criado. Veja a nova encomenda e o aviso.")
     }
+    fun physicalPickup() {
+        val demo = repository as? DemoControls ?: return
+        mutateSelected {
+            demo.physicalPickup(it.membershipId, it.selectedId!!)
+            "Retirada física simulada. Nenhum hardware foi acionado."
+        }
     }
     fun logout() {
         epoch++
