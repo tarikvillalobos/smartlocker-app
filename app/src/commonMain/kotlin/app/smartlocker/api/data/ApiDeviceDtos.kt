@@ -18,3 +18,23 @@ data class ApiPushRegistrationRequest(
     }
 
     override fun toString() = "ApiPushRegistrationRequest(redacted)"
+}
+
+@Serializable
+data class ApiPushRegistration(val installationId: String, val registeredAt: String) {
+    fun validate() {
+        apiRequire(Regex("^[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}$").matches(installationId))
+        apiInstant(registeredAt)
+    }
+}
+
+@Serializable
+data class ApiPushData(
+    val type: String,
+    val brandId: String,
+    val membershipId: String,
+    val parcelId: String,
+    val noticeId: String,
+) {
+    fun validate() {
+        apiRequire(type == "parcel_update")
