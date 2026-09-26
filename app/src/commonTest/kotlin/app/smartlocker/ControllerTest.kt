@@ -59,4 +59,24 @@ class ControllerTest {
         controller.navigate(Route.RESIDENTS)
         assertEquals(Route.HOME, controller.state.value.route)
     }
+
+    @Test fun logoutDiscardsContactVerificationAlreadyInFlight() = runTest {
+        val clock = TestClock()
+        val demo = DemoRepository(MemoryStorage(), MemorySecure(), Brands.smartLocker, clock, 0)
+        demo.signIn()
+        val profile = demo.profile()
+        val response = CompletableDeferred<app.smartlocker.profile.domain.Profile>()
+        val repository = object : LockerRepository by demo {
+            override suspend fun verifyContactChange(challengeId: String, code: String) = response.await()
+        }
+        val controller = AppController(AppConfiguration(Brands.smartLocker, Environment.DEMO), repository, clock, backgroundScope)
+        controller.state.first { it.profile != null }
+        controller.contact("changed@example.test", LoginChannel.EMAIL)
+        controller.state.first { it.contactChallenge != null }
+        controller.verifyContact("123456")
+        runCurrent()
+        controller.logout()
+        runCurrent()
+        response.complete(profile.copy(email = "changed@example.test"))
+        runCurrent()
 }
