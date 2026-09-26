@@ -38,3 +38,23 @@ Service. Linux precisa de `libsecret-tools` e de um cofre desbloqueado, como
 `androidApp/build/outputs/apk/debug/androidApp-debug.apk`, assinado com a chave
 de debug local. O app abre no ambiente externo; escolha “Experimentar demonstração”.
 Para produção, configure o keystore privado e a assinatura do responsável.
+Não versione arquivos de chave, senhas, certificados privados ou tokens.
+
+Os testes nativos usam um identificador separado para preservar dados pessoais:
+
+```sh
+./gradlew :androidApp:connectedDebugAndroidTest -PapplicationId=app.smartlocker.validation
+```
+
+Use um emulador dedicado. Essa variante limpa apenas seus próprios dados de teste.
+As verificações cobrem Keystore, adulteração de ciphertext, rotação, login, retirada,
+reabertura da Activity e logout; reabertura de Activity não simula morte do processo.
+
+## iOS
+
+Gere recursos e ícones antes de gerar o projeto Xcode. `python3 scripts/test_ios.py`
+executa Keychain e UI no primeiro iPhone simulado disponível; `--device UUID`
+seleciona outro. `--output artifacts/nova-execucao` preserva resultados anteriores.
+
+O ZIP de CI contém `SmartLocker.app` para simulador arm64. Não é um IPA para iPhone.
+Distribuição em aparelho exige equipe Apple, provisioning e exportação assinada.
