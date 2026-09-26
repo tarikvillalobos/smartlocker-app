@@ -11,6 +11,7 @@ verificação abaixo prova integração com backend, fornecedor ou hardware exte
 Dois testes de cofre nativo são descobertos, mas pulados nessa suíte por padrão;
 sua execução separada e os sistemas verificados estão registrados abaixo.
 
+| Suíte | Testes executados | Verificação |
 | --- | ---: | --- |
 | DomainTest | 4 | CPF, telefone, e-mail, métricas e validade de credenciais |
 | DemoRepositoryTest | 8 | OTP, sessão, retirada, persistência, isolamento e paginação |
