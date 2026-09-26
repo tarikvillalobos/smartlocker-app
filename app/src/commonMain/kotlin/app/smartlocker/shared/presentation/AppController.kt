@@ -77,6 +77,7 @@ class AppController(
             readJob?.cancel()
             actionJob?.cancel()
             val old = state.value
+            mutable.value = AppState(initialized = true, remoteBrand = old.remoteBrand, route = old.route,
                 selectedId = old.selectedId, filter = old.filter, membershipId = old.membershipId,
                 now = clock.now(), error = error.message)
         } else if (error is AppFailure && error.kind == FailureKind.DENIED) {
