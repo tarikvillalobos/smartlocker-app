@@ -2018,3 +2018,23 @@ components:
         -
           if:
             properties:
+              status:
+                const: "manual"
+          then:
+            properties:
+              manualAt:
+                $ref: "#/components/schemas/Instant"
+              collectedAt:
+                type: "null"
+              credentialStatus:
+                const: "revoked"
+        -
+          if:
+            properties:
+              status:
+                const: "collected"
+          then:
+            properties:
+              collectedAt:
+                $ref: "#/components/schemas/Instant"
+              credentialStatus:
