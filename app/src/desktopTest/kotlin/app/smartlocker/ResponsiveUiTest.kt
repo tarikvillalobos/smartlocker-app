@@ -66,6 +66,7 @@ class ResponsiveUiTest {
         val runtime = AppRuntime(platform, AppConfiguration(Brands.smartLocker, Environment.DEMO))
         try {
             setContent { SmartLockerApp(runtime) }
+            waitUntil(timeoutMillis = 10_000) { runtime.state.value.controller.state.value.initialized }
             onNodeWithText("Preencher dados de demonstração").performScrollTo().performClick()
             onNodeWithText("Receber código por SMS").performScrollTo().performClick()
             waitUntil(10_000) { runtime.state.value.controller.state.value.challenge != null }
