@@ -17,6 +17,7 @@ final class SmartLockerUITests: XCTestCase {
         waitUntilUncovered(phone, in: app)
         app.typeText("11987654321")
         XCUIDevice.shared.orientation = .landscapeLeft
+        waitForOrientation(portrait: false, in: app)
         XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 5))
         waitUntilUncovered(phone, in: app)
         XCTAssertEqual(phone.value as? String, "11987654321")
