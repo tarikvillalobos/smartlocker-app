@@ -178,3 +178,23 @@ class ApiSessionClientTest {
         }
         try {
             assertFailsWith<AppFailure> { client.verifyLogin("challenge-1", "123456") }
+            assertNull(client.currentSession())
+            secure.fail = false
+            client.verifyLogin("challenge-1", "123456")
+            assertEquals(2, keys.size)
+            assertNotNull(keys[0])
+            assertEquals(keys[0], keys[1])
+            assertEquals("ana", client.currentSession()?.userId)
+        } finally { client.close() }
+    }
+
+    @Test fun logoutNetworkFailureStillClearsMemoryAndVaultAndReportsUnconfirmedRevocation() = runTest {
+        val clock = TestClock()
+        val secure = MemorySecure()
+        var revocations = 0
+        val client = client(clock, secure) { request ->
+            if (request.path().endsWith("/verify")) respond(tokens(clock), headers = JSON)
+            else {
+                assertEquals("/auth/logout", request.path())
+                assertEquals("Bearer access-old", request.headers[HttpHeaders.Authorization])
+                revocations++
