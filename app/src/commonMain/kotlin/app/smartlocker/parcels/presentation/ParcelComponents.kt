@@ -58,3 +58,23 @@ fun PickupCard(state: AppState, controller: AppController, platform: PlatformSer
                     PickupQr(credential.payload, Modifier.widthIn(max = if (detail) 232.dp else 208.dp))
                     FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                         credential.code.chunked(3).forEach { part ->
+                            Text(part, style = MaterialTheme.typography.displaySmall,
+                                letterSpacing = 4.sp, color = MaterialTheme.colorScheme.secondary)
+                        }
+                    }
+                    if (detail) Text("Aproxime do leitor do armário ou digite o código no painel.",
+                        style = MaterialTheme.typography.bodySmall, color = Tokens.secondary)
+                } else if (parcel.status != ParcelStatus.WAITING) {
+                    Surface(shape = CircleShape, color = Tokens.success) {
+                        AppIcon(Symbol.CHECK, modifier = Modifier.padding(20.dp).size(40.dp), tint = Tokens.successText)
+                    }
+                    Text(if (parcel.status == ParcelStatus.MANUAL) "Retirada informada" else "Encomenda retirada",
+                        style = MaterialTheme.typography.headlineSmall)
+                    Text(if (parcel.status == ParcelStatus.MANUAL) "Marcada por você. O armário ainda não confirmou."
+                        else "Confirmação física ${dateTime(parcel.collectedAt!!)}",
+                        color = Tokens.secondary, style = MaterialTheme.typography.bodyMedium)
+                    Text("O código anterior está finalizado.", style = MaterialTheme.typography.bodySmall)
+                } else {
+                    AppIcon(Symbol.HELP, modifier = Modifier.size(36.dp), tint = Tokens.warningText)
+                    Text(state.credentialMessage ?: if (state.stale) "Conecte-se para verificar o código."
+                        else "Atualize para verificar a validade do código.", color = Tokens.secondary)
