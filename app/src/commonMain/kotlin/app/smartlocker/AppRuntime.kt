@@ -18,3 +18,23 @@ class AppRuntime(val platform: PlatformServices, initial: AppConfiguration? = nu
     private val clock = AppClock { Clock.System.now().toEpochMilliseconds() }
     private val initialConfig = initial ?: AppConfiguration(
         Brands.all.find { it.id == platform.local.read("brand") } ?: Brands.smartLocker,
+        platform.local.read("environment")?.let { runCatching { Environment.valueOf(it) }.getOrNull() } ?: Environment.PRODUCTION,
+    )
+    private val mutable = MutableStateFlow(create(initialConfig))
+    val state = mutable.asStateFlow()
+
+    private fun create(configuration: AppConfiguration): RuntimeState {
+        val repository = when (configuration.environment) {
+            Environment.DEMO -> DemoRepository(platform.local, platform.secure, configuration.brand, clock)
+            Environment.PRODUCTION -> UnconfiguredRepository()
+        }
+        val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+        return RuntimeState(configuration, AppController(configuration, repository, clock, scope))
+    }
+
+    fun configure(brand: Brand = state.value.configuration.brand, environment: Environment = state.value.configuration.environment) {
+        if (state.value.controller.state.value.session != null) return
+        state.value.controller.close()
+        platform.local.write("brand", brand.id)
+        platform.local.write("environment", environment.name)
+        mutable.value = create(AppConfiguration(brand, environment))
