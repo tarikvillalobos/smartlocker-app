@@ -151,7 +151,6 @@ class ApiSessionClient(
 
     private suspend fun expired(): Nothing {
         stored = null
-        store.write(null)
         throw AppFailure(FailureKind.EXPIRED_SESSION, "Sua sessão expirou. Entre novamente.")
     }
 
