@@ -38,3 +38,23 @@ info:
     Confirmação física só aparece em consultas após processamento do evento confiável do locker pelo servidor.
     Não há endpoint do aplicativo para declarar confirmação física, depositar encomendas ou abrir portas.
     SMS, e-mail, WhatsApp e push são responsabilidades do backend e dependem das capacidades retornadas.
+    Configurações, fornecedores, limites e prazos desta minuta precisam ser homologados antes da distribuição.
+  license:
+    name: "Privado e proprietário"
+servers:
+  -
+    url: "https://api.smartlocker.example.invalid/v1"
+    description: "Placeholder deliberadamente não operacional. Substituir por homologação aprovada."
+security:
+  -
+    SessionBearer: []
+tags:
+  -
+    name: "Configuration"
+    description: "Capacidades públicas da distribuição white-label."
+  -
+    name: "Authentication"
+    description: "Códigos temporários, renovação e encerramento de sessão."
+  -
+    name: "Profile"
+    description: "Identidade, vínculos, preferências e contatos verificados."
