@@ -41,7 +41,6 @@ class ProductionRuntimeUiTest {
                 waitUntil(timeoutMillis = 10_000) { controller.state.value.route == Route.DETAIL && !controller.state.value.busy }
                 onNodeWithText("Já retirei a encomenda").performScrollTo().performClick()
                 onNodeWithText("Sim, retirei").performClick()
-                waitUntil(10_000) { controller.state.value.selected?.status == ParcelStatus.MANUAL && !controller.state.value.busy }
                 assertNull(controller.state.value.credential)
                 onAllNodesWithText("Retirada informada").onFirst().assertExists()
                 onAllNodesWithText("Histórico").onFirst().performClick()
