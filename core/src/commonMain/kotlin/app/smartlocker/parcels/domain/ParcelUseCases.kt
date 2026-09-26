@@ -18,3 +18,12 @@ class LoadPickupCredential(private val repository: LockerRepository, private val
     suspend operator fun invoke(location: String, parcel: Parcel): PickupCredential {
         if (parcel.locationId != location || parcel.status != ParcelStatus.WAITING) {
             throw AppFailure(FailureKind.CONFLICT, "Selecione uma encomenda aguardando retirada neste local.")
+        }
+        val credential = repository.credential(location, parcel.id)
+        if (credential.parcelId != parcel.id || !credential.canDisplay(clock.now(), true) ||
+            credential.code.isBlank() || credential.payload.isBlank() || credential.payload.length > 2048) {
+            throw AppFailure(FailureKind.EXPIRED_CODE, "Não foi possível confirmar a validade do código. Atualize os dados.")
+        }
+        return credential
+    }
+}
