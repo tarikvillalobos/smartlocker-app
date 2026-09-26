@@ -18,3 +18,23 @@ data class ApiChannels(
     val inApp: ApiChannelCapability,
     val sms: ApiChannelCapability,
     val email: ApiChannelCapability,
+    val whatsapp: ApiChannelCapability,
+    val push: ApiChannelCapability,
+) {
+    fun availableChannels(): Set<String> = listOf(
+        "app" to inApp, "sms" to sms, "email" to email, "whatsapp" to whatsapp, "push" to push,
+    ).filter { it.second.available }.map { it.first }.toSet()
+}
+
+@Serializable
+data class ApiFeatures(
+    val manualPickup: Boolean,
+    val undoManualPickup: Boolean,
+    val contactEditing: Boolean,
+    val recipients: Boolean,
+    val supportIssues: Boolean,
+    val pushRegistration: Boolean,
+) {
+    fun toDomain() = Features(residents = recipients, issues = supportIssues,
+        manualPickup = manualPickup, contactEditing = contactEditing)
+}
