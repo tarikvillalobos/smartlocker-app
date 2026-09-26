@@ -164,6 +164,9 @@ O plist contém `CADisableMinimumFrameDurationOnPhone=true`, exigido pelo Compos
 
 A [execução Verify SmartLocker 36245459937](https://github.com/tarikvillalobos/smartlocker-app/actions/runs/36245459937)
 passou em **todos os sete jobs**: OpenAPI, auditoria, Android, iOS e desktop em
+macOS/Windows/Linux. Os jobs desktop incluem os três testes de cofre nativo.
+A revisão verificada foi `d5ecef3`, com o cliente HTTP completo. Commits posteriores
+que apenas atualizam documentação não alteram o código dos artefatos verificados.
 
 O [workflow de instaladores 36242543761](https://github.com/tarikvillalobos/smartlocker-app/actions/runs/36242543761)
 terminou com os sete jobs aprovados. Gerou DEBs das duas marcas após corrigir
