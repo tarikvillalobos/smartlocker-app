@@ -1458,3 +1458,23 @@ components:
           const: 6
         purpose:
           type: "string"
+          enum:
+            - "login"
+            - "contact_change"
+      required:
+        - "id"
+        - "expiresAt"
+        - "resendAt"
+        - "channel"
+        - "maskedDestination"
+        - "codeLength"
+        - "purpose"
+      description: "Expiração e reenvio são definidos pelo servidor. Novo envio invalida o OTP anterior. Não devolver o OTP."
+      examples:
+        -
+          id: "challenge-example"
+          expiresAt: "2026-09-26T12:05:00.000Z"
+          resendAt: "2026-09-26T12:00:30.000Z"
+          channel: "sms"
+          maskedDestination: "+55 ** *****-4321"
+          codeLength: 6
