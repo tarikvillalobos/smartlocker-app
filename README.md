@@ -31,7 +31,9 @@ compilação, testes e integração real.
 
 ## Pré-requisitos
 
-- JDK 21 e Python 3.9 ou superior.
+- JDK 21 e Python 3.9 ou superior. No macOS, o inicializador Gradle
+  seleciona automaticamente o JDK 21 instalado; em outros sistemas,
+  configure JAVA_HOME para ele antes de executar o Gradle.
 - Android SDK 35, com `ANDROID_HOME` configurado.
 - macOS e Xcode para iOS; XcodeGen para gerar o projeto.
 - Linux: ambiente gráfico para executar a UI; `secret-tool` e Secret Service
