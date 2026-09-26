@@ -54,6 +54,7 @@ fun AuxiliaryScreen(state: AppState, controller: AppController, platform: Platfo
                 DemoScenario.NORMAL to "Restaurar exemplo inicial",
                 DemoScenario.EMPTY to "Nenhuma encomenda",
                 DemoScenario.MANY to "Muitas encomendas",
+                DemoScenario.LONG_TEXT to "Nomes e endereços longos",
                 DemoScenario.NETWORK to "Falha de rede",
                 DemoScenario.DENIED to "Acesso negado",
                 DemoScenario.EXPIRED_SESSION to "Sessão expirada",
