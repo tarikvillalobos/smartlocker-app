@@ -158,3 +158,23 @@ paths:
         - "Authentication"
       summary: "Reenviar código de login"
       description: |-
+        Respeitar resendAt. O servidor reenviará ao contato original; retorna novo desafio e invalida o anterior.
+        Reenviar não remove limites globais contra abuso.
+      security: []
+      parameters:
+        -
+          $ref: "#/components/parameters/BrandId"
+        -
+          $ref: "#/components/parameters/IdempotencyKey"
+      responses:
+        "202":
+          description: "Resultado confirmado pelo servidor."
+          headers:
+            X-Request-Id:
+              $ref: "#/components/headers/RequestId"
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Challenge"
