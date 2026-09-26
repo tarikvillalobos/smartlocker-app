@@ -159,6 +159,17 @@ class AppController(
             issues = issues.items, issueCursor = issues.nextCursor,
             residents = if (brand.features.residents && membership.features.residents && context.membershipId == location) it.residents else emptyList(),
             selectedId = detail.parcel?.id, selected = detail.parcel, credential = detail.credential,
+            credentialMessage = detail.message, stale = false, now = clock.now(), lastUpdated = clock.now())) }
+    }
+
+    private fun normalizeCapabilities(value: AppState): AppState {
+        val allowed = value.features(value.remoteBrand ?: configuration.brand)
+        val blocked = (value.route == Route.RESIDENTS && !allowed.residents) ||
+            (value.route == Route.ISSUES && !allowed.issues) || (value.route == Route.CONTACT && !allowed.contactEditing)
+        return value.copy(route = if (blocked) Route.PROFILE else value.route,
+            residents = if (allowed.residents) value.residents else emptyList(),
+            issues = if (allowed.issues) value.issues else emptyList(),
+            contactChallenge = if (allowed.contactEditing) value.contactChallenge else null)
     }
 
     private data class Detail(val parcel: Parcel?, val credential: PickupCredential?, val message: String?)
