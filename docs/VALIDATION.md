@@ -187,3 +187,4 @@ Push nativo ainda não está integrado; canais e lockers dependem do backend.
 A demonstração contém dados fictícios e nunca substitui a API após uma falha.
 Continuam pendentes aparelhos físicos, leitores de tela, canais reais, identidades
 de assinatura comercial, notarização e distribuição nas lojas.
+A liberação para produção depende dessas etapas externas de homologação e distribuição.
