@@ -50,6 +50,18 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: app.smartlocker.tests
         PRODUCT_MODULE_NAME: SmartLockerUITests
         GENERATE_INFOPLIST_FILE: YES
+  SmartLockerVaultTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - SmartLockerVaultTests.swift
+    dependencies:
+      - target: SmartLocker
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: app.smartlocker.vaulttests
+        PRODUCT_MODULE_NAME: SmartLockerVaultTests
+        GENERATE_INFOPLIST_FILE: YES
 schemes:
   SmartLocker:
     build:
