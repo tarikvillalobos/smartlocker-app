@@ -38,3 +38,23 @@ fun PageTitle(title: String, back: (() -> Unit)? = null, action: (@Composable ()
         Text(title, Modifier.weight(1f), style = MaterialTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.secondary)
         action?.invoke()
+    }
+}
+
+@Composable
+fun StatusBadge(parcel: Parcel) {
+    val (label, background, foreground) = when (parcel.status) {
+        ParcelStatus.WAITING -> Triple("Aguardando", Tokens.warning, Tokens.warningText)
+        ParcelStatus.MANUAL -> Triple("Informada por você", Tokens.success, Tokens.successText)
+        ParcelStatus.COLLECTED -> Triple("Retirada", Tokens.success, Tokens.successText)
+    }
+    Surface(color = background, contentColor = foreground, shape = CircleShape) {
+        Text(label, Modifier.padding(horizontal = 10.dp, vertical = 5.dp), style = MaterialTheme.typography.labelSmall)
+    }
+}
+
+@Composable
+fun EmptyState(title: String, description: String) {
+    Panel {
+        AppIcon(Symbol.PARCEL, modifier = Modifier.size(36.dp), tint = MaterialTheme.colorScheme.primary)
+        Text(title, style = MaterialTheme.typography.titleMedium)
