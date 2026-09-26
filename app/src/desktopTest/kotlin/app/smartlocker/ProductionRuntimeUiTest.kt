@@ -58,3 +58,14 @@ class ProductionRuntimeUiTest {
                 runOnIdle { controller.navigate(Route.DEMO) }
                 assertEquals(Route.HISTORY, controller.state.value.route)
                 val requestsBeforeDemoActions = fixture.requests.size
+                runOnIdle { controller.deposit(); controller.physicalPickup(); controller.demoScenario(DemoScenario.NORMAL) }
+                waitUntil(10_000) { !controller.state.value.busy }
+                assertEquals(requestsBeforeDemoActions, fixture.requests.size)
+                assertEquals(Environment.PRODUCTION, runtime.state.value.configuration.environment)
+                onNodeWithText("Demonstração · dados fictícios").assertDoesNotExist()
+                assertEquals(1, fixture.requests.count { it.method == HttpMethod.Post && it.url.encodedPath.endsWith("/manual-pickup") })
+                assertTrue(fixture.requests.filter { it.url.encodedPath.startsWith("/v1/memberships/") }
+                    .all { it.headers[HttpHeaders.Authorization] == "Bearer access-api" && it.headers["X-Brand-Id"] == "smartlocker" })
+            } finally { runOnIdle { runtime.close() } }
+        }
+}
