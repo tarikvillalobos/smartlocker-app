@@ -58,3 +58,23 @@ fun SmartLockerApp(runtime: AppRuntime, modifier: Modifier = Modifier) {
                         }
                     } else {
                         Row(Modifier.weight(1f).fillMaxWidth()) {
+                            if (rail) AppNavigation(state, controller, true)
+                            if (split && state.route in setOf(Route.HISTORY, Route.DETAIL)) {
+                                Row(Modifier.fillMaxSize().padding(horizontal = 12.dp), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                                    Box(Modifier.weight(1f)) { ScrollPage { HistoryScreen(state, controller) } }
+                                    Box(Modifier.weight(1f)) {
+                                        ScrollPage { DetailScreen(state, controller, runtime.platform) }
+                                    }
+                                }
+                            } else {
+                                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
+                                    ScrollPage(maxWidth = if (state.route == Route.HOME && split) 720 else 600) {
+                                        when (state.route) {
+                                            Route.HOME -> HomeScreen(state, controller, runtime.platform)
+                                            Route.HISTORY -> HistoryScreen(state, controller)
+                                            Route.DETAIL -> DetailScreen(state, controller, runtime.platform)
+                                            Route.PROFILE -> ProfileScreen(state, controller, runtime.platform)
+                                            else -> AuxiliaryScreen(state, controller, runtime.platform)
+                                        }
+                                    }
+                                }
