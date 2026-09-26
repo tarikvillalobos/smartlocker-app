@@ -105,6 +105,3 @@ Registro e recebimento nativo de push ainda não fazem parte dessa integração.
 
 ## Extensão
 
-Novas integrações devem implementar portas existentes. Não adicionar supostos
-contratos de fornecedor. A lista de moradores não concede acesso às encomendas
-de outra pessoa. Flags escondem e bloqueiam rotas, mas não substituem autorização.
