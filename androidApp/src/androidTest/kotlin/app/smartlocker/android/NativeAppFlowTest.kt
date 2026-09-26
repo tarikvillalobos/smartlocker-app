@@ -45,6 +45,8 @@ class NativeAppFlowTest {
     }
 
     @Test fun enteredLoginAndOtpSurviveRotationAndManualPickupWorks() {
+        focusWithVisibleIme("Celular").performTextInput("11987654321")
+        focusWithVisibleIme("CPF").performTextInput("52998224725")
         rotate(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE, Configuration.ORIENTATION_LANDSCAPE)
         ui.onNodeWithText("11987654321").assertExists()
         ui.onNodeWithText("52998224725").assertExists()
