@@ -1,6 +1,8 @@
 package app.smartlocker
 
 import app.smartlocker.platform.DesktopSecureStorage
+import app.smartlocker.api.data.ChunkedSecureStore
+import app.smartlocker.shared.domain.SecureStorage
 import app.smartlocker.shared.domain.AppFailure
 import kotlinx.coroutines.runBlocking
 import org.junit.Assume.assumeTrue
