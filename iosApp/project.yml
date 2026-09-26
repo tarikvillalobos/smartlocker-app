@@ -33,3 +33,23 @@ targets:
           python3 scripts/prepare_resources.py
           ./gradlew :app:embedAndSignAppleFrameworkForXcode --console=plain
         basedOnDependencyAnalysis: false
+  SmartLockerUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - SmartLockerUITests.swift
+    dependencies:
+      - target: SmartLocker
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: app.smartlocker.tests
+        PRODUCT_MODULE_NAME: SmartLockerUITests
+        GENERATE_INFOPLIST_FILE: YES
+schemes:
+  SmartLocker:
+    build:
+      targets:
+        SmartLocker: all
+    test:
+      targets:
+        - SmartLockerUITests
