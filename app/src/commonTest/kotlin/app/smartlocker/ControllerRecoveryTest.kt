@@ -58,3 +58,23 @@ class ControllerRecoveryTest {
         controller.state.first { !it.busy && it.membershipId == "office" }
         controller.select("demo-8")
         controller.state.first { !it.busy && it.selected?.id == "demo-8" }
+        clock.time = controller.state.value.session!!.expiresAt
+        advanceTimeBy(1_001)
+        runCurrent()
+        assertNull(controller.state.value.session)
+        assertTrue(controller.state.value.parcels.isEmpty())
+        assertEquals("office", controller.state.value.membershipId)
+        controller.login(demoLogin)
+        controller.state.first { it.challenge != null }
+        controller.verify("123456")
+        val restored = controller.state.first { it.profile != null && !it.busy }
+        assertEquals("office", restored.membershipId)
+        assertEquals("demo-8", restored.selectedId)
+        assertEquals(Route.DETAIL, restored.route)
+    }
+
+    @Test fun differentUserCannotInheritTheExpiredAccountsDestination() = runTest {
+        val clock = TestClock()
+        val demo = DemoRepository(MemoryStorage(), MemorySecure(), Brands.smartLocker, clock, 0)
+        demo.signIn()
+        val repository = object : LockerRepository by demo {
