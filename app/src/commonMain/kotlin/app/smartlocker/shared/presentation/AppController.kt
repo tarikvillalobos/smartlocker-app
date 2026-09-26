@@ -44,7 +44,6 @@ class AppController(
     private fun execute(block: suspend (Int) -> Unit) {
         if (actionJob?.isActive == true || readJob?.isActive == true) return
         val generation = epoch
-        scope.launch {
             if (generation != epoch) return@launch
             mutable.update { it.copy(busy = true, error = null) }
             try {
