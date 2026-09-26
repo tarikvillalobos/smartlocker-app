@@ -148,6 +148,7 @@ continuam pendentes.
 `python3 scripts/test_ios.py` cria e remove apenas seu simulador temporário.
 `--device UUID` usa um simulador existente e o preserva; `--output` permite guardar
 cada resultado `.xcresult` sem sobrescrever o anterior. A execução isolada
+registrada do cliente 1.1.0 está em `artifacts/ios-client-1.1.xcresult`. O build utiliza assinatura
 local (`CODE_SIGNING_ALLOWED=YES CODE_SIGN_IDENTITY=-`) para habilitar o Keychain.
 Isso não é assinatura comercial, provisioning para aparelho nem exportação IPA.
 O plist contém `CADisableMinimumFrameDurationOnPhone=true`, exigido pelo Compose.
