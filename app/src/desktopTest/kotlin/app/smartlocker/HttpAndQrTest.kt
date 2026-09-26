@@ -58,3 +58,6 @@ class HttpAndQrTest {
     @Test fun productionCannotSilentlyUseDemo() = runTest {
         assertEquals(FailureKind.MISSING_CONTRACT,
             assertFailsWith<AppFailure> { UnconfiguredRepository().requestLogin(demoLogin) }.kind)
+        assertFailsWith<IllegalArgumentException> { HttpTransport(MockEngine { respond("{}") }, "http://api.example.test") }
+    }
+}
