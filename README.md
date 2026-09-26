@@ -37,6 +37,10 @@ Fontes são baixadas de revisões fixas do Google Fonts e geradas localmente.
 
 ## Execução rápida no desktop
 
+```sh
+python3 scripts/prepare_resources.py
+./gradlew :app:run --args="--demo"
+```
 
 Setup and development instructions will be added as the project evolves.
 
