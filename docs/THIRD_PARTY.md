@@ -23,3 +23,6 @@ Versões escolhidas após consulta em 25/09/2026:
 Foram preferidas versões estáveis compatíveis com o ambiente instalado,
 não necessariamente as versões mais novas. Material 3 foi fixado em 1.9.0
 para evitar a versão alpha sugerida pelo catálogo padrão do plugin Compose.
+
+As licenças OFL de ambas as fontes acompanham os recursos em
+`app/src/commonMain/composeResources/files/licenses/`.
