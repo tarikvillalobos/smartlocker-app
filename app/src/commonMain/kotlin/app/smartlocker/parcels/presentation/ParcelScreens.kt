@@ -82,6 +82,7 @@ fun HistoryScreen(state: AppState, controller: AppController) {
             Metadata("Total recebido", state.statistics?.total?.let { "$it encomendas" } ?: "Sem dados")
             Metadata("Tempo médio para retirar", durationLabel(state.statistics?.averageMillis))
         }
+        if (state.statistics?.complete == false) Text("Indicadores indisponíveis para este período.", color = Tokens.secondary)
         Text("Média de retiradas físicas confirmadas. Marcações manuais não entram na média.",
             style = MaterialTheme.typography.bodySmall, color = Tokens.secondary)
     }
