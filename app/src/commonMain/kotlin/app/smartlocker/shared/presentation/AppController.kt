@@ -63,7 +63,6 @@ class AppController(
             epoch++
             val old = state.value
             mutable.value = AppState(initialized = true, route = old.route,
-                selectedId = old.selectedId, filter = old.filter, now = clock.now(), error = error.message)
         } else if (error is AppFailure && error.kind == FailureKind.DENIED) {
             mutable.update { it.copy(error = error.message, parcels = emptyList(), pending = emptyList(),
                 selected = null, selectedId = null, credential = null, notices = emptyList(),
