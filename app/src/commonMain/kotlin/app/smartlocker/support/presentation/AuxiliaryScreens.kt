@@ -86,6 +86,11 @@ fun AuxiliaryScreen(state: AppState, controller: AppController, platform: Platfo
 @Composable
 private fun IssueScreen(state: AppState, controller: AppController) {
     var message by rememberSaveable(state.selectedId) { mutableStateOf("") }
+    var observedSubmission by rememberSaveable { mutableLongStateOf(state.issueSubmission) }
+    LaunchedEffect(state.issueSubmission) {
+        if (state.issueSubmission != observedSubmission) message = ""
+        observedSubmission = state.issueSubmission
+    }
     PageTitle("Solicitações", { controller.navigate(if (state.selectedId != null) Route.DETAIL else Route.PROFILE) })
     if (state.selectedId != null) Panel {
         Text("Problema com ${state.selected?.carrier ?: "a encomenda selecionada"}", style = MaterialTheme.typography.titleMedium)
