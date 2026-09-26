@@ -30,6 +30,7 @@ class AppController(
         }
         execute { generation ->
             val session = repository.restoreSession()
+            if (generation != epoch) return@execute
             mutable.update { it.copy(session = session, initialized = true) }
             if (session != null) load()
         }
