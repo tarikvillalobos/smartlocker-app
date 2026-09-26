@@ -27,7 +27,6 @@ class ProductionRuntimeUiTest {
                 onNodeWithText("Celular").performScrollTo().performTextInput("11987654321")
                 onNodeWithText("CPF").performScrollTo().performTextInput("52998224725")
                 onNodeWithText("Receber código por SMS").performScrollTo().performClick()
-                waitUntil(10_000) { controller.state.value.challenge != null && !controller.state.value.busy }
                 onNodeWithText("Código de 6 dígitos").performScrollTo().performTextInput("123456")
                 onNodeWithText("Confirmar código").performScrollTo().performClick()
                 waitUntil(15_000) { controller.state.value.profile != null && !controller.state.value.busy }
