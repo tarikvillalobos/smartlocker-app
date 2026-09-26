@@ -23,6 +23,7 @@ data class Parcel(
     val canMarkManually: Boolean = true,
     val canUndo: Boolean = false,
     val version: String? = null,
+    val canReportIssue: Boolean = true,
 ) {
     val status: ParcelStatus get() = when {
         collectedAt != null -> ParcelStatus.COLLECTED
