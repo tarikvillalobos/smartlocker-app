@@ -43,7 +43,6 @@ marcação nunca reativa códigos. Métricas usam o conjunto completo mesmo quan
 a listagem mostra apenas 20 de 73 registros. O transporte usa Ktor MockEngine
 para verificar 401/403/409/429/503, cancelamento e ausência de repetição automática.
 ZXing decodifica o QR e confirma o payload sintético de origem.
-Relatórios: `core/build/reports/tests/jvmTest/` e `app/build/reports/tests/desktopTest/`.
 
 ## Contrato OpenAPI proposto
 
