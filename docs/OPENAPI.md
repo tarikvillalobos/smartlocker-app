@@ -103,7 +103,6 @@ de identidade; validade do OTP; política de canais; política de undo; emissão
 renovação de credenciais; permissões exatas; limites/retencão de idempotência;
 protocolo confiável dos eventos físicos; processos de suporte; fornecedor push e
 seus certificados/chaves de backend. Nem este documento nem sua validação provam
-implementação ou segurança do servidor futuro.
 
 ## Validação realizada
 
