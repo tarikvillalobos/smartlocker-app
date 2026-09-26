@@ -47,4 +47,3 @@ interface DemoControls {
     suspend fun physicalPickup(locationId: String, parcelId: String)
     suspend fun scenario(value: DemoScenario)
 }
-enum class DemoScenario { NORMAL, EMPTY, MANY, NETWORK, DENIED, EXPIRED_SESSION, EXPIRED_CODE, LOCKER_OFFLINE }
