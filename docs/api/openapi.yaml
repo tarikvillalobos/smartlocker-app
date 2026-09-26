@@ -2458,3 +2458,16 @@ components:
         - "status"
         - "code"
         - "requestId"
+      description: |-
+        RFC 9457 application/problem+json. O app decide texto e ação pelo code; HTTP status deve coincidir com status.
+        401=session/refresh; 403=permissão ou recurso desabilitado; 404=recurso inexistente ou de outro usuário;
+        409=estado/idempotência; 410=OTP/cursor/credencial sem validade; 412=versão; 422=validação/OTP inválido;
+        429=limite de tentativas/reenvio; 503=indisponibilidade. Nunca distinguir recursos de outros usuários.
+      examples:
+        -
+          type: "about:blank"
+          title: "Código expirado"
+          status: 410
+          code: "CREDENTIAL_EXPIRED"
+          requestId: "request-example"
+          detail: "Atualize a encomenda para verificar as opções disponíveis."
