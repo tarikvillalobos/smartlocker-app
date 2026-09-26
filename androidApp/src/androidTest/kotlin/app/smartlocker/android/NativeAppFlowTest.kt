@@ -145,6 +145,11 @@ class NativeAppFlowTest {
                 kotlin.math.abs(clipped.bottom - complete.bottom) <= tolerance &&
                 complete.top >= window.safeTop - tolerance &&
                 complete.left >= window.safeLeft - tolerance &&
+                complete.right <= window.width - window.safeRight + tolerance &&
+                complete.bottom <= window.height - window.imeBottom + tolerance
+        }
+    }
+
     private fun login() {
         ui.onNodeWithText("Preencher dados de demonstração").performScrollTo().performClick()
         ui.onNodeWithText("Receber código por SMS").performScrollTo().performClick()
