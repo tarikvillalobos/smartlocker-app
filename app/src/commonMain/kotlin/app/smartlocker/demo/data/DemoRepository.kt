@@ -98,3 +98,23 @@ class DemoRepository(
     }
     override suspend fun verifyContactChange(challengeId: String, code: String): Profile {
         mutex.withLock {
+            check()
+            val (contact, channel) = pendingContact ?: throw AppFailure(FailureKind.CONFLICT, "Solicite um código.")
+            auth.verify(challengeId, code)
+            db.update { if (channel == LoginChannel.SMS) it.copy(phone = contact) else it.copy(email = contact) }
+            pendingContact = null
+        }
+        return profile()
+    }
+    override suspend fun notifications(locationId: String): List<DeliveryNotice> {
+        check()
+        val ids = parcels.all(locationId).map { it.id }.toSet()
+        return db.snapshot.notices.filter { it.parcel in ids }.map { it.toDomain() }
+    }
+    override suspend fun markNoticeRead(locationId: String, id: String) = mutex.withLock {
+        val allowed = notifications(locationId).any { it.id == id }
+        if (!allowed) throw AppFailure(FailureKind.DENIED, "Aviso indisponível.")
+        db.update { it.copy(notices = it.notices.map { n -> if (n.id == id) n.copy(read = true) else n }) }
+    }
+    override suspend fun reportIssue(locationId: String, parcelId: String, message: String): SupportIssue = mutex.withLock {
+        check()
