@@ -93,6 +93,9 @@ class AppController(
         if (generation != epoch) return@execute
         mutable.update { it.copy(session = session, challenge = null,
             route = if (previousUser == null || previousUser == session.userId) it.route else Route.HOME,
+            selectedId = if (previousUser == null || previousUser == session.userId) it.selectedId else null,
+            membershipId = if (previousUser == null || previousUser == session.userId) it.membershipId else "",
+            filter = if (previousUser == null || previousUser == session.userId) it.filter else ParcelFilter.ALL) }
         load()
     }
 
