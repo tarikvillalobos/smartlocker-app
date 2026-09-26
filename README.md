@@ -109,3 +109,23 @@ A CI configura runners Linux, Windows e macOS, além de Android e simulador iOS.
 - `app/commonMain`: repositórios, transporte HTTP, demonstração, estado e UI.
 - `app/androidMain`, `iosMain`, `desktopMain`: serviços específicos.
 - `androidApp`: Activity, ViewModel, ícone, manifesto e tratamento de dobradiças.
+- `iosApp`: host SwiftUI, Keychain e configuração XcodeGen.
+- `scripts`: recursos, bootstrap e auditoria de commits.
+- `docs`: arquitetura, API, personalização, responsividade e validação.
+
+Veja [arquitetura e segurança local](docs/ARCHITECTURE.md),
+[integração externa](docs/API.md), [white-label](docs/BRANDING.md) e
+[responsividade](docs/RESPONSIVE.md).
+
+## Distribuição
+
+Desktop: `./gradlew :app:packageDistributionForCurrentOS`. Pacotes DMG, MSI e DEB
+são gerados no sistema correspondente; assinatura e notarização não estão
+configuradas. Android release exige keystore privado e política de assinatura.
+iOS exige equipe Apple, provisioning, ícones de distribuição e documentos legais.
+Não inclua segredos ou chaves privadas no repositório.
+
+## Git
+
+Cada commit de implementação altera exatamente um arquivo e até 20 linhas
+adicionadas + removidas. Ative o hook após clonar:
