@@ -47,3 +47,23 @@ O domínio de exemplo acima não oferece serviço. Substitua-o pelo ambiente rea
 A configuração do endpoint não muda uma preferência de demonstração já salva;
 na tela de login, selecione “Usar API externa” quando necessário.
 
+## Autenticação e armazenamento
+
+`X-Brand-Id` acompanha as requisições. O access token segue no header Bearer;
+refresh token, sessionId, marca, usuário e os dois prazos ficam no cofre nativo.
+O prazo exposto ao controller representa a validade da sessão renovável. Expirar
+um access token isoladamente permite refresh antes da próxima leitura protegida.
+Revogação ou expiração da sessão remove os dados autenticados.
+
+O refresh é serializado. Sua chave de idempotência pendente é gravada no cofre
+antes da chamada, permitindo repetir a mesma intenção após resposta incerta.
+Operações mutáveis não são repetidas automaticamente. Chaves de outras intenções
+incertas ficam em memória durante a sessão para uma repetição explícita.
+Não existe fila offline que apresente confirmação antes da resposta do servidor.
+
+`ChunkedSecureStore` grava a sessão em partes pequenas no próprio cofre, usando
+manifesto e journal para substituição e recuperação. O limite do registro é
+256 KiB; tokens não são truncados para caber em um único item nativo. Não existe
+fallback para arquivo sem proteção. Logout limpa a sessão local mesmo se não
+for possível confirmar a revogação remota.
+
