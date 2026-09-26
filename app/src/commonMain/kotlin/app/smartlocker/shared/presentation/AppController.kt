@@ -65,6 +65,8 @@ class AppController(
         if (error is AppFailure && error.kind == FailureKind.EXPIRED_SESSION) {
             previousUser = state.value.session?.userId
             epoch++
+            readJob?.cancel()
+            actionJob?.cancel()
             val old = state.value
             mutable.value = AppState(initialized = true, route = old.route,
                 selectedId = old.selectedId, filter = old.filter, membershipId = old.membershipId,
