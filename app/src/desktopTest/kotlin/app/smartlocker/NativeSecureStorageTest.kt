@@ -92,6 +92,7 @@ class NativeSecureStorageTest {
                 failure?.let { throw it }
             }
         }
+
     private fun fixture(test: suspend (DesktopSecureStorage, Path, String, String) -> Unit) {
         assumeTrue("Native vault tests require explicit opt-in", System.getenv("SMARTLOCKER_NATIVE_SECURE_TESTS") == "1")
         val directory = Files.createTempDirectory("smartlocker-vault-test-")
