@@ -1,9 +1,5 @@
 # Base OpenAPI proposta para SmartLocker
 
-A minuta em [`api/openapi.yaml`](api/openapi.yaml) foi criada a pedido do usuário como base de um
-contrato que ainda não existe. Ela não descreve uma API já fornecida, não cria
-servidor e não conecta o aplicativo. O host `.example.invalid` é deliberadamente
-não operacional. Versão `0.1.0-draft`, formato OpenAPI 3.1.1/JSON Schema 2020-12.
 
 ## Cobertura
 
