@@ -878,3 +878,23 @@ paths:
         "409":
           $ref: "#/components/responses/Problem"
         "412":
+          $ref: "#/components/responses/Problem"
+        "429":
+          $ref: "#/components/responses/Problem"
+        "503":
+          $ref: "#/components/responses/Problem"
+        default:
+          $ref: "#/components/responses/Problem"
+    delete:
+      operationId: "undoManualPickup"
+      tags:
+        - "Parcels"
+      summary: "Desfazer exclusivamente uma marcação manual permitida"
+      description: |-
+        Exige canUndoManual e prazo undoUntil ainda válido. Nunca desfazer confirmação física. Limpar manualAt,
+        preservar evento de reversão e manter credentialStatus=revoked. Nenhum código consumido ou revogado é
+        reativado.
+      x-required-permission: "parcels:manual"
+      parameters:
+        -
+          $ref: "#/components/parameters/BrandId"
