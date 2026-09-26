@@ -1278,3 +1278,23 @@ components:
       name: "challengeId"
       in: "path"
       required: true
+      schema:
+        $ref: "#/components/schemas/Identifier"
+    NoticeId:
+      name: "noticeId"
+      in: "path"
+      required: true
+      schema:
+        $ref: "#/components/schemas/Identifier"
+    IssueId:
+      name: "issueId"
+      in: "path"
+      required: true
+      schema:
+        $ref: "#/components/schemas/Identifier"
+    InstallationId:
+      name: "installationId"
+      in: "path"
+      required: true
+      schema:
+        type: "string"
