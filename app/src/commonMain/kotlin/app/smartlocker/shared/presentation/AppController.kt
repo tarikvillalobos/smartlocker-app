@@ -145,6 +145,10 @@ class AppController(
         val recent = if (context.filter == ParcelFilter.ALL) page.items.take(4)
             else repository.parcels(location, ParcelFilter.ALL, null).items.take(4)
         val statistics = history.statistics
+        val notices = repository.noticePage(location)
+        val membership = profile.memberships.first { it.id == location }
+        val issues = if (brand.features.issues && membership.features.issues) repository.issuePage(location)
+            else app.smartlocker.profile.domain.IssuePage(emptyList(), null)
         val selectedId = context.selectedId ?: pending.firstOrNull()?.id
         val detail = readDetail(location, selectedId)
         if (generation != epoch) return
