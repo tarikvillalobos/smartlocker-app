@@ -78,3 +78,23 @@ class DemoRepository(
         parcels.mark(locationId, parcelId, false)
     }
     override suspend fun undoManual(locationId: String, parcelId: String): Parcel = mutex.withLock {
+        check()
+        if (!brand.features.manualPickup) throw AppFailure(FailureKind.DENIED, "Recurso não habilitado.")
+        parcels.undo(locationId, parcelId)
+    }
+    override suspend fun updatePreferences(value: CommunicationPreferences): Profile {
+        mutex.withLock {
+            check()
+            db.update { it.copy(inApp = value.inApp, sms = value.sms, whatsapp = value.whatsapp) }
+        }
+        return profile()
+    }
+    override suspend fun requestContactChange(contact: String, channel: LoginChannel): Challenge {
+        check()
+        if (!brand.features.contactEditing) throw AppFailure(FailureKind.DENIED, "Edição indisponível.")
+        return mutex.withLock {
+            auth.request(LoginRequest(contact, "52998224725", channel)).also { pendingContact = contact to channel }
+        }
+    }
+    override suspend fun verifyContactChange(challengeId: String, code: String): Profile {
+        mutex.withLock {
