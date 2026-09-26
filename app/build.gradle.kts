@@ -46,7 +46,6 @@ kotlin {
             implementation(libs.coroutines.test)
         }
         val desktopTest by getting {
-            dependencies { implementation(compose.desktop.uiTestJUnit4) }
         }
     }
 }
