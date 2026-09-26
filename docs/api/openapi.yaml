@@ -1778,3 +1778,23 @@ components:
               type: "null"
         preferences:
           $ref: "#/components/schemas/CommunicationPreferences"
+        memberships:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Membership"
+      required:
+        - "id"
+        - "name"
+        - "phone"
+        - "phoneVerifiedAt"
+        - "email"
+        - "emailVerifiedAt"
+        - "preferences"
+        - "memberships"
+    ContactChangeRequest:
+      type: "object"
+      properties:
+        contact:
+          type: "string"
+          minLength: 3
+          maxLength: 254
