@@ -10,7 +10,6 @@ Atualizado em 26/09/2026. Consulte [VALIDATION.md](VALIDATION.md) para as evidê
 - [x] Persistência demonstrativa, isolamento, sessão e tratamento de erros.
 - [x] Serviços nativos e duas marcas, com logos, canais e rotas opcionais.
 - [x] Layout adaptativo, fonte a 200%, paisagem e redimensionamento.
-- [x] Builds Android/iOS e testes compartilhados executados.
 - [x] Documentação de arquitetura, API, marcas, execução e distribuição.
 - [x] Base OpenAPI 3.1.1 proposta, validada e documentada, solicitada pelo usuário.
 - [x] Regressões de sessão/local, paginação, contato, avisos e concorrência corrigidas.
