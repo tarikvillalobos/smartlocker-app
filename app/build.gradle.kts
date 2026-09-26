@@ -32,7 +32,6 @@ kotlin {
             implementation(libs.ktor.client.content)
             implementation(libs.ktor.json)
         }
-        androidMain.dependencies { implementation(libs.ktor.client.cio) }
         iosMain.dependencies { implementation(libs.ktor.client.darwin) }
         val desktopMain by getting {
             dependencies {
