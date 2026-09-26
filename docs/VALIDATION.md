@@ -57,9 +57,6 @@ nem ensaios de dobradiça física ou de foco por teclado em cada sistema.
 | Plataforma | Evidência | Limites |
 | --- | --- | --- |
 | Desktop macOS | Compilação e testes Compose/JVM aprovados | DMG e assinatura não ensaiados |
-| Android | APK debug e lint aprovados | Distribuição e aparelho físico pendentes |
-| iOS | Host SwiftUI/Compose compilado; login aberto em iPhone 17 Pro simulado | Assinatura e aparelho físico pendentes |
-| Windows/Linux | Entrypoints, cofres e CI configurados | Estado dos jobs indicado abaixo; cofres nativos não ensaiados |
 
 Android: `:androidApp:assembleDebug :androidApp:lintDebug`, com **0 erros e
 2 avisos** sobre atualização do SDK 35. APK em
