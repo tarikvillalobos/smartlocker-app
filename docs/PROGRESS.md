@@ -11,5 +11,3 @@
 - [ ] Documentação e auditoria do histórico.
 - [ ] API real: aguardando documentação e ambiente de homologação.
 
-O backend local será explicitamente demonstrativo. Integrações reais
-necessitam contratos e credenciais dos fornecedores.
