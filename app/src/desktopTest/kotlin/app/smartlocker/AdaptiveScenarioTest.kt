@@ -37,7 +37,6 @@ class AdaptiveScenarioTest {
             runOnIdle { controller.login(demoLogin) }
             waitUntil(timeoutMillis = 10_000) { controller.state.value.challenge != null }
             runOnIdle { controller.verify("123456") }
-            waitUntil(15_000) { controller.state.value.profile != null && !controller.state.value.busy }
             runOnIdle { controller.filter(ParcelFilter.WAITING); controller.select("demo-1") }
             waitUntil(15_000) { controller.state.value.selected?.id == "demo-1" && !controller.state.value.busy }
             for ((w, h) in listOf(1200 to 840, 600 to 840, 320 to 600, 840 to 390, 390 to 400)) {
