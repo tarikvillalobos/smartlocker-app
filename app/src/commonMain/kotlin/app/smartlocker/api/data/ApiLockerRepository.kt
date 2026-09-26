@@ -58,3 +58,23 @@ class ApiLockerRepository(private val session: ApiSessionClient) : LockerReposit
         val response = request<ApiParcelPage>(user, path)
         requireResponse(response.items.all { it.membershipId == locationId })
         val page = response.toDomain()
+        requireResponse(page.items.all { when (filter) {
+            ParcelFilter.ALL -> true
+            ParcelFilter.WAITING -> it.status == ParcelStatus.WAITING
+            ParcelFilter.COLLECTED -> it.status != ParcelStatus.WAITING
+        } })
+        validateCursor(cursor, page.nextCursor)
+        val global = configuration().capabilities
+        val items = page.items.map { restrictActions(it, membership.capabilities, global) }
+        cache(user) { items.forEach { reviewedParcels[locationId to it.id] = it } }
+        return page.copy(items = items)
+    }
+
+    override suspend fun parcel(locationId: String, id: String): Parcel {
+        val user = currentUser()
+        val membership = membership(locationId, user)
+        val response = request<ApiParcel>(user, parcelPath(locationId, id))
+        return parcel(response, locationId, id, membership.capabilities, user)
+    }
+
+    override suspend fun statistics(locationId: String): Statistics {
