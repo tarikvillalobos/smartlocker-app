@@ -58,3 +58,13 @@ fun SmartLockerTheme(brand: Brand, content: @Composable () -> Unit) {
         colorScheme = lightColorScheme(primary = Color(brand.primary), secondary = Color(brand.dark),
             background = Tokens.background, surface = Color.White, onSurface = Tokens.text,
             onBackground = Tokens.text, outline = Tokens.strongBorder, error = Tokens.destructive,
+            onPrimary = Color.White, surfaceVariant = Tokens.success, onSurfaceVariant = Tokens.secondary),
+        typography = Typography(displaySmall = title(30), headlineMedium = title(26),
+            headlineSmall = title(22), titleLarge = title(20), titleMedium = title(17),
+            titleSmall = title(15), bodyLarge = text(16), bodyMedium = text(14), bodySmall = text(12),
+            labelLarge = text(15, FontWeight.Bold), labelMedium = text(13, FontWeight.SemiBold),
+            labelSmall = text(12, FontWeight.SemiBold)),
+        shapes = Shapes(small = Tokens.control, medium = Tokens.card, large = Tokens.hero),
+        content = content,
+    )
+}
