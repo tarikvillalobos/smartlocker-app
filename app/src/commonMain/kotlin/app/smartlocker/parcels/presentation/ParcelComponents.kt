@@ -98,3 +98,11 @@ fun PickupCard(state: AppState, controller: AppController, platform: PlatformSer
                     }
                 }
                 if (!detail) OutlinedIconButton({ controller.navigate(Route.DETAIL) }) {
+                    AppIcon(Symbol.NEXT, "Ver detalhes", tint = Color.White)
+                }
+            }
+        } else if (!detail) {
+            TextButton({ controller.navigate(Route.DETAIL) }) { Text("Ver detalhes", color = Color.White) }
+        }
+    }
+}
