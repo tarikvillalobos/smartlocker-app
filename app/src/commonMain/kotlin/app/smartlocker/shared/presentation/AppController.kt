@@ -155,6 +155,8 @@ class AppController(
         val context = state.value
         val detail = readDetail(context.membershipId, context.selectedId)
         if (generation != epoch) return
+        mutable.update { it.copy(selectedId = detail.parcel?.id, selected = detail.parcel,
+            credential = detail.credential, credentialMessage = detail.message, now = clock.now()) }
     }
 
     fun select(id: String, openDetail: Boolean = true) {
