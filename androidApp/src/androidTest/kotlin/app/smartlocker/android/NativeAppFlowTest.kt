@@ -105,6 +105,26 @@ class NativeAppFlowTest {
                         node.config.getOrNull(SemanticsProperties.Focused) == true)
                 }
                 val now = SystemClock.uptimeMillis()
+                if (sample != latest) { latest = sample; stableSince = now }
+                sample.isFullyVisible() && now - stableSince >= 250
+            }
+        } catch (error: ComposeTimeoutException) {
+            throw AssertionError("The complete focused $label field must remain above a visible, settled IME. Geometry: $latest", error)
+        }
+        field.assertIsFocused()
+    }
+
+    private fun keyboardWindow(): KeyboardWindow? {
+        var result: KeyboardWindow? = null
+        scenario.onActivity { activity ->
+            val insets = ViewCompat.getRootWindowInsets(activity.window.decorView) ?: return@onActivity
+            // Full window bounds do not shrink with adjustResize; avoid subtracting the IME twice.
+            val bounds = WindowMetricsCalculator.getOrCreate().computeCurrentWindowMetrics(activity).bounds
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            result = KeyboardWindow(insets.isVisible(WindowInsetsCompat.Type.ime()),
+                insets.getInsets(WindowInsetsCompat.Type.ime()).bottom, bounds.width(), bounds.height(),
+                systemBars.top, systemBars.left, systemBars.right)
+        }
     private fun login() {
         ui.onNodeWithText("Preencher dados de demonstração").performScrollTo().performClick()
         ui.onNodeWithText("Receber código por SMS").performScrollTo().performClick()
