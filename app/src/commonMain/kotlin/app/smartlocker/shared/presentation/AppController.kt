@@ -167,6 +167,7 @@ class AppController(
             credential = detail.credential, credentialMessage = detail.message, now = clock.now()) }
     }
     fun select(id: String, openDetail: Boolean = true) {
+        if (actionJob?.isActive == true) return
         mutable.update { it.copy(selectedId = id, selected = null, credential = null,
             route = if (openDetail) Route.DETAIL else it.route) }
         refreshData(detailOnly = true)
