@@ -10,9 +10,6 @@ import app.smartlocker.platform.DesktopServices
 
 fun main(args: Array<String>) = application {
     val runtime = remember {
-        val brand = if ("--aurora" in args) Brands.aurora else Brands.smartLocker
-        val configuration = if ("--demo" in args) AppConfiguration(brand, Environment.DEMO) else null
-        AppRuntime(DesktopServices(), configuration)
     }
     val holder by runtime.state.collectAsState()
     Window(onCloseRequest = { runtime.close(); exitApplication() }, title = holder.configuration.brand.name,
