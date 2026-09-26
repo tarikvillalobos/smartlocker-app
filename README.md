@@ -10,11 +10,6 @@ verde da marca padrão. Aurora Lockers demonstra uma segunda personalização.
 
 ## Status real
 
-- View received packages
-- Check package details and status
-- Access pickup codes
-- Track pending and collected packages
-- Receive delivery-related notifications
 
 ## White Label
 
