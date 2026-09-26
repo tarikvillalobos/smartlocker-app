@@ -38,6 +38,7 @@ def visit(value):
     elif isinstance(value, list):
         for child in value: visit(child)
 visit(spec)
+validate_spec(spec)
 for name, item in spec['paths'].items():
     for method in ['get', 'post', 'put', 'patch', 'delete']:
         if method in item:
