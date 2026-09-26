@@ -18,3 +18,15 @@ targets:
       - SmartLockerApp.swift
     settings:
       base:
+        TARGETED_DEVICE_FAMILY: "1,2"
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: SmartLocker
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
+    preBuildScripts:
+      - name: Compile shared Compose framework
+        script: |
+          cd "$SRCROOT/.."
+          python3 scripts/prepare_resources.py
+          ./gradlew :app:embedAndSignAppleFrameworkForXcode
+        basedOnDependencyAnalysis: false
