@@ -6,6 +6,8 @@ data class Features(
     val manualPickup: Boolean = true,
     val contactEditing: Boolean = true,
 )
+enum class BrandMark { PARCEL, MONOGRAM }
+
 data class Brand(
     val id: String,
     val name: String,
