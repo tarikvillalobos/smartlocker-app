@@ -1,9 +1,5 @@
 # Instalação e distribuição
 
-Os pacotes entregam a experiência local demonstrativa. A OpenAPI é uma proposta;
-a API operacional e a homologação estão indisponíveis. Documentos legais e
-fornecedores ainda não foram configurados.
-A versão `1.0.0` identifica os pacotes, sem afirmar prontidão para produção.
 
 ## Desktop
 
