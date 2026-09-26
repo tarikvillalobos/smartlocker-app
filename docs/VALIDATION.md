@@ -141,10 +141,6 @@ O plist contém `CADisableMinimumFrameDurationOnPhone=true`, exigido pelo Compos
 
 | Entrega | Evidência | Limite |
 | --- | --- | --- |
-| Desktop macOS | Compilação e testes Compose/JVM aprovados | DMG e assinatura não ensaiados |
-| Android | APK, lint e abertura no emulador API 34 aprovados | Distribuição e aparelho físico pendentes |
-| iOS | Build, abertura e teste de teclado/rotação no iPhone 17 Pro simulado | Assinatura e aparelho físico pendentes |
-| Windows/Linux | Testes Compose/JVM aprovados na CI | Cofres nativos e instaladores não ensaiados |
 
 Android: `:androidApp:assembleDebug :androidApp:lintDebug`, com **0 erros e
 2 avisos** sobre atualização do SDK 35. APK em
