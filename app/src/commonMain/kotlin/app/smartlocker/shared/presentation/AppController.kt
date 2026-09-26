@@ -77,8 +77,6 @@ class AppController(
         mutable.update { it.copy(challenge = challenge) }
     }
     fun resend() { lastLogin?.let(::login) }
-    fun correctContact() { mutable.update { it.copy(challenge = null, error = null) } }
-    fun verify(code: String) = execute {
         val challenge = state.value.challenge ?: return@execute
         val session = repository.verifyLogin(challenge.id, code)
         mutable.update { it.copy(session = session, challenge = null,
