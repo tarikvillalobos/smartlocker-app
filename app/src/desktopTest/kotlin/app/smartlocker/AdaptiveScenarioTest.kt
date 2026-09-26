@@ -58,3 +58,23 @@ class AdaptiveScenarioTest {
         try {
             setContent { CompositionLocalProvider(LocalDensity provides Density(1f, 2f)) { SmartLockerApp(runtime) } }
             waitUntil(10_000) { controller.state.value.initialized }
+            runOnIdle { controller.login(demoLogin) }
+            waitUntil(10_000) { controller.state.value.challenge != null }
+            runOnIdle { controller.verify("123456") }
+            waitUntil(15_000) { controller.state.value.profile != null && !controller.state.value.busy }
+            runOnIdle { controller.demoScenario(DemoScenario.LONG_TEXT) }
+            waitUntil(15_000) { controller.state.value.selected?.carrier?.startsWith("Cooperativa") == true && !controller.state.value.busy }
+            onNodeWithText("Copiar código").performScrollTo().assertIsDisplayed()
+            capture("long-390-2x")
+            runOnIdle { controller.demoScenario(DemoScenario.MANY) }
+            waitUntil(15_000) { controller.state.value.statistics?.total == 73 && !controller.state.value.busy }
+            onNodeWithText("Copiar código").performScrollTo().assertIsDisplayed()
+            runOnIdle { controller.navigate(Route.HISTORY) }
+            onNodeWithText("Carregar mais").performScrollTo().performClick()
+            waitUntil(15_000) { controller.state.value.parcels.size == 40 && !controller.state.value.busy }
+            capture("many-390-2x")
+            runOnIdle { controller.demoScenario(DemoScenario.EMPTY); controller.navigate(Route.HOME) }
+            waitUntil(15_000) { controller.state.value.parcels.isEmpty() && !controller.state.value.busy }
+            onNodeWithText("Tudo em dia!").performScrollTo().assertIsDisplayed()
+            onNodeWithText("Copiar código").assertDoesNotExist()
+            capture("empty-390-2x")
