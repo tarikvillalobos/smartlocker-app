@@ -6,6 +6,7 @@ import androidx.compose.ui.uikit.OnFocusBehavior
 import app.smartlocker.platform.IosServices
 
 fun MainViewController(readSecret: (String) -> String?, writeSecret: (String, String?) -> Boolean) =
+    ComposeUIViewController(configure = { onFocusBehavior = OnFocusBehavior.DoNothing }) {
         val runtime = androidx.compose.runtime.remember { AppRuntime(IosServices(readSecret, writeSecret)) }
         DisposableEffect(runtime) { onDispose { runtime.close() } }
         SmartLockerApp(runtime)
