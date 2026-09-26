@@ -67,6 +67,7 @@ class AdaptiveScenarioTest {
             onNodeWithText("Copiar código").performScrollTo().assertIsDisplayed()
             capture("long-390-2x")
             runOnIdle { controller.demoScenario(DemoScenario.MANY) }
+            waitUntil(timeoutMillis = 15_000) { controller.state.value.statistics?.total == 73 && !controller.state.value.busy }
             onNodeWithText("Copiar código").performScrollTo().assertIsDisplayed()
             runOnIdle { controller.navigate(Route.HISTORY) }
             onNodeWithText("Carregar mais").performScrollTo().performClick()
