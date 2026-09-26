@@ -13,6 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import app.smartlocker.parcels.domain.*
 import kotlinx.datetime.*
+import kotlin.time.Instant
 
 @Composable
 fun Panel(modifier: Modifier = Modifier, dark: Boolean = false, content: @Composable ColumnScope.() -> Unit) {
