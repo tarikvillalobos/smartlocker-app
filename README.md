@@ -12,6 +12,8 @@ verde da marca padrão. Aurora Lockers demonstra uma segunda personalização.
 
 Em desenvolvimento. A experiência demonstrativa funciona localmente dentro do
 aplicativo, com persistência e fluxos interativos. Não existe servidor próprio.
+A API externa e suas credenciais ainda não existem. A pedido do usuário, criamos
+[uma base OpenAPI validada](docs/OPENAPI.md) para o futuro fornecedor.
 O modo de produção informa essa indisponibilidade e nunca usa demonstração
 como fallback. Nenhum SMS, e-mail, WhatsApp, push ou comando de hardware é enviado.
 O produto ainda não está pronto para produção.
