@@ -197,7 +197,6 @@ class ApiSessionClient(
         }
         if (token != null) {
             try {
-                request("/auth/logout", HttpMethod.Post, headers = mapOf("Authorization" to "Bearer $token"), authenticated = false)
             } catch (error: CancellationException) { throw error }
             catch (_: Exception) {
                 throw AppFailure(FailureKind.NETWORK, "Sessão removida deste dispositivo. Não foi possível confirmar a revogação remota.")
