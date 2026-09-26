@@ -258,3 +258,23 @@ class ApiSessionClientTest {
                     else -> { protectedReads++; respond("{}", headers = JSON) }
                 }
             }
+            try {
+                client.verifyLogin("challenge-1", "123456")
+                assertFailsWith<AppFailure> { client.request("/me") }
+                assertEquals("ana", client.currentSession()?.userId)
+                assertEquals(0, protectedReads)
+            } finally { client.close() }
+        }
+    }
+
+    @Test fun differentBackendCannotRestoreOrTransmitAnotherOriginsSession() = runTest {
+        val clock = TestClock()
+        val secure = MemorySecure()
+        val first = client(clock, secure) { respond(tokens(clock), headers = JSON) }
+        first.verifyLogin("challenge-1", "123456")
+        first.close()
+        var calls = 0
+        val second = client(clock, secure, "https://different.example.test/v1") { calls++; error("No request is authorized") }
+        try {
+            assertNull(second.restoreSession())
+            assertEquals(0, calls)
