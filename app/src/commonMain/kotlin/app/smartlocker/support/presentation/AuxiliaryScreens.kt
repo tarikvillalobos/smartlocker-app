@@ -104,6 +104,7 @@ private fun IssueScreen(state: AppState, controller: AppController) {
     if (state.issues.isEmpty()) EmptyState("Nenhuma solicitação", "Relate problemas a partir do detalhe da encomenda.")
     state.issues.sortedByDescending { it.createdAt }.forEach { issue ->
         Panel {
+            Text("${issue.reference} · ${issue.status}", style = MaterialTheme.typography.labelLarge)
             Text(issue.message)
             Text(dateTime(issue.createdAt), style = MaterialTheme.typography.bodySmall, color = Tokens.secondary)
         }
