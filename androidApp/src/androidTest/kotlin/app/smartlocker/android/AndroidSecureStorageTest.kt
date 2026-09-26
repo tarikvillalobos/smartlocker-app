@@ -78,3 +78,20 @@ class AndroidSecureStorageTest {
         storage.write(second, "two")
         storage.write(first, null)
         assertFalse(preferences.contains(first))
+        assertNull(AndroidSecureStorage(context).read(first))
+        assertEquals("two", AndroidSecureStorage(context).read(second))
+    }
+
+    @Test fun demoLoginRestoresAndLogoutRemovesTheEncryptedSession() = runBlocking {
+        val clock = AppClock { 1_800_000_000_000L }
+        val auth = DemoAuth(storage, prefix, clock)
+        val challenge = auth.request(LoginRequest("11987654321", "52998224725", LoginChannel.SMS))
+        val session = auth.login(challenge.id, "123456")
+        val reopened = DemoAuth(AndroidSecureStorage(context), prefix, clock)
+        assertEquals(session, reopened.restore())
+        reopened.logout()
+        assertNull(reopened.session)
+        assertNull(DemoAuth(AndroidSecureStorage(context), prefix, clock).restore())
+        assertFalse(preferences.contains("demo.$prefix.session"))
+    }
+}
