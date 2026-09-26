@@ -255,6 +255,14 @@ class AppController(
         mutable.update { it.copy(profile = profile, contactChallenge = null, contactValue = "", route = Route.PROFILE,
             feedback = "Contato verificado e atualizado.") }
     }
+    fun report(message: String) = execute { generation ->
+        val context = state.value
+        val selectedId = context.selectedId ?: return@execute
+        val issue = repository.reportIssue(context.membershipId, selectedId, message)
+        if (generation != epoch) return@execute
+        mutable.update { it.copy(issues = it.issues + issue, issueSubmission = it.issueSubmission + 1,
+            feedback = "Solicitação ${issue.id} recebida. Acompanhe nesta tela.", stale = true, credential = null) }
+        refreshAfterMutation(generation)
     }
     fun notice(value: DeliveryNotice) = execute { generation ->
         repository.markNoticeRead(state.value.membershipId, value.id)
