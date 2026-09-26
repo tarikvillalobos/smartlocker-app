@@ -28,6 +28,24 @@ páginas carregadas ao abrir detalhes, recentes independentes do filtro históri
 e reenvio de verificação de contato depois de navegar. Uma ação já confirmada
 continua confirmada se a atualização posterior falhar, evitando relatos repetidos.
 
+A retirada manual permanece distinta do evento físico simulado. Desfazer uma
+marcação nunca reativa códigos. Métricas usam o conjunto completo mesmo quando
+a listagem mostra apenas 20 de 73 registros. O transporte usa Ktor MockEngine
+para verificar 401/403/409/429/503, cancelamento e ausência de repetição automática.
+ZXing decodifica o QR e confirma o payload sintético de origem.
+Relatórios: `core/build/reports/tests/jvmTest/` e `app/build/reports/tests/desktopTest/`.
+
+## Contrato OpenAPI proposto
+
+A base em `docs/api/openapi.yaml` contém **23 caminhos, 26 operações e 38 schemas**.
+A validação formal de OpenAPI 3.1.1, referências locais e oito exemplos passou.
+Também passaram **21 casos positivos e negativos de JSON Schema**, cobrindo
+CPF, contatos/canais, OTP, preferências, métricas, UTC e cadastro push.
+
+Execute `scripts/validate_openapi.py` e `scripts/check_openapi_cases.py` no ambiente
+Python descrito em [OPENAPI.md](OPENAPI.md). A CI executa as mesmas verificações.
+Isso valida a estrutura e exemplos da proposta; não testa um servidor nem indica
+que os endpoints foram implementados. O app continua sem adaptador dessa minuta.
 
 ## Layout e acessibilidade
 
