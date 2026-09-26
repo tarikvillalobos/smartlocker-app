@@ -98,3 +98,23 @@ class ApiSessionClientTest {
         val authorizations = mutableListOf<String?>()
         val client = client(clock) { request ->
             when (request.path()) {
+                "/auth/challenges/challenge-1/verify" -> respond(tokens(clock, accessIn = 10_000), headers = JSON)
+                "/auth/refresh" -> {
+                    rotations++
+                    assertNull(request.headers[HttpHeaders.Authorization])
+                    assertEquals("refresh-old", request.jsonBody().getValue("refreshToken").jsonPrimitive.content)
+                    entered.complete(Unit)
+                    release.await()
+                    respond(tokens(clock, access = "access-new", refresh = "refresh-new"), headers = JSON)
+                }
+                "/me" -> {
+                    authorizations += request.headers[HttpHeaders.Authorization]
+                    respond("{}", headers = JSON)
+                }
+                else -> error("Unexpected fixture path")
+            }
+        }
+        try {
+            client.verifyLogin("challenge-1", "123456")
+            val reads = List(2) { async { client.request("/me") } }
+            entered.await()
