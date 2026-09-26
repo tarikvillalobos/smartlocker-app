@@ -44,7 +44,6 @@ fun ProfileScreen(state: AppState, controller: AppController, platform: Platform
     }
     Text("AVISOS DE ENCOMENDA", style = MaterialTheme.typography.labelMedium, color = Tokens.secondary)
     Panel {
-        PreferenceRow("Notificação no aplicativo", profile.preferences.inApp, !state.busy) {
             controller.preferences(profile.preferences.copy(inApp = it))
         }
         if ("sms" in brand.channels) PreferenceRow("SMS", profile.preferences.sms, !state.busy) {
