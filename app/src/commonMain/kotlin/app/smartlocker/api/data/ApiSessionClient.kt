@@ -212,6 +212,15 @@ class ApiSessionClient(
             try {
                 request("/auth/logout", HttpMethod.Post, headers = mapOf("Authorization" to "Bearer $token",
                     "Idempotency-Key" to Uuid.random().toString()), authenticated = false)
+                true
+            } catch (cancelled: CancellationException) { throw cancelled }
+            catch (_: Exception) { false }
+        }
+        if (!localCleared) {
+            val message = when (remoteRevoked) {
+                true -> "A sessão foi revogada no servidor, mas não foi possível remover a sessão protegida deste dispositivo."
+                false -> "Não foi possível remover a sessão protegida deste dispositivo nem confirmar a revogação remota."
+                null -> "Não foi possível remover a sessão protegida deste dispositivo. Nenhuma revogação remota foi confirmada."
             }
         }
     }
