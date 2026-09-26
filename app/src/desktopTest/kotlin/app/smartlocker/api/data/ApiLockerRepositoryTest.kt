@@ -138,3 +138,23 @@ class ApiLockerRepositoryTest {
                 }
                 "/v1/me/contact-challenges/contact-1/resend" -> {
                     assertEquals(HttpMethod.Post, request.method)
+                    assertEquals("", request.bodyText())
+                    json(challenge.copy(id = "contact-2"))
+                }
+                "/v1/me/contact-challenges/contact-2/verify" -> {
+                    assertEquals("{\"code\":\"123456\"}", request.bodyText())
+                    json(profile)
+                }
+                else -> error("Unexpected path")
+            }
+        }.useSuspend {
+            assertFalse(it.repo.updatePreferences(CommunicationPreferences(false, true, false)).preferences.inApp)
+            assertEquals("contact-1", it.repo.requestContactChange("(11) 98765-4321", LoginChannel.SMS).id)
+            assertEquals("contact-2", it.repo.resendContactChange("contact-1", "ignored@example.test", LoginChannel.EMAIL).id)
+            assertEquals("user-1", it.repo.verifyContactChange("contact-2", "123456").id)
+        }
+    }
+
+    @Test fun supportAndRecipientsHonorCapabilitiesAndParcelScope() = runTest {
+        withRepository { request ->
+            when {
