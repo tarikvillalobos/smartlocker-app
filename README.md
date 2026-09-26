@@ -129,3 +129,12 @@ Não inclua segredos ou chaves privadas no repositório.
 
 Cada commit de implementação altera exatamente um arquivo e até 20 linhas
 adicionadas + removidas. Ative o hook após clonar:
+`git config core.hooksPath .githooks`. A CI também audita o histórico.
+O commit inicial do README precede esta implementação e fica fora da contagem.
+Binários gerados, fontes, APKs e frameworks não são versionados.
+
+## Licença
+
+Software privado e proprietário. Todos os direitos reservados.
+Licenças de componentes e fontes de terceiros não alteram a licença do produto;
+veja [avisos de terceiros](docs/THIRD_PARTY.md).
