@@ -15,8 +15,6 @@ funcionalidade de moradores; a rota também é bloqueada no controller.
    canais, flags, contatos e URLs HTTPS dos documentos legais.
 3. Inclua fontes em `composeResources/font` via geração controlada e atualize
    o registro do design system caso a família seja nova.
-4. Personalize o símbolo/wordmark de `LoginScreen` e o vetor de launcher Android
-   por recurso de build. O logo padrão é vetorial e não depende de WebView.
 5. Android: use `-PapplicationId=seu.pacote -PappName=SuaMarca` e recursos de ícone
    específicos. iOS: ajuste bundle ID, display name e ícones em `project.yml`.
 6. Desktop: ajuste packageName e ícones em nativeDistributions no build do app.
