@@ -218,3 +218,20 @@ class AppController(
     }
     fun physicalPickup() = mutateSelected {
         (repository as? DemoControls)?.physicalPickup(it.membershipId, it.selectedId!!)
+        feedback("Retirada física simulada. Nenhum hardware foi acionado.")
+    }
+    fun logout() {
+        epoch++
+        readJob?.cancel()
+        execute {
+            try { repository.logout() }
+            finally {
+                previousUser = null
+                lastLogin = null
+                mutable.value = AppState(initialized = true, now = clock.now())
+            }
+        }
+    }
+    fun feedback(message: String?) { mutable.update { it.copy(feedback = message) } }
+    fun close() = scope.cancel()
+}
