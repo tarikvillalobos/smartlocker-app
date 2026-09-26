@@ -64,6 +64,10 @@ fun LoginScreen(controller: AppController, state: AppState, legal: () -> Unit) {
                 }
             } else {
                 Text("Confira seu código", style = MaterialTheme.typography.headlineSmall)
+                Text("Enviado para ${state.challenge.maskedDestination ?: contact}.", color = Tokens.secondary)
+                val remaining = ((state.challenge.expiresAt - state.now + 999) / 1000).coerceAtLeast(0)
+                Text(if (remaining == 0L) "Código expirado. Solicite um novo envio."
+                    else "Código válido por ${remaining / 60} min ${remaining % 60} s.", color = Tokens.secondary)
                 if (demo) Text("Código demonstrativo: 123456", color = MaterialTheme.colorScheme.primary)
                 OutlinedTextField(code, { code = it.filter(Char::isDigit).take(6) },
                     label = { Text("Código de 6 dígitos") }, singleLine = true, shape = Tokens.control,
