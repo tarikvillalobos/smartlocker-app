@@ -46,7 +46,6 @@ data class PickupCredential(
 }
 
 data class ParcelPage(val items: List<Parcel>, val nextCursor: String?)
-data class Statistics(val total: Int, val averageMillis: Long?, val since: Long, val until: Long)
 
 fun List<Parcel>.filtered(filter: ParcelFilter): List<Parcel> = filter {
     when (filter) {
