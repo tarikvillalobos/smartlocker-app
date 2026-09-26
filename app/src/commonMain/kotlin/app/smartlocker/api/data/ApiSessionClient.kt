@@ -208,7 +208,6 @@ class ApiSessionClient(
             } catch (cancelled: CancellationException) { throw cancelled }
             catch (_: Exception) { false }
         }
-        if (token != null) {
             try {
                 request("/auth/logout", HttpMethod.Post, headers = mapOf("Authorization" to "Bearer $token",
                     "Idempotency-Key" to Uuid.random().toString()), authenticated = false)
