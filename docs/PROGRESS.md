@@ -28,3 +28,5 @@ Atualizado em 26/09/2026. Consulte [VALIDATION.md](VALIDATION.md) para as evidê
 
 Não há backend próprio nem fallback automático para demo. Os endpoints do OpenAPI
 são uma proposta autorizada, não uma integração com serviço existente.
+A versão 1.1.0 inclui cliente HTTP configurável e demonstração explícita.
+A publicação para operação real depende da homologação e distribuição acima.
