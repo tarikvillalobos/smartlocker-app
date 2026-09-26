@@ -2158,3 +2158,23 @@ components:
           type: "string"
           pattern: "^[0-9]{4,12}$"
           description: "Código numérico autorizado; preservar zeros iniciais."
+        qrPayload:
+          type: "string"
+          minLength: 1
+          maxLength: 2048
+          description: "Payload exato autorizado para QR. Nunca montar uma credencial localmente."
+        status:
+          type: "string"
+          const: "active"
+        verifiedAt:
+          $ref: "#/components/schemas/Instant"
+        expiresAt:
+          $ref: "#/components/schemas/Instant"
+        revalidateAfter:
+          $ref: "#/components/schemas/Instant"
+      required:
+        - "parcelId"
+        - "membershipId"
+        - "code"
+        - "qrPayload"
+        - "status"
