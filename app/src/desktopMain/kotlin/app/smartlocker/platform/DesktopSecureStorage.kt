@@ -4,6 +4,9 @@ import app.smartlocker.shared.domain.*
 import com.sun.jna.platform.win32.Crypt32Util
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import java.nio.file.Files
 import java.nio.file.Path
