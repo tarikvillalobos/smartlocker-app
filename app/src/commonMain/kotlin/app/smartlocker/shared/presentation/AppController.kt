@@ -235,7 +235,6 @@ class AppController(
         (repository as? DemoControls)?.deposit(state.value.membershipId)
         if (generation != epoch) return@execute
         load()
-        feedback("Depósito fictício criado. Veja a nova encomenda e o aviso.")
     }
     fun physicalPickup() = mutateSelected {
         (repository as? DemoControls)?.physicalPickup(it.membershipId, it.selectedId!!)
