@@ -34,6 +34,7 @@ Nenhum corpo de resposta de erro é exibido diretamente nem registrado em logs.
 11. Relatos e consulta de solicitações; disponibilidade por cliente.
 12. Política de cache, ETags, erros, limites e idempotência, quando existentes.
 
+## Trabalho após homologar e disponibilizar o contrato
 
 Criar DTOs em `data` e mapeamentos validados para os modelos de domínio. Implementar
 `LockerRepository` com o transporte e a autenticação documentados. Injetar esse
