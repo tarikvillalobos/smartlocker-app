@@ -23,6 +23,10 @@ sua execução separada e os sistemas verificados estão registrados abaixo.
 | ResponsiveUiTest | 2 | Matriz visual e percurso de login, cópia e retirada manual |
 | AdaptiveScenarioTest | 2 | Redimensionamento, paisagem, campos e conteúdo extremo |
 
+As regressões cobrem retorno seguro ao vínculo após reautenticar, manutenção das
+páginas carregadas ao abrir detalhes, recentes independentes do filtro histórico
+e reenvio de verificação de contato depois de navegar. Uma ação já confirmada
+continua confirmada se a atualização posterior falhar, evitando relatos repetidos.
 
 O transporte é testado com Ktor MockEngine, sem endpoints inventados no produto.
 Os testes verificam respostas 401/403/409/429/503, cancelamento e ausência de
