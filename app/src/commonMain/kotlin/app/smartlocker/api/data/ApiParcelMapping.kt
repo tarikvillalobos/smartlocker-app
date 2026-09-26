@@ -78,3 +78,8 @@ fun ApiPickupCredential.toDomain(): PickupCredential {
     apiText(qrPayload, 2048)
     val verified = apiInstant(verifiedAt)
     val expires = apiInstant(expiresAt)
+    val revalidate = apiInstant(revalidateAfter)
+    apiRequire(verified <= revalidate && revalidate <= expires && verified < expires)
+    return PickupCredential(apiId(parcelId), code, qrPayload, expires, verified, CredentialStatus.ACTIVE,
+        revalidateAt = revalidate)
+}
