@@ -288,6 +288,8 @@ class AppController(
             refreshAfterMutation(generation)
         }
     }
+    private suspend fun refreshAfterMutation(generation: Int, confirmedProfile: Profile? = null) {
+        try { load(generation, confirmedProfile) }
         catch (error: CancellationException) { throw error }
         catch (error: Exception) {
             if (generation == epoch) {
