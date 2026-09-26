@@ -1478,3 +1478,23 @@ components:
           channel: "sms"
           maskedDestination: "+55 ** *****-4321"
           codeLength: 6
+          purpose: "login"
+    LoginRequest:
+      type: "object"
+      properties:
+        contact:
+          type: "string"
+          minLength: 3
+          maxLength: 254
+          description: "Celular brasileiro em E.164 (+55...) para sms, endereço de e-mail para email."
+        cpf:
+          type: "string"
+          pattern: "^(?!([0-9])\\1{10})[0-9]{11}$"
+          description: "Somente os onze dígitos; validar dígitos verificadores. Nunca usar como segredo."
+        channel:
+          type: "string"
+          enum:
+            - "sms"
+            - "email"
+      required:
+        - "contact"
