@@ -21,7 +21,6 @@ Use `python scripts/gradle.py` no Windows. O parâmetro `brand` seleciona nome,
 ícones, identificador e marca inicial; não define local/unidade do usuário.
 Os arquivos ficam em `app/build/compose/binaries/main/{dmg,msi,deb}/`.
 Cada sistema gera seu próprio formato. macOS exige as ferramentas do Xcode;
-Windows exige WiX 3 no PATH; Linux exige `fakeroot` para o pacote DEB.
 
 O workflow **Build installable artifacts**, acionado manualmente em Actions,
 produz DMG, MSI e DEB de ambas as marcas e um ZIP do app iOS de simulador.
