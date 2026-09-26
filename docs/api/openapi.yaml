@@ -1518,3 +1518,23 @@ components:
                 pattern: "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$"
       examples:
         -
+          contact: "+5511987654321"
+          cpf: "52998224725"
+          channel: "sms"
+        -
+          contact: "ana@example.test"
+          cpf: "52998224725"
+          channel: "email"
+    OtpVerification:
+      type: "object"
+      properties:
+        code:
+          type: "string"
+          pattern: "^[0-9]{6}$"
+          writeOnly: true
+          description: "OTP recebido pelo canal escolhido."
+      required:
+        - "code"
+      additionalProperties: false
+    SessionTokens:
+      type: "object"
