@@ -58,3 +58,23 @@ class AppController(
             val old = state.value
             mutable.value = AppState(initialized = true, route = old.route,
                 selectedId = old.selectedId, filter = old.filter, now = clock.now(), error = error.message)
+        } else {
+            mutable.update { it.copy(error = (error as? AppFailure)?.message ?: "Não foi possível concluir. Tente novamente.",
+                stale = it.profile != null, credential = null) }
+        }
+    }
+
+    fun login(request: LoginRequest) = execute {
+        lastLogin = request
+        val challenge = repository.requestLogin(request)
+        mutable.update { it.copy(challenge = challenge) }
+    }
+    fun resend() { lastLogin?.let(::login) }
+    fun correctContact() { mutable.update { it.copy(challenge = null, error = null) } }
+    fun verify(code: String) = execute {
+        val challenge = state.value.challenge ?: return@execute
+        val session = repository.verifyLogin(challenge.id, code)
+        mutable.update { it.copy(session = session, challenge = null,
+            route = if (previousUser == null || previousUser == session.userId) it.route else Route.HOME,
+            selectedId = if (previousUser == null || previousUser == session.userId) it.selectedId else null) }
+        load()
