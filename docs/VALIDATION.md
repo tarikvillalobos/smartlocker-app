@@ -23,10 +23,6 @@ sua execução separada e os sistemas verificados estão registrados abaixo.
 | ResponsiveUiTest | 2 | Matriz visual e percurso de login, cópia e retirada manual |
 | AdaptiveScenarioTest | 2 | Redimensionamento, paisagem, campos e conteúdo extremo |
 
-O fluxo de retirada distingue marcação manual, desfazimento e evento físico
-simulado. O desfazimento nunca reativa códigos. Métricas são calculadas sobre
-dados completos mesmo quando a listagem mostra apenas 20 de 73 registros.
-Cofres em memória são usados nos testes; isso não valida os cofres dos sistemas.
 
 O transporte é testado com Ktor MockEngine, sem endpoints inventados no produto.
 Os testes verificam respostas 401/403/409/429/503, cancelamento e ausência de
