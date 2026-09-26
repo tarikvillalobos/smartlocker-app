@@ -138,3 +138,10 @@ class ControllerRecoveryTest {
         controller.report("O compartimento permanece fechado.")
         val current = controller.state.first { it.issueSubmission == 1L && !it.busy }
         assertEquals(1, current.issues.size)
+        assertTrue(current.feedback!!.contains("recebida"))
+        assertTrue(current.error!!.contains("operação foi concluída"))
+        assertTrue(current.stale)
+        assertNull(current.credential)
+        assertEquals(1, demo.issues("home").size)
+    }
+}
