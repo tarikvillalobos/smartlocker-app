@@ -105,6 +105,26 @@ class DesktopSecureStorage(private val directory: Path) : SecureStorage {
     } catch (_: Exception) {
         throw unavailable()
     }
+
+    private fun requirePayload(supported: Boolean) {
+        if (!supported) throw AppFailure(FailureKind.UNAVAILABLE,
+            "A sessão excede o limite do cofre deste sistema. A sessão anterior foi preservada.")
+    }
+
+    private suspend fun command(args: List<String>, input: String? = null, allowMissing: Boolean = false): String? {
+        val process = ProcessBuilder(args).start()
+        val workers = Executors.newFixedThreadPool(3) { task ->
+            Thread(task, "smartlocker-vault-io").apply { isDaemon = true }
+        }
+        val deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(15)
+        try {
+            // Drain both streams while writing; a full stderr pipe must never block stdout.
+            val output = workers.submit<String> { readOutput(process.inputStream) }
+            val errors = workers.submit<String> { readOutput(process.errorStream) }
+            val writing = workers.submit<Unit> {
+                process.outputStream.use { stream -> input?.let { stream.write(it.toByteArray(Charsets.UTF_8)) } }
+            }
+            while (!process.waitFor(100, TimeUnit.MILLISECONDS)) {
     private fun unavailable() = AppFailure(FailureKind.UNAVAILABLE,
         "Armazenamento seguro indisponível. Desbloqueie o cofre do sistema; no Linux instale secret-tool.")
 }
