@@ -16,6 +16,10 @@ import kotlin.time.Clock
 data class RuntimeState(val configuration: AppConfiguration, val controller: AppController)
 
 /** Composition root: explicitly chooses one implementation; production has no demo fallback. */
+class AppRuntime(
+    val platform: PlatformServices, initial: AppConfiguration? = null,
+    private val engineFactory: () -> io.ktor.client.engine.HttpClientEngine = ::createApiEngine,
+) {
     private val clock = AppClock { Clock.System.now().toEpochMilliseconds() }
     private val endpoint = initial?.apiBaseUrl ?: platform.apiBaseUrl
     private val initialConfig = (initial ?: AppConfiguration(
