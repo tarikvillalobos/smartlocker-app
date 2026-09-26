@@ -45,6 +45,7 @@ class DesktopSecureStorage(private val directory: Path) : SecureStorage {
                 else Files.write(path, Crypt32Util.cryptProtectData(value.toByteArray()))
             }
             else -> {
+                if (value == null) command(listOf("secret-tool", "clear", "service", service, "account", key))
                 else command(listOf("secret-tool", "store", "--label=SmartLocker", "service", service, "account", key), encoded(value))
             }
         }
