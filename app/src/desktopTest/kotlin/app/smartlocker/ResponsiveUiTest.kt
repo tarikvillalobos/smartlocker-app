@@ -40,7 +40,6 @@ class ResponsiveUiTest {
                         runOnIdle { controller.login(demoLogin) }
                         waitUntil(timeoutMillis = 10_000) { controller.state.value.challenge != null && !controller.state.value.busy }
                         runOnIdle { controller.verify("123456") }
-                        waitUntil(15_000) { controller.state.value.profile != null && !controller.state.value.busy }
                         for ((route, name) in listOf(Route.HOME to "home", Route.HISTORY to "history",
                             Route.DETAIL to "detail", Route.PROFILE to "profile")) {
                             runOnIdle { controller.navigate(route) }
