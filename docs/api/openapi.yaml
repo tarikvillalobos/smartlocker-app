@@ -2438,3 +2438,23 @@ components:
         detail:
           type: "string"
           maxLength: 500
+          description: "Mensagem segura sem dados pessoais, códigos, tokens ou detalhes internos."
+        instance:
+          type: "string"
+          format: "uri-reference"
+          description: "Identificador da ocorrência, sem dados pessoais."
+        requestId:
+          type: "string"
+          maxLength: 128
+        fieldErrors:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/FieldError"
+        retryAt:
+          $ref: "#/components/schemas/Instant"
+      required:
+        - "type"
+        - "title"
+        - "status"
+        - "code"
+        - "requestId"
