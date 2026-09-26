@@ -58,3 +58,23 @@ class ChunkedSecureStoreTest {
         assertTrue(vault.memory.values.containsKey("$KEY.journal"))
         assertFailsWith<AppFailure> { store.write("third") }
         vault.fail = { _, _ -> false }
+        assertTrue(ChunkedSecureStore(vault, KEY).read() == "replacement".repeat(1000))
+        assertTrue(obsolete.none { it in vault.memory.values })
+        assertFalse(vault.memory.values.containsKey("$KEY.journal"))
+    }
+
+    @Test fun uncertainPointerResultRecoversTheGenerationActuallyCommitted() = runTest {
+        val memory = MemorySecure()
+        val storage = object : SecureStorage by memory {
+            var failAfterCommit = false
+            override suspend fun write(key: String, value: String?) {
+                memory.write(key, value)
+                if (failAfterCommit && key == "$KEY.head") error("Synthetic lost acknowledgement")
+            }
+        }
+        val store = ChunkedSecureStore(storage, KEY)
+        store.write("previous")
+        storage.failAfterCommit = true
+        assertFailsWith<AppFailure> { store.write("replacement".repeat(1000)) }
+        storage.failAfterCommit = false
+        assertTrue(ChunkedSecureStore(storage, KEY).read() == "replacement".repeat(1000))
