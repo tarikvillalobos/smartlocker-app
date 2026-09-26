@@ -1618,3 +1618,23 @@ components:
     Capabilities:
       type: "object"
       properties:
+        features:
+          $ref: "#/components/schemas/Features"
+        channels:
+          type: "object"
+          properties:
+            inApp:
+              $ref: "#/components/schemas/ChannelCapability"
+            sms:
+              $ref: "#/components/schemas/ChannelCapability"
+            email:
+              $ref: "#/components/schemas/ChannelCapability"
+            whatsapp:
+              $ref: "#/components/schemas/ChannelCapability"
+            push:
+              $ref: "#/components/schemas/ChannelCapability"
+          required:
+            - "inApp"
+            - "sms"
+            - "email"
+            - "whatsapp"
