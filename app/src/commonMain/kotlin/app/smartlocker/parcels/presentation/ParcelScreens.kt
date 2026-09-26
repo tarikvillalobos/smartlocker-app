@@ -31,11 +31,6 @@ fun HomeScreen(state: AppState, controller: AppController, platform: PlatformSer
     if (state.pending.isEmpty()) EmptyState("Tudo em dia!", "Nenhuma encomenda aguardando retirada neste local.")
     else {
         if (state.pending.size > 1) {
-            Text("${state.pending.size} encomendas aguardando", style = MaterialTheme.typography.labelLarge)
-            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                state.pending.forEach { parcel ->
-                    FilterChip(parcel.id == state.selectedId, { controller.select(parcel.id, false) },
-                        label = { Text("${parcel.carrier} · ${parcel.compartment}") })
                 }
             }
         }
