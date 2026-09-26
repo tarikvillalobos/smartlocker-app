@@ -2378,3 +2378,23 @@ components:
         - "type"
         - "brandId"
         - "membershipId"
+        - "parcelId"
+        - "noticeId"
+      description: |-
+        Envelope de dados proposto para o push. Não contém tokens de sessão, credenciais de retirada, CPF ou contatos.
+        O app consulta a API após autenticar e revalidar o vínculo; um push jamais autoriza nem confirma retirada.
+    FieldError:
+      type: "object"
+      properties:
+        field:
+          type: "string"
+          maxLength: 100
+        code:
+          type: "string"
+          maxLength: 100
+      required:
+        - "field"
+        - "code"
+    Problem:
+      type: "object"
+      properties:
