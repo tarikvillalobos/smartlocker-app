@@ -110,6 +110,7 @@ private fun IssueScreen(state: AppState, controller: AppController) {
             Text(dateTime(issue.createdAt), style = MaterialTheme.typography.bodySmall, color = Tokens.secondary)
         }
     }
+    if (state.issueCursor != null) PrimaryButton("Carregar mais solicitações", !state.busy, controller::moreIssues)
 }
 
 @Composable
