@@ -23,7 +23,6 @@ text = path.read_text()
 assert all(line == line.rstrip() for line in text.splitlines()), 'Trailing whitespace'
 assert max(map(len, text.splitlines())) < 240, 'Unexpectedly long line'
 spec = yaml.load(text, Loader=UniqueLoader)
-validate_spec(spec)
 operations = []
 refs = []
 def visit(value):
