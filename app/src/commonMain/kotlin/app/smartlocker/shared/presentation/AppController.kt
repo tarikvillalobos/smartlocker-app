@@ -282,6 +282,8 @@ class AppController(
         mutable.update { it.copy(notices = it.notices.map { notice ->
             if (notice.id == value.id) notice.copy(read = true) else notice
         }) }
+        mutable.update { it.copy(selectedId = value.parcelId, selected = null, credential = null, route = Route.DETAIL) }
+        loadDetail(generation)
     }
     fun demoScenario(value: DemoScenario) = execute { generation ->
         (repository as? DemoControls)?.scenario(value)
