@@ -28,4 +28,7 @@ fun Modifier.keepAboveKeyboard(): Modifier {
             requester.bringIntoView()
         }
     }
+    return bringIntoViewRequester(requester)
+        .onSizeChanged { fieldSize = it }
+        .onFocusChanged { focused = it.hasFocus }
 }
