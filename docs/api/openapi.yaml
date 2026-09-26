@@ -1978,3 +1978,23 @@ components:
           type: "array"
           items:
             $ref: "#/components/schemas/TimelineEvent"
+        version:
+          type: "integer"
+          minimum: 1
+      required:
+        - "id"
+        - "recipientId"
+        - "membershipId"
+        - "carrier"
+        - "tracking"
+        - "status"
+        - "locker"
+        - "compartment"
+        - "size"
+        - "depositedAt"
+        - "notifiedAt"
+        - "deadline"
+        - "manualAt"
+        - "collectedAt"
+        - "credentialStatus"
+        - "actions"
