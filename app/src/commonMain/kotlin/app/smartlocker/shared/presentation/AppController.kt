@@ -257,6 +257,7 @@ class AppController(
     fun correctProfileContact() {
         epoch++
         readJob?.cancel()
+        actionJob?.cancel()
         mutable.update { it.copy(contactChallenge = null, error = null, busy = false) }
     }
     fun verifyContact(code: String) = execute { generation ->
