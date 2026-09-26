@@ -202,6 +202,11 @@ class ApiSessionClient(
             restored = true
             uncertain.clear()
             verificationKeys.clear()
+            try {
+                withContext(NonCancellable) { store.write(null) }
+                true
+            } catch (cancelled: CancellationException) { throw cancelled }
+            catch (_: Exception) { false }
         }
         if (token != null) {
             try {
