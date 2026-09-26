@@ -238,3 +238,23 @@ class ApiSessionClientTest {
             } finally { release.complete(Unit); client.close() }
         }
     }
+
+    @Test fun wrongBrandOrChangedUserAndSessionCannotReplaceVerifiedIdentity() = runTest {
+        val clock = TestClock()
+        val secure = MemorySecure()
+        val wrongBrand = client(clock, secure) { respond(tokens(clock, brand = "another-brand"), headers = JSON) }
+        try {
+            assertFailsWith<AppFailure> { wrongBrand.verifyLogin("challenge-1", "123456") }
+            assertNull(wrongBrand.currentSession())
+            assertTrue(secure.values.isEmpty())
+        } finally { wrongBrand.close() }
+        for (changedUser in listOf(false, true)) {
+            var protectedReads = 0
+            val client = client(clock) { request ->
+                when (request.path()) {
+                    "/auth/challenges/challenge-1/verify" -> respond(tokens(clock, accessIn = 10_000), headers = JSON)
+                    "/auth/refresh" -> respond(tokens(clock, user = if (changedUser) "other" else "ana",
+                        session = if (changedUser) "session-1" else "other-session"), headers = JSON)
+                    else -> { protectedReads++; respond("{}", headers = JSON) }
+                }
+            }
