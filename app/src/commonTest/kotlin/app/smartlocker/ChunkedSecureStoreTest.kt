@@ -158,6 +158,23 @@ class ChunkedSecureStoreTest {
         assertTrue(memory.values.keys.all { it.startsWith("api.session.another.") })
     }
 
+    @Test fun pendingOldGenerationCleanupCannotPreventLogicalLogout() = runTest {
+        val vault = FaultVault()
+        val store = ChunkedSecureStore(vault, KEY)
+        store.write("previous")
+        val obsolete = vault.memory.values.keys.filter { ".chunk." in it }.toSet()
+        vault.fail = { key, value -> key in obsolete && value == null }
+        store.write("current".repeat(1000))
+        assertTrue(vault.memory.values.containsKey("$KEY.journal"))
+        store.write(null)
+        assertFalse(vault.memory.values.containsKey("$KEY.head"))
+        assertNull(ChunkedSecureStore(vault, KEY).read())
+        assertTrue(vault.memory.values.containsKey("$KEY.journal"))
+        vault.fail = { _, _ -> false }
+        assertNull(ChunkedSecureStore(vault, KEY).read())
+        assertTrue(vault.memory.values.isEmpty())
+    }
+
     private class FaultVault : SecureStorage {
         val memory = MemorySecure()
         var fail: (String, String?) -> Boolean = { _, _ -> false }
