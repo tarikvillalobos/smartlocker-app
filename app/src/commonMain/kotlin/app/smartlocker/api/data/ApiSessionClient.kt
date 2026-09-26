@@ -198,3 +198,22 @@ class ApiSessionClient(
         if (token != null) {
             try {
                 request("/auth/logout", HttpMethod.Post, headers = mapOf("Authorization" to "Bearer $token"), authenticated = false)
+            } catch (error: CancellationException) { throw error }
+            catch (_: Exception) {
+                throw AppFailure(FailureKind.NETWORK, "Sessão removida deste dispositivo. Não foi possível confirmar a revogação remota.")
+            }
+        }
+    }
+
+    private fun ensureCurrent(epoch: Int) {
+        if (generation != epoch) throw CancellationException("API context changed")
+    }
+
+    fun close() {
+        generation++
+        stored = null
+        uncertain.clear()
+        verificationKeys.clear()
+        transport.close()
+    }
+}
