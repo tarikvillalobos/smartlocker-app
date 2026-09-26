@@ -158,3 +158,23 @@ class ControllerMembershipRevocationTest {
         val demo = DemoRepository(MemoryStorage(), MemorySecure(), Brands.smartLocker, clock, 0)
         demo.signIn()
         demo.reportIssue("home", "demo-0", "O compartimento permanece fechado.")
+        val repository = object : LockerRepository by demo {
+            override suspend fun verifyContactChange(challengeId: String, code: String): Profile =
+                demo.verifyContactChange(challengeId, code).let { profile ->
+                    profile.copy(memberships = profile.memberships.map { it.copy(features = Features(false, false, false, false)) })
+                }
+        }
+        val controller = start(repository, clock)
+        controller.navigate(Route.RESIDENTS)
+        controller.state.first { !it.busy && it.residents.isNotEmpty() }
+        assertTrue(controller.state.value.issues.isNotEmpty())
+        controller.navigate(Route.CONTACT)
+        controller.contact("new@example.test", LoginChannel.EMAIL)
+        controller.state.first { !it.busy && it.contactChallenge != null }
+        controller.verifyContact("123456")
+        val current = controller.state.first { !it.busy && it.contactChallenge == null }
+        assertEquals("home", current.membershipId)
+        assertEquals(Route.PROFILE, current.route)
+        assertEquals(Features(false, false, false, false), controller.features)
+        assertTrue(current.residents.isEmpty())
+        assertTrue(current.issues.isEmpty())
