@@ -87,3 +87,17 @@ Código e QR usam somente o conteúdo autorizado pelo servidor, sem persistênci
 local; são ocultados ao atingir `revalidateAfter`, expirar ou perder frescor.
 
 ## Homologação e integrações pendentes
+
+O projeto externo precisa disponibilizar ambientes e contas de teste, confirmar
+compatibilidade com a minuta e homologar isolamento, refresh, concorrência,
+idempotência, canais, prazos e eventos físicos. Esses resultados não podem ser
+inferidos dos testes locais ou de um build aprovado.
+
+SMS, e-mail e WhatsApp dependem do backend e de seus fornecedores. O contrato e
+os DTOs descrevem push opcional, mas registro FCM/APNs, entrega nativa e navegação
+por notificações externas ainda não estão integrados. A central de avisos via
+HTTP é independente de push. Nenhuma chave de fornecedor deve entrar no app.
+
+Não há endpoint do usuário para abrir portas, depositar encomendas ou confirmar
+retirada física. Esses eventos são responsabilidade do sistema de lockers e do
+backend. QR Codes demonstrativos começam com `SMARTLOCKER-DEMO` e são fictícios.
