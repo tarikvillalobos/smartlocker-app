@@ -58,3 +58,23 @@ class DemoDatabase(private val storage: LocalStorage, brandId: String, private v
         snapshot = next
     }
 
+    fun reset() = update { seed(clock.now()) }
+    fun clear() {
+        storage.write(key, null)
+        snapshot = seed(clock.now())
+    }
+}
+
+fun seed(now: Long): DemoSnapshot {
+    val carriers = listOf("Loja online", "Correios", "Transportadora", "Farmácia")
+    val parcels = (0..8).map { index ->
+        val arrival = now - index * 86_400_000L - 3_600_000
+        ParcelRecord(
+            "demo-$index", "ana", if (index == 8) "office" else "home",
+            carriers[index % carriers.size], "DEMO${1000 + index}BR",
+            "Portaria principal", "Residencial Jardim · Rua das Flores, 120",
+            (14 + index).toString(), if (index % 2 == 0) "M" else "P",
+            arrival, arrival + 60_000, arrival + 3 * 86_400_000L,
+            collected = if (index in 2..7) arrival + (index + 1) * 1_800_000 else null,
+            credential = if (index in 2..7) "CONSUMED" else "ACTIVE",
+        )
