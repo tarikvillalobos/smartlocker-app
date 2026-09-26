@@ -1418,3 +1418,23 @@ components:
           schema:
             $ref: "#/components/schemas/Problem"
   schemas:
+    Identifier:
+      type: "string"
+      minLength: 1
+      maxLength: 128
+      pattern: "^[A-Za-z0-9_-]+$"
+      description: "Identificador opaco. O app não extrai dados pessoais nem autorização deste valor."
+    Instant:
+      type: "string"
+      format: "date-time"
+      pattern: "Z$"
+      examples:
+        - "2026-09-26T12:00:00.000Z"
+      description: "Instante RFC 3339 em UTC; resolução mínima de milissegundos quando disponível."
+    Secret:
+      type: "string"
+      minLength: 1
+      maxLength: 8192
+      description: "Segredo: não registrar em logs, métricas, URLs ou cache não seguro."
+    Challenge:
+      type: "object"
