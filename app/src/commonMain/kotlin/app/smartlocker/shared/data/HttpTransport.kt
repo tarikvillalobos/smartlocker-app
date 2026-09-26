@@ -58,3 +58,12 @@ class HttpTransport(engine: HttpClientEngine, private val baseUrl: String) : Aut
             }
         } catch (error: CancellationException) {
             throw error
+        } catch (error: AppFailure) {
+            throw error
+        } catch (_: Exception) {
+            throw AppFailure(FailureKind.NETWORK, "Não foi possível conectar. Confira sua conexão.")
+        }
+    }
+
+    override fun close() = client.close()
+}
