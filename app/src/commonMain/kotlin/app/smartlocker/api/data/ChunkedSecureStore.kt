@@ -85,6 +85,8 @@ class ChunkedSecureStore(private val storage: SecureStorage, private val key: St
         val entries = lines.map(::parse)
         if (entries.map { it.generation }.distinct().size != entries.size) throw failure()
         return entries
+    }
+
     private suspend fun cleanup(head: Manifest?, required: Boolean) {
         try {
             val raw = storage.read(journalKey) ?: return
