@@ -18,3 +18,23 @@ class ChunkedSecureStoreTest {
         assertTrue(memory.values.values.all { it.length <= 1500 && it != session })
         assertTrue(memory.values.keys.count { ".chunk." in it } > 10)
         assertFalse(memory.values.containsKey("$KEY.journal"))
+    }
+
+    @Test fun interruptedChunkWritePreservesOldSessionAndRecoversItsJournal() = runTest {
+        val vault = FaultVault()
+        val store = ChunkedSecureStore(vault, KEY)
+        store.write("previous")
+        val previousKeys = vault.memory.values.keys.toSet()
+        vault.fail = { key, value -> value != null && ".chunk." in key && key.endsWith(".1") }
+        assertFailsWith<AppFailure> { store.write("replacement".repeat(1000)) }
+        assertTrue(vault.memory.values.containsKey("$KEY.journal"))
+        vault.fail = { _, _ -> false }
+        assertTrue(ChunkedSecureStore(vault, KEY).read() == "previous")
+        assertEquals(previousKeys, vault.memory.values.keys)
+    }
+
+    @Test fun failedPointerWriteOrDeleteKeepsThePreviousGenerationReadable() = runTest {
+        for (clear in listOf(false, true)) {
+            val vault = FaultVault()
+            val store = ChunkedSecureStore(vault, KEY)
+            store.write("previous")
