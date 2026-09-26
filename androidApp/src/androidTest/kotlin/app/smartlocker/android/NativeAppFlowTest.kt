@@ -38,3 +38,23 @@ class NativeAppFlowTest {
 
     @Test fun enteredLoginAndOtpSurviveRotationAndManualPickupWorks() {
         ui.onNodeWithText("Celular").performScrollTo().performTextInput("11987654321")
+        ui.onNodeWithText("CPF").performScrollTo().performTextInput("52998224725")
+        rotate(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE, Configuration.ORIENTATION_LANDSCAPE)
+        ui.onNodeWithText("11987654321").assertExists()
+        ui.onNodeWithText("52998224725").assertExists()
+        ui.onNodeWithText("Receber código por SMS").performScrollTo().performClick()
+        waitForText("Código de 6 dígitos")
+        ui.onNodeWithText("Código de 6 dígitos").performScrollTo().performTextInput("123")
+        rotate(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT, Configuration.ORIENTATION_PORTRAIT)
+        ui.onNodeWithText("123").assertExists()
+        ui.onNodeWithText("Código de 6 dígitos").performScrollTo().performTextInput("456")
+        ui.onNodeWithText("Confirmar código").performScrollTo().performClick()
+        waitForText("Copiar código")
+        ui.onNodeWithContentDescription("Ver detalhes").performScrollTo().performClick()
+        ui.onNodeWithText("Já retirei a encomenda").performScrollTo().performClick()
+        ui.onNodeWithText("Sim, retirei").performClick()
+        waitForText("Retirada informada")
+        ui.onNodeWithText("Retirada informada").assertExists()
+        ui.onNodeWithText("Copiar código").assertDoesNotExist()
+    }
+
