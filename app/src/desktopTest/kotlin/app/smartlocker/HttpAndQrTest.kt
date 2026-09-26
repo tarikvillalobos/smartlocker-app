@@ -38,3 +38,23 @@ class HttpAndQrTest {
         val transport = HttpTransport(engine, "https://api.example.test")
         val error = assertFailsWith<AppFailure> {
             transport.execute("/fixture", HttpMethod.Post, mapOf("X-Fixture-Auth" to "contract-defined"), "{}")
+        }
+        assertEquals(FailureKind.CONFLICT, error.kind)
+        assertFalse(error.message.contains("sensitive"))
+        assertEquals(1, calls)
+        transport.close()
+    }
+    @Test fun mapsSessionAndAccessErrorsAndPreservesCancellation() = runTest {
+        for ((status, kind) in listOf(401 to FailureKind.EXPIRED_SESSION, 403 to FailureKind.DENIED,
+            429 to FailureKind.UNAVAILABLE, 503 to FailureKind.UNAVAILABLE)) {
+            val transport = HttpTransport(MockEngine { respond("{}", HttpStatusCode.fromValue(status)) }, "https://api.example.test")
+            assertEquals(kind, assertFailsWith<AppFailure> { transport.execute("/fixture", HttpMethod.Get) }.kind)
+            transport.close()
+        }
+        val transport = HttpTransport(MockEngine { delay(10_000); respond("{}") }, "https://api.example.test")
+        assertFailsWith<CancellationException> { withTimeout(50) { transport.execute("/fixture", HttpMethod.Get) } }
+        transport.close()
+    }
+    @Test fun productionCannotSilentlyUseDemo() = runTest {
+        assertEquals(FailureKind.MISSING_CONTRACT,
+            assertFailsWith<AppFailure> { UnconfiguredRepository().requestLogin(demoLogin) }.kind)
