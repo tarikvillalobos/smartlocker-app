@@ -224,6 +224,8 @@ class ApiSessionClient(
             }
             throw AppFailure(FailureKind.UNAVAILABLE, message)
         }
+        if (remoteRevoked == false) throw AppFailure(FailureKind.NETWORK,
+            "Sessão removida deste dispositivo. Não foi possível confirmar a revogação remota.")
     }
 
     private fun ensureCurrent(epoch: Int) {
