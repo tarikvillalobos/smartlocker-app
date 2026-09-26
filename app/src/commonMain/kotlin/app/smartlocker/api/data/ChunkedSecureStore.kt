@@ -89,6 +89,7 @@ class ChunkedSecureStore(private val storage: SecureStorage, private val key: St
 
     private suspend fun cleanup(head: Manifest?, required: Boolean) {
         try {
+            val entries = readJournal() ?: return
             for (entry in entries) {
                 if (entry.generation == head?.generation) {
                     if (entry != head) throw failure()
