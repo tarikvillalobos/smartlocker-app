@@ -938,3 +938,23 @@ paths:
     parameters:
       -
         $ref: "#/components/parameters/MembershipId"
+    get:
+      operationId: "listDeliveryNotices"
+      tags:
+        - "Notifications"
+      summary: "Listar avisos e contagem global de não lidos"
+      description: "Ordenar por createdAt descendente e id ascendente; cursor usa snapshot estável."
+      x-required-permission: "notifications:read"
+      parameters:
+        -
+          $ref: "#/components/parameters/BrandId"
+        -
+          $ref: "#/components/parameters/Cursor"
+        -
+          $ref: "#/components/parameters/Limit"
+      responses:
+        "200":
+          description: "Resultado confirmado pelo servidor."
+          headers:
+            X-Request-Id:
+              $ref: "#/components/headers/RequestId"
