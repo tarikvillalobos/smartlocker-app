@@ -798,3 +798,23 @@ paths:
         aplicativo não persiste nem reativa credenciais a partir de cache.
       x-required-permission: "credentials:read"
       parameters:
+        -
+          $ref: "#/components/parameters/BrandId"
+      responses:
+        "200":
+          description: "Resultado confirmado pelo servidor."
+          headers:
+            X-Request-Id:
+              $ref: "#/components/headers/RequestId"
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/PickupCredential"
+        "400":
+          $ref: "#/components/responses/Problem"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Problem"
