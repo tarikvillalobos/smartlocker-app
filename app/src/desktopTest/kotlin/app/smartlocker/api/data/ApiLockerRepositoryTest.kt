@@ -238,3 +238,23 @@ class ApiLockerRepositoryTest {
     private fun HttpRequestData.bodyText() = when (val content = body) {
         is OutgoingContent.ByteArrayContent -> content.bytes().decodeToString()
         is OutgoingContent.NoContent -> ""
+        else -> error("Unexpected body content type")
+    }
+
+    companion object {
+        private const val EARLIER = "2026-09-26T11:00:00.000Z"
+        private const val NOW = "2026-09-26T12:00:00.000Z"
+        private const val SOON = "2026-09-26T12:00:30.000Z"
+        private const val LATER = "2026-09-26T13:00:00.000Z"
+        private val available = ApiChannelCapability(true)
+        private val unavailable = ApiChannelCapability(false)
+        private val capabilities = ApiCapabilities(ApiFeatures(true, true, true, true, true, false),
+            ApiChannels(available, available, available, unavailable, unavailable))
+        private val configuration = ApiBrandConfiguration("smartlocker", "SmartLocker", capabilities, null, null, null)
+        private val membership = ApiMembership("member-1", "location-1", "Residencial", "unit-1", "42", "America/Sao_Paulo", capabilities)
+        private val profile = ApiProfile("user-1", "Ana", "+5511987654321", NOW, "ana@example.test", NOW,
+            ApiCommunicationPreferences(true, true, false), listOf(membership))
+        private val tokens = ApiSessionTokens("Bearer", "access-1", LATER, "refresh-1", "2026-09-27T12:00:00.000Z",
+            "user-1", "smartlocker", "session-1", listOf("profile:read", "parcels:read", "parcels:manual"))
+        private val notice = ApiDeliveryNotice("notice-1", "member-1", "parcel-1", "Encomenda disponível", EARLIER, null)
+        private val challenge = ApiChallenge("contact-1", LATER, SOON, "sms", "+55 ** *****-4321", 6, "contact_change")
