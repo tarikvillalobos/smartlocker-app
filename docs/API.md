@@ -28,6 +28,7 @@ Consulte [OPENAPI.md](OPENAPI.md) e os registros datados de [VALIDATION.md](VALI
 A seleção de demonstração é explícita. Falhas de configuração, autenticação ou
 rede em produção nunca trocam o repositório para dados demonstrativos.
 
+## Configurar o endpoint
 
 ## Trabalho após homologar e disponibilizar o contrato
 
