@@ -141,7 +141,6 @@ class AppController(
             catch (error: AppFailure) { if (error.kind == FailureKind.DENIED) null else throw error }
         }
         var credential: PickupCredential? = null
-        var credentialMessage: String? = null
         if (selected?.status == ParcelStatus.WAITING) {
             try { credential = LoadPickupCredential(repository, clock)(location, selected) }
             catch (error: AppFailure) {
