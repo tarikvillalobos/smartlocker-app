@@ -58,3 +58,23 @@ data class ApiBrandConfiguration(
         listOfNotNull(termsUrl, privacyUrl).forEach { value ->
             val parsed = try { Url(value) } catch (_: IllegalArgumentException) { invalidApiResponse() }
             apiRequire(parsed.protocol.name == "https" && parsed.host.isNotBlank() && value.none(Char::isWhitespace))
+            apiRequire(!value.substringAfter("://").substringBefore('/').contains('@'))
+        }
+    }
+
+    fun toDomain(base: Brand): Brand {
+        validate(base.id)
+        val supplied = capabilities.features
+        val allowed = Features(residents = base.features.residents && supplied.recipients,
+            issues = base.features.issues && supplied.supportIssues,
+            manualPickup = base.features.manualPickup && supplied.manualPickup,
+            contactEditing = base.features.contactEditing && supplied.contactEditing)
+        return base.copy(name = appName, supportEmail = supportEmail, termsUrl = termsUrl,
+            privacyUrl = privacyUrl, features = allowed,
+            channels = base.channels intersect capabilities.channels.availableChannels())
+    }
+}
+
+@Serializable
+data class ApiMembership(
+    val id: String,
