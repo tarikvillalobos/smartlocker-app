@@ -31,6 +31,22 @@ fun HomeScreen(state: AppState, controller: AppController, platform: PlatformSer
     if (state.pending.isEmpty()) EmptyState("Tudo em dia!", "Nenhuma encomenda aguardando retirada neste local.")
     else {
         if (state.pending.size > 1) {
+            var menu by remember { mutableStateOf(false) }
+            Text("Encomendas aguardando", style = MaterialTheme.typography.labelLarge)
+            Box {
+                OutlinedButton({ menu = true }, Modifier.fillMaxWidth()) {
+                    Text("Selecionar entrega · ${state.selected?.carrier ?: "Escolher"}")
+                }
+                DropdownMenu(menu, { menu = false }) {
+                    state.pending.forEach { parcel ->
+                        DropdownMenuItem(text = { Text("${parcel.carrier} · Porta ${parcel.compartment}") },
+                            onClick = { menu = false; controller.select(parcel.id, false) })
+                    }
+                    DropdownMenuItem(text = { Text("Ver todas no histórico") }, onClick = {
+                        menu = false
+                        controller.filter(ParcelFilter.WAITING)
+                        controller.navigate(Route.HISTORY)
+                    })
                 }
             }
         }
