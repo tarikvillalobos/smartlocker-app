@@ -146,6 +146,10 @@ class DemoRepository(
         when (value) {
             DemoScenario.NORMAL -> db.reset()
             DemoScenario.EMPTY -> db.update { it.copy(parcels = emptyList(), notices = emptyList()) }
+            DemoScenario.LONG_TEXT -> db.update { data -> data.copy(parcels = data.parcels.map { item ->
+                item.copy(carrier = "Cooperativa de distribuição de encomendas do bairro Jardim das Palmeiras",
+                    address = "Rua das Flores, 120, bloco residencial dos fundos, entrada acessível pela portaria principal")
+            }) }
             DemoScenario.MANY -> repeat(65) { parcels.deposit("home") }
             DemoScenario.EXPIRED_CODE -> db.update { it.copy(parcels = it.parcels.map { p -> p.copy(deadline = clock.now() - 1) }) }
             DemoScenario.LOCKER_OFFLINE -> db.update { it.copy(parcels = it.parcels.map { p -> p.copy(available = false) }) }
