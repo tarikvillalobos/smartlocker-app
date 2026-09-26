@@ -51,6 +51,12 @@ desativado. iOS usa Keychain `AfterFirstUnlockThisDeviceOnly`. Desktop usa
 Keychain, DPAPI ou Secret Service. Não há fallback para arquivo em texto claro.
 A indisponibilidade do cofre é apresentada ao usuário.
 
+`ChunkedSecureStore` divide o registro de sessão em itens protegidos de até
+1.500 caracteres. Manifesto e journal mantêm uma geração confirmada e permitem
+limpar gravações interrompidas. O limite do registro é 256 KiB, sem truncamento.
+A checagem de integridade das partes detecta corrupção acidental; a proteção
+criptográfica permanece responsabilidade do cofre nativo.
+
 Dados locais do desktop ficam em `~/.smartlocker`, com diretório 0700 e arquivos
 0600 em sistemas POSIX. No Windows, as sessões usam DPAPI do usuário corrente.
 O logout apaga o registro de sessão e o snapshot demonstrativo; a chave de
