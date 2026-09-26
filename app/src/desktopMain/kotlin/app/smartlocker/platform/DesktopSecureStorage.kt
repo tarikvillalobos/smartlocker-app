@@ -78,6 +78,7 @@ class DesktopSecureStorage(private val directory: Path) : SecureStorage {
                 }
                 else -> throw unavailable()
             }
+            Unit
         }
         Unit
     }
