@@ -38,6 +38,8 @@ class HttpTransport(engine: HttpClientEngine, private val baseUrl: String) : Aut
         jsonBody: String? = null,
     ): String {
         require(documentedPath.startsWith("/") && !documentedPath.startsWith("//"))
+        require(!documentedPath.contains("://") && !documentedPath.contains('#'))
+        require(documentedPath.substringBefore('?').split('/').none { it.decodeURLPart() in setOf(".", "..") })
         try {
             val response = client.request(baseUrl.trimEnd('/') + documentedPath) {
                 this.method = method
