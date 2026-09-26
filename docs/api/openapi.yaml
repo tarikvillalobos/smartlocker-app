@@ -1958,3 +1958,23 @@ components:
               $ref: "#/components/schemas/Instant"
             -
               type: "null"
+        collectedAt:
+          anyOf:
+            -
+              $ref: "#/components/schemas/Instant"
+            -
+              type: "null"
+        credentialStatus:
+          type: "string"
+          enum:
+            - "active"
+            - "expired"
+            - "revoked"
+            - "consumed"
+            - "unverified"
+        actions:
+          $ref: "#/components/schemas/ParcelActions"
+        timeline:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/TimelineEvent"
