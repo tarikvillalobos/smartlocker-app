@@ -18,3 +18,23 @@ internal class ProductionApiFixture {
     private val now = Clock.System.now().toEpochMilliseconds()
     private fun at(offset: Long) = Instant.fromEpochMilliseconds(now + offset).toString()
     private val yes = ApiChannelCapability(true)
+    private val no = ApiChannelCapability(false)
+    private val capabilities = ApiCapabilities(ApiFeatures(true, true, false, false, false, false),
+        ApiChannels(yes, yes, yes, no, no))
+    private val membership = ApiMembership("member-api", "location-api", "Residencial API", "unit-api", "42",
+        "America/Sao_Paulo", capabilities)
+    private val profile = ApiProfile("user-api", "Ana API", "+5511987654321", at(0), null, null,
+        ApiCommunicationPreferences(true, true, false), listOf(membership))
+    private fun page() = ApiPageInfo(null, at(0), at(600_000))
+    private fun parcel() = ApiParcel("parcel-api", "recipient-api", "member-api", "Transportadora API", "BR123",
+        if (manual) "manual" else "waiting", ApiLocker("locker-api", "Portaria API", "Rua das Flores, 120", true),
+        "4", null, at(-3_600_000), at(-3_600_000), at(3_600_000), if (manual) at(0) else null, null,
+        if (manual) "revoked" else "active", ApiParcelActions(!manual, manual, if (manual) at(600_000) else null, false),
+        listOf(ApiTimelineEvent("deposited", at(-3_600_000))), if (manual) 4 else 3)
+
+    val engine = MockEngine { request ->
+        requests += request
+        val path = request.url.encodedPath.removePrefix("/v1")
+        if (unavailable && path == "/me") {
+            respond("""{"type":"about:blank","title":"Indisponível","status":503,"code":"SERVICE_UNAVAILABLE","requestId":"test-1"}""",
+                HttpStatusCode.ServiceUnavailable, headersOf(HttpHeaders.ContentType, "application/problem+json"))
