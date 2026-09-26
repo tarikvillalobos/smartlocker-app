@@ -10,6 +10,12 @@ Atualizado em 26/09/2026. Consulte [VALIDATION.md](VALIDATION.md) para as evidê
 - [x] Persistência demonstrativa, isolamento, sessão e tratamento de erros.
 - [x] Serviços nativos e duas marcas, com logos, canais e rotas opcionais.
 - [x] Layout adaptativo, fonte a 200%, paisagem e redimensionamento.
+- [x] Cliente HTTP de produção: OTP, refresh, vínculos, encomendas, perfil, avisos e suporte.
+- [x] Estado paginado, permissões efetivas, fuso do vínculo e códigos revalidados pela API.
+- [x] Sessão grande no cofre nativo, idempotência e limpeza de dados após revogação.
+- [x] Testes compartilhados/desktop e 68 capturas; contagens em VALIDATION.md.
+- [x] Testes isolados de cofres nativos, incluindo regressão para sessão fragmentada.
+- [x] Base OpenAPI 3.1.1 proposta, oito exemplos e 25 casos de schema validados.
 - [x] Regressões de sessão/local, paginação, contato, avisos e concorrência corrigidas.
 - [x] Sete testes Android ampliados aprovados: Keystore, IME real, rotação e recriação.
 - [x] Três testes iOS aprovados em simulador isolado, incluindo UI/teclado e Keychain.
