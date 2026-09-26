@@ -1,10 +1,5 @@
 # Integração com a API externa
 
-O usuário solicitou uma base OpenAPI enquanto a API externa não existe.
-A [especificação proposta](api/openapi.yaml) documenta 26 operações; consulte
-[decisões e validação](OPENAPI.md). É uma minuta versionada, não uma API publicada.
-O domínio `.invalid` é intencionalmente não operacional. Não há servidor,
-banco de servidor, migrações, simulador HTTP ou adaptador dessa minuta no app.
 
 ## Implementado independentemente do contrato
 
