@@ -43,6 +43,7 @@ class AppRuntime(val platform: PlatformServices, initial: AppConfiguration? = nu
         state.value.controller.close()
         platform.local.write("brand", brand.id)
         platform.local.write("environment", environment.name)
+        mutable.value = create(AppConfiguration(brand, environment, endpoint))
     }
 
     fun close() = state.value.controller.close()
