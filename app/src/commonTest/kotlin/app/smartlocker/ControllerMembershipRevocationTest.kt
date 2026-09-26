@@ -178,3 +178,23 @@ class ControllerMembershipRevocationTest {
         assertEquals(Features(false, false, false, false), controller.features)
         assertTrue(current.residents.isEmpty())
         assertTrue(current.issues.isEmpty())
+    }
+
+    private fun assertCleared(state: AppState) {
+        assertNull(state.selectedId)
+        assertNull(state.selected)
+        assertNull(state.credential)
+        assertNull(state.credentialMessage)
+        assertNull(state.statistics)
+        assertNull(state.nextCursor)
+        assertNull(state.noticeCursor)
+        assertNull(state.issueCursor)
+        assertNull(state.serverUnreadCount)
+        assertNull(state.lastUpdated)
+        assertTrue(state.parcels.isEmpty())
+        assertTrue(state.pending.isEmpty())
+        assertTrue(state.recent.isEmpty())
+        assertTrue(state.notices.isEmpty())
+        assertTrue(state.issues.isEmpty())
+        assertTrue(state.residents.isEmpty())
+    }
