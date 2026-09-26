@@ -18,3 +18,23 @@ import app.smartlocker.auth.domain.*
 import app.smartlocker.config.*
 import app.smartlocker.design.*
 import app.smartlocker.shared.presentation.*
+
+@Composable
+fun LoginScreen(controller: AppController, state: AppState, legal: () -> Unit) {
+    val brand = controller.configuration.brand
+    val demo = controller.configuration.environment == Environment.DEMO
+    var contact by rememberSaveable { mutableStateOf("") }
+    var cpf by rememberSaveable { mutableStateOf("") }
+    var code by rememberSaveable { mutableStateOf("") }
+    var email by rememberSaveable { mutableStateOf(false) }
+    Column(Modifier.widthIn(max = Tokens.maxForm).fillMaxWidth().verticalScroll(rememberScrollState())) {
+        Column(Modifier.fillMaxWidth().background(Color(brand.dark), RoundedCornerShape(bottomStart = 32.dp, bottomEnd = 32.dp))
+            .padding(horizontal = 24.dp, vertical = 36.dp), verticalArrangement = Arrangement.spacedBy(24.dp)) {
+            Surface(shape = Tokens.control, color = Color.White.copy(alpha = .08f), contentColor = Tokens.soft) {
+                Row(Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    AppIcon(Symbol.PARCEL)
+                    Text(brand.name, style = MaterialTheme.typography.labelLarge)
+                }
+            }
+            Text(brand.headline, style = MaterialTheme.typography.displaySmall, color = Color.White)
