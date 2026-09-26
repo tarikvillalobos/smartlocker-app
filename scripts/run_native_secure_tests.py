@@ -10,6 +10,7 @@ import tempfile
 
 def gradle(environment):
     return subprocess.call(
+        [sys.executable, "scripts/gradle.py", ":app:desktopNativeVaultTest", "--no-daemon"],
         env=environment,
     )
 
