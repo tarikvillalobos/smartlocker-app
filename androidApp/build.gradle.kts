@@ -25,4 +25,5 @@ dependencies {
     implementation(project(":core"))
     implementation(libs.activity)
     implementation(libs.window)
+    implementation(libs.compose.foundation)
 }
