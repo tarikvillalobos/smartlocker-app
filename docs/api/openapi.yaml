@@ -1658,3 +1658,23 @@ components:
             - "string"
             - "null"
           format: "email"
+        termsUrl:
+          type:
+            - "string"
+            - "null"
+          format: "uri"
+          pattern: "^https://"
+        privacyUrl:
+          type:
+            - "string"
+            - "null"
+          format: "uri"
+          pattern: "^https://"
+      required:
+        - "brandId"
+        - "appName"
+        - "capabilities"
+        - "supportEmail"
+        - "termsUrl"
+        - "privacyUrl"
+      description: "Complementa a marca embarcada. Não muda identificador nativo nem autoriza acesso a qualquer vínculo."
