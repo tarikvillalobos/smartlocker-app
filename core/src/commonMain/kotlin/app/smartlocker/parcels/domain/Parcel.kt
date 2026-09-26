@@ -42,7 +42,6 @@ data class PickupCredential(
 ) {
     fun canDisplay(now: Long, fresh: Boolean): Boolean =
         fresh && status == CredentialStatus.ACTIVE && now < expiresAt &&
-            now >= verifiedAt && now - verifiedAt < 60_000
 }
 
 data class ParcelPage(val items: List<Parcel>, val nextCursor: String?)
