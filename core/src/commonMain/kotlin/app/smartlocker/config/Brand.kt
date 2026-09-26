@@ -18,3 +18,23 @@ data class Brand(
     val channels: Set<String>,
     val features: Features = Features(),
     val headline: String = "Suas encomendas, sempre à mão.",
+    val introduction: String = "Receba o código de retirada assim que o pacote chegar ao armário.",
+    val bodyFont: String = "jakarta",
+    val headingFont: String = "sora",
+    val applicationId: String = "app.smartlocker.demo",
+)
+
+object Brands {
+    val smartLocker = Brand(
+        "smartlocker", "SmartLocker", "SL", 0xFF007A5E, 0xFF08393B,
+        null, null, null, setOf("app", "sms", "whatsapp"),
+    )
+    val aurora = Brand(
+        "aurora", "Aurora Lockers", "AL", 0xFF6652B8, 0xFF292344,
+        null, null, null, setOf("app", "sms"),
+        features = Features(residents = false),
+        headline = "Sua entrega. Seu tempo.",
+        applicationId = "app.aurora.lockers.demo",
+    )
+    val all = listOf(smartLocker, aurora)
+}
