@@ -7,6 +7,8 @@ data class LoginRequest(val contact: String, val cpf: String, val channel: Login
 
 object InputValidation {
     fun phone(value: String): Boolean {
+        val raw = value.filter(Char::isDigit)
+        val digits = if (raw.length == 13 && raw.startsWith("55")) raw.drop(2) else raw
         return digits.length == 11 && digits[2] == '9' && digits.take(2).toInt() >= 11
     }
 
