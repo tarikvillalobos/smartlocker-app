@@ -106,6 +106,7 @@ private fun IssueScreen(state: AppState, controller: AppController) {
         Panel {
             Text("${issue.reference} · ${issue.status}", style = MaterialTheme.typography.labelLarge)
             Text(issue.message)
+            issue.resolution?.let { Text(it, color = Tokens.secondary) }
             Text(dateTime(issue.createdAt), style = MaterialTheme.typography.bodySmall, color = Tokens.secondary)
         }
     }
