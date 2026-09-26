@@ -50,14 +50,6 @@ class DesktopSecureStorage(private val directory: Path) : SecureStorage {
     }
 
     override suspend fun write(key: String, value: String?) = withContext(Dispatchers.IO) {
-        require(key.matches(Regex("[a-zA-Z0-9._-]+")))
-        when {
-            "mac" in os -> {
-                if (value == null) command(listOf("/usr/bin/security", "delete-generic-password", "-a", key, "-s", service), allowMissing = true)
-                else {
-                    // The secret is sent on stdin, not exposed in the process argument list.
-                    val input = "add-generic-password -U -a $key -s $service -w ${encoded(value)}\n"
-                    command(listOf("/usr/bin/security", "-i"), input)
                 }
             }
             "win" in os -> {
