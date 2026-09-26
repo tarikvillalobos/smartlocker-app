@@ -38,3 +38,23 @@ class ControllerMembershipRevocationTest {
         }
         val controller = start(repository, clock)
         assertNotNull(controller.state.value.credential)
+        controller.preferences(CommunicationPreferences(sms = false))
+        runCurrent()
+        assertTrue(started.isCompleted)
+        val waiting = controller.state.value
+        assertTrue(waiting.busy)
+        assertEquals("office", waiting.membershipId)
+        assertCleared(waiting)
+        assertEquals("Preferências salvas.", waiting.feedback)
+        allowReload.complete(Unit)
+        val refreshed = controller.state.first { !it.busy }
+        assertFalse(refreshed.stale)
+        assertTrue(refreshed.parcels.isNotEmpty())
+        assertTrue(refreshed.parcels.all { it.locationId == "office" })
+        assertEquals("office", refreshed.selected?.locationId)
+    }
+
+    @Test fun aFailedReloadCannotRestoreDataFromTheRevokedMembership() = runTest {
+        val clock = TestClock()
+        val demo = DemoRepository(MemoryStorage(), MemorySecure(), Brands.smartLocker, clock, 0)
+        demo.signIn()
