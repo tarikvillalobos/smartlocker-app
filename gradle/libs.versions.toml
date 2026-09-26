@@ -28,6 +28,10 @@ jna = { module = "net.java.dev.jna:jna-platform", version.ref = "jna" }
 
 ktor-client-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
 
+compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "material3" }
+qrcode = { module = "io.github.g0dkar:qrcode-kotlin", version.ref = "qrcode" }
+zxing = { module = "com.google.zxing:core", version.ref = "zxing" }
+
 [plugins]
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
