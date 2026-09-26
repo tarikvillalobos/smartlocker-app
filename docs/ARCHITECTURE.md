@@ -70,8 +70,6 @@ Marcação manual e retirada física são eventos diferentes. Na demonstração,
 a marcação revoga a credencial, permite desfazer por dez minutos e nunca é
 apresentada como confirmação do hardware. Desfazer não reativa a credencial.
 Retirada física consome a credencial, é idempotente e não permite desfazer.
-Essas regras demonstram a UI; o adaptador real deverá respeitar as capacidades
-e decisões retornadas pela API.
 
 Indicadores usam a coleção completa dos últimos 30 dias no repositório demo,
 independentemente da página exibida. Média inclui apenas timestamps físicos
