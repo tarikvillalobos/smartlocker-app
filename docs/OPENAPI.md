@@ -107,6 +107,16 @@ implementação ou segurança do backend mantido no outro projeto.
 
 ## Validação realizada
 
+A execução de 26/09/2026 aprovou a validação formal OpenAPI 3.1.1 e os
+**25 casos positivos e negativos** de `scripts/check_openapi_cases.py`.
+Os casos cobrem CPF, contatos/canais, OTP, preferências, métricas incompletas,
+UTC, combinação plataforma/provedor push e os quatro cenários de unidade:
+presente, ausente e os dois pares de campos inconsistentes.
+
+O contrato contém 23 caminhos, 26 operações e 38 schemas. Esses resultados
+validam a especificação e seus casos de schema; não comprovam integração com
+backend, entrega de mensagens ou operação de hardware. Resultados do aplicativo
+e revisões testadas devem ser consultados em [VALIDATION.md](VALIDATION.md).
 
 ## Executar a validação
 
