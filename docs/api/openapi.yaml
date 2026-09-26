@@ -2138,3 +2138,23 @@ components:
             properties:
               averagePickupDurationSeconds:
                 type: "null"
+      examples:
+        -
+          since: "2026-08-27T12:00:00.000Z"
+          until: "2026-09-26T12:00:00.000Z"
+          generatedAt: "2026-09-26T12:00:00.000Z"
+          complete: true
+          totalReceived: 8
+          physicalPickupCount: 6
+          averagePickupDurationSeconds: 9900
+    PickupCredential:
+      type: "object"
+      properties:
+        parcelId:
+          $ref: "#/components/schemas/Identifier"
+        membershipId:
+          $ref: "#/components/schemas/Identifier"
+        code:
+          type: "string"
+          pattern: "^[0-9]{4,12}$"
+          description: "Código numérico autorizado; preservar zeros iniciais."
