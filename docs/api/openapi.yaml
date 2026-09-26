@@ -78,3 +78,23 @@ paths:
         - "Configuration"
       summary: "Consultar capacidades públicas da marca"
       security: []
+      parameters:
+        -
+          $ref: "#/components/parameters/BrandId"
+      responses:
+        "200":
+          description: "Resultado confirmado pelo servidor."
+          headers:
+            X-Request-Id:
+              $ref: "#/components/headers/RequestId"
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/BrandConfiguration"
+        "400":
+          $ref: "#/components/responses/Problem"
+        "404":
+          $ref: "#/components/responses/Problem"
+        "429":
