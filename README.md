@@ -49,4 +49,3 @@ No Windows, substitua `./gradlew` por `gradlew.bat` e `python3` por `python`.
 
 ## Android
 
-Private and proprietary software.
