@@ -18,3 +18,22 @@ cases = [
  ('ContactChangeRequest', {'contact': 'new@example.test', 'channel': 'email'}, True),
  ('ContactChangeRequest', {'contact': '', 'channel': 'email'}, False),
  ('OtpVerification', {'code': '123456'}, True),
+ ('OtpVerification', {'code': '12345'}, False),
+ ('PreferencesUpdate', {}, False),
+ ('PreferencesUpdate', {'sms': False}, True),
+ ('PreferencesUpdate', {'camera': True}, False),
+ ('ParcelMetrics', metrics, True),
+ ('ParcelMetrics', dict(metrics, complete=False), False),
+ ('ParcelMetrics', dict(metrics, physicalPickupCount=0), False),
+ ('ParcelMetrics', dict(metrics, complete=False, totalReceived=None,
+                        physicalPickupCount=None, averagePickupDurationSeconds=None), True),
+ ('Instant', '2026-09-26T12:00:00.000Z', True),
+ ('Instant', '2026-09-26T09:00:00-03:00', False),
+ ('PushRegistrationRequest', {'platform': 'android', 'provider': 'apns',
+    'token': 'synthetic-token', 'permission': 'authorized', 'appVersion': '0.1.0'}, False),
+]
+for name, value, expected in cases:
+    root = {'$ref': '#/components/schemas/' + name, 'components': spec['components']}
+    actual = Draft202012Validator(root, format_checker=FormatChecker()).is_valid(value)
+    assert actual == expected, f'Unexpected validity for {name}'
+print(f'{len(cases)} positive and negative schema cases passed.')
