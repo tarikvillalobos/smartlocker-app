@@ -10,6 +10,20 @@ verde da marca padrão. Aurora Lockers demonstra uma segunda personalização.
 
 ## Status real
 
+O cliente HTTP está implementado: login e renovação de sessão, encomendas,
+credenciais, histórico, avisos, perfil, contatos, preferências e suporte usam o
+contrato em [OpenAPI](docs/OPENAPI.md). O backend está sendo finalizado em outro
+projeto. Este repositório entrega o aplicativo e não cria esse servidor.
+
+Com endpoint HTTPS configurado, o modo de produção usa a API externa. Sem
+configuração válida, apresenta indisponibilidade; erros nunca ativam dados
+fictícios. A demonstração permanece uma opção explícita e funciona localmente.
+Testes de cliente com respostas controladas não comprovam homologação externa.
+
+A liberação para produção depende de homologação com o backend, canais e lockers,
+além de assinatura e distribuição. Push nativo ainda não está integrado. SMS,
+e-mail e WhatsApp são responsabilidades do backend e dos fornecedores; o app
+não envia comandos de abertura de portas ou confirmações físicas de retirada.
 
 Consulte [o registro de progresso](docs/PROGRESS.md) e
 [a matriz de validação](docs/VALIDATION.md) para distinguir configuração,
