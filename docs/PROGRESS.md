@@ -21,7 +21,6 @@ Atualizado em 26/09/2026. Consulte [VALIDATION.md](VALIDATION.md) para as evidê
 - [x] Três testes iOS aprovados em simulador isolado, incluindo UI/teclado e Keychain.
 - [x] DMG, MSI e DEB das duas marcas gerados em CI; DMG também executado localmente.
 - [x] Documentação de arquitetura, API, marcas, execução e distribuição.
-- [ ] API real: implementação externa, credenciais e homologação indisponíveis.
 - [ ] Integrações reais com locker, push, SMS, e-mail e WhatsApp.
 - [ ] Ensaios em aparelhos físicos e auditoria com TalkBack/VoiceOver.
 - [ ] Assinatura comercial, notarização e distribuição para lojas.
