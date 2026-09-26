@@ -156,7 +156,6 @@ class AppController(
         mutable.update { it.copy(profile = profile, membershipId = location, parcels = page.items,
             pending = pending, recent = recent, nextCursor = page.nextCursor, statistics = statistics, notices = notices.items,
             noticeCursor = notices.nextCursor, serverUnreadCount = notices.unreadCount,
-            issues = issues.items, issueCursor = issues.nextCursor, selectedId = detail.parcel?.id, selected = detail.parcel, credential = detail.credential,
             credentialMessage = detail.message, stale = false, now = clock.now(), lastUpdated = clock.now()) }
     }
 
