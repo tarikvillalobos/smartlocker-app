@@ -23,6 +23,26 @@ A UI mede as restrições da janela. Não utiliza uma tela fixa de 390 × 844.
 - Status têm rótulos textuais. Material oferece foco e navegação por Tab;
   Escape volta ao início no desktop e o botão voltar Android é tratado.
 
+## Mudanças de janela no Android
+
+A Activity hospeda apenas Compose; não incorpora AndroidView ou AndroidFragment.
+O manifesto trata diretamente `orientation`, `screenSize`, `smallestScreenSize`
+e `screenLayout`. Assim, rotação e redimensionamento atualizam a composição sem
+recriar a Activity. A decisão busca manter foco e sessão do teclado durante a
+mudança de janela; não fixa orientação nem impede tela dividida.
+
+A UI já observa restrições em BoxWithConstraints, densidade em LocalDensity,
+insets de safe area/IME e a geometria de FoldingFeature. Esses valores continuam
+mudando e precisam atualizar o layout mesmo quando a Activity é mantida.
+Se uma View nativa for incorporada no futuro, será necessário revisar como ela
+recarrega recursos e configuração. Essa responsabilidade acompanha a opção de
+tratar mudanças diretamente. Veja a [orientação oficial do Android para Compose](https://developer.android.com/guide/topics/resources/runtime-changes).
+
+`fontScale`, `density` e outras alterações não declaradas continuam usando a
+recriação normal. O runtime é retido pelo ViewModel; campos usam rememberSaveable.
+O teste nativo também chama ActivityScenario.recreate() durante o OTP para
+verificar restauração fora da rotação. Essa recriação explícita não equivale a
+morte do processo. O resultado do teste ampliado permanece em [VALIDATION.md](VALIDATION.md).
 ## Verificação
 
 Testes Compose exercitam 320, 390, 430, 600, 840 e 1200 dp, em escala 100% e 200%,
