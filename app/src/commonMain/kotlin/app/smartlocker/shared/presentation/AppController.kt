@@ -317,7 +317,6 @@ class AppController(
         val issue = repository.reportIssue(context.membershipId, selectedId, message)
         if (generation != epoch) return@execute
         mutable.update { it.copy(issues = it.issues + issue, issueSubmission = it.issueSubmission + 1,
-            feedback = "Solicitação ${issue.id} recebida. Acompanhe nesta tela.", stale = true, credential = null) }
         refreshAfterMutation(generation)
     }
     fun notice(value: DeliveryNotice) = execute { generation ->
