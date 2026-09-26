@@ -38,3 +38,23 @@ fun ParcelRow(parcel: Parcel, onClick: () -> Unit) {
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun PickupCard(state: AppState, controller: AppController, platform: PlatformServices, detail: Boolean = false) {
+    val parcel = state.selected ?: return
+    Panel(dark = true) {
+        FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            StatusBadge(parcel)
+            Text("Retire até ${dateTime(parcel.deadline).substringBefore(" ·")}",
+                color = Tokens.soft, style = MaterialTheme.typography.bodySmall)
+        }
+        if (detail) {
+            Text(parcel.carrier, style = MaterialTheme.typography.titleMedium)
+            parcel.tracking?.let { Text("Rastreio $it", color = Tokens.soft, style = MaterialTheme.typography.bodySmall) }
+        }
+        Surface(shape = Tokens.card, color = Color.White, contentColor = Tokens.text) {
+            Column(Modifier.fillMaxWidth().padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                val credential = state.credential
+                if (credential != null && credential.canDisplay(state.now, !state.stale)) {
+                    PickupQr(credential.payload, Modifier.widthIn(max = if (detail) 232.dp else 208.dp))
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                        credential.code.chunked(3).forEach { part ->
