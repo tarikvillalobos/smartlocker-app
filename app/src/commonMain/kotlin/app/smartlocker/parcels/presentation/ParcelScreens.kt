@@ -38,3 +38,23 @@ fun HomeScreen(state: AppState, controller: AppController, platform: PlatformSer
                         label = { Text("${parcel.carrier} · ${parcel.compartment}") })
                 }
             }
+        }
+        if (state.selected?.status == ParcelStatus.WAITING) PickupCard(state, controller, platform)
+        else PrimaryButton("Ver encomenda pendente") { controller.select(state.pending.first().id, false) }
+    }
+    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+        Text("Recentes", Modifier.weight(1f), style = MaterialTheme.typography.titleMedium)
+        TextButton({ controller.navigate(Route.HISTORY) }) { Text("Ver histórico") }
+    }
+    state.parcels.take(4).forEach { item -> ParcelRow(item) { controller.select(item.id) } }
+    if (state.parcels.isEmpty()) Text("Suas próximas entregas aparecerão aqui.", color = Tokens.secondary)
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun HistoryScreen(state: AppState, controller: AppController) {
+    PageTitle("Histórico")
+    FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        listOf(ParcelFilter.ALL to "Todas", ParcelFilter.WAITING to "Aguardando", ParcelFilter.COLLECTED to "Retiradas")
+            .forEach { (filter, title) ->
+                FilterChip(state.filter == filter, { controller.filter(filter) }, label = { Text(title) }, enabled = !state.busy)
