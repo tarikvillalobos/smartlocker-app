@@ -71,21 +71,6 @@ para esse papel; esta minuta define apenas o cliente de usuários finais.
 
 ## Mapeamento implementado no cliente
 
-- Session atual tem apenas access token; storage/modelos precisarão representar
-  refresh, sessionId, brandId e os respectivos prazos.
-- Membership atual trata locationId como vínculo; o contrato distingue membership,
-  location e unit e adiciona fuso/capacidades efetivas.
-- Contatos no contrato podem ser null quando ainda ausentes; o domínio atual usa
-  strings não nulas. Não preencher ausência com dados fictícios.
-- O domínio usa milissegundos; a API propõe RFC 3339 e média em segundos.
-- O cálculo atual inclui o extremo final do período; a proposta usa fim exclusivo.
-- O contrato acrescenta versões para If-Match e revalidateAfter de credenciais;
-  o app atual usa frescor fixo de 60 segundos. A integração deverá adequar isso.
-- Notifications/issues hoje retornam listas; o contrato as pagina e inclui
-  contagem global explícita para avisos. O adaptador deve preservar esses dados.
-- Secret aceita até 8192 caracteres; isso excede limites operacionais atuais de
-  alguns cofres desktop (sessão codificada em base64). Confirmar limites com o
-  fornecedor e adequar o armazenamento antes de integrar; não truncar segredos.
 
 ## Lacunas e escolhas que exigem homologação
 
