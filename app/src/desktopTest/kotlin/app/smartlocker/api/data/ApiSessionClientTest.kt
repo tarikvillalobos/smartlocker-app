@@ -278,3 +278,23 @@ class ApiSessionClientTest {
         try {
             assertNull(second.restoreSession())
             assertEquals(0, calls)
+            assertTrue(secure.values.isEmpty())
+        } finally { second.close() }
+    }
+
+    @Test fun uncertainMutationRequiresExplicitRetryWithSameKeyAndSuccessStartsANewIntent() = runTest {
+        val clock = TestClock()
+        val keys = mutableListOf<String?>()
+        val client = client(clock) { request ->
+            if (request.path().endsWith("/verify")) respond(tokens(clock), headers = JSON)
+            else {
+                keys += request.headers["Idempotency-Key"]
+                assertEquals("\"3\"", request.headers[HttpHeaders.IfMatch])
+                if (keys.size == 1) throw IOException("Synthetic lost response")
+                respond("{}", headers = JSON)
+            }
+        }
+        try {
+            client.verifyLogin("challenge-1", "123456")
+            suspend fun mutation() = client.request("/memberships/home/parcels/parcel-1/manual-pickup",
+                HttpMethod.Post, headers = mapOf(HttpHeaders.IfMatch to "\"3\""))
