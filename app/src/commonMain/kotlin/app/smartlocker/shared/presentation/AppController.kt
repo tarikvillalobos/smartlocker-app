@@ -57,6 +57,8 @@ class AppController(
                 if (generation == epoch) mutable.update { it.copy(busy = false, initialized = true) }
             }
         }
+        actionJob = job
+        job.start()
     }
 
     private fun handle(error: Exception) {
