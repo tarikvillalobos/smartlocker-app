@@ -1,0 +1,20 @@
+openapi: "3.1.1"
+jsonSchemaDialect: "https://json-schema.org/draft/2020-12/schema"
+info:
+  title: "SmartLocker App — contrato proposto"
+  version: "0.1.0-draft"
+  description: |-
+    MINUTA PROPOSTA: não descreve uma API existente, publicada ou integrada.
+    Documento de base para implementação e revisão conjunta do aplicativo e do futuro fornecedor.
+    Nenhum servidor, adaptador HTTP ou integração com hardware acompanha este contrato.
+
+    O servidor deverá isolar marca, usuário e vínculo em cada operação; conhecer um ID não autoriza acesso.
+    X-Brand-Id identifica a distribuição white-label e não é segredo nem prova de autorização.
+    Tokens são vinculados à marca. Destinatários da mesma unidade não compartilham encomendas por padrão.
+    IDs são opacos. Datas usam RFC 3339 UTC com sufixo Z; a interface converte para o fuso do vínculo.
+    Respostas pessoais, tokens e credenciais usam Cache-Control: no-store. O app não registra esses corpos.
+
+    x-required-permission documenta autorização de aplicação, não scopes OAuth nem autorização por feature flag.
+    Cada permissão deve ser concedida pelo servidor e novamente limitada ao usuário e ao vínculo solicitado.
+    CPF identifica a conta e nunca substitui o código temporário como fator de autenticação.
+    Erros públicos de login não revelam se um contato ou CPF está cadastrado.
