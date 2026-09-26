@@ -2358,3 +2358,23 @@ components:
         registeredAt:
           $ref: "#/components/schemas/Instant"
       required:
+        - "installationId"
+        - "registeredAt"
+    PushData:
+      type: "object"
+      properties:
+        type:
+          type: "string"
+          const: "parcel_update"
+        brandId:
+          $ref: "#/components/schemas/Identifier"
+        membershipId:
+          $ref: "#/components/schemas/Identifier"
+        parcelId:
+          $ref: "#/components/schemas/Identifier"
+        noticeId:
+          $ref: "#/components/schemas/Identifier"
+      required:
+        - "type"
+        - "brandId"
+        - "membershipId"
