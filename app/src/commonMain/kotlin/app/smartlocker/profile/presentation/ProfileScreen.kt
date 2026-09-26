@@ -18,3 +18,23 @@ import app.smartlocker.shared.presentation.*
 fun ProfileScreen(state: AppState, controller: AppController, platform: PlatformServices) {
     val profile = state.profile ?: return
     val brand = controller.configuration.brand
+    val scope = rememberCoroutineScope()
+    var permission by remember { mutableStateOf("Consultar permissão do dispositivo") }
+    PageTitle("Perfil")
+    Panel(dark = true) {
+        Text(profile.name, style = MaterialTheme.typography.titleLarge)
+        Text(brand.name, color = Tokens.soft)
+        Text("${state.membership?.location} · ${state.membership?.unit}", color = Tokens.soft)
+    }
+    Text("DADOS DE CONTATO", style = MaterialTheme.typography.labelMedium, color = Tokens.secondary)
+    Panel {
+        Metadata("Celular", profile.phone)
+        HorizontalDivider(color = Tokens.border)
+        Metadata("E-mail", profile.email)
+        if (brand.features.contactEditing) MenuRow("Editar e verificar contato", Symbol.EDIT) { controller.navigate(Route.CONTACT) }
+    }
+    Text("AVISOS DE ENCOMENDA", style = MaterialTheme.typography.labelMedium, color = Tokens.secondary)
+    Panel {
+        PreferenceRow("Notificação no aplicativo", profile.preferences.inApp, !state.busy) {
+            controller.preferences(profile.preferences.copy(inApp = it))
+        }
