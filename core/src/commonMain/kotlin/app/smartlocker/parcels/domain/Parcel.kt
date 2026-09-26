@@ -38,6 +38,7 @@ data class PickupCredential(
     val expiresAt: Long,
     val verifiedAt: Long,
     val status: CredentialStatus,
+    val revalidateAt: Long = verifiedAt + 60_000,
 ) {
     fun canDisplay(now: Long, fresh: Boolean): Boolean =
         fresh && status == CredentialStatus.ACTIVE && now < expiresAt &&
