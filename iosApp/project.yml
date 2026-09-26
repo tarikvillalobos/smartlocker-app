@@ -6,6 +6,7 @@ options:
 settings:
   base:
     PRODUCT_BUNDLE_IDENTIFIER: app.smartlocker.demo
+    SMARTLOCKER_API_BASE_URL: ""
     SWIFT_VERSION: "5.0"
     PRODUCT_MODULE_NAME: SmartLockerHost
     ARCHS: arm64
