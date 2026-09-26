@@ -42,6 +42,11 @@ fun HomeScreen(state: AppState, controller: AppController, platform: PlatformSer
         if (state.selected?.status == ParcelStatus.WAITING) PickupCard(state, controller, platform)
         else PrimaryButton("Ver encomenda pendente") { controller.select(state.pending.first().id, false) }
     }
+    if (showRecent) RecentParcels(state, controller)
+}
+
+@Composable
+fun RecentParcels(state: AppState, controller: AppController) {
     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
         Text("Recentes", Modifier.weight(1f), style = MaterialTheme.typography.titleMedium)
         TextButton({ controller.navigate(Route.HISTORY) }) { Text("Ver histórico") }
