@@ -18,3 +18,23 @@ import app.smartlocker.parcels.presentation.*
 import app.smartlocker.profile.presentation.ProfileScreen
 import app.smartlocker.shared.presentation.*
 import app.smartlocker.support.presentation.*
+
+@Composable
+fun SmartLockerApp(runtime: AppRuntime, modifier: Modifier = Modifier) {
+    val holder by runtime.state.collectAsState()
+    val controller = holder.controller
+    val state by controller.state.collectAsState()
+    SmartLockerTheme(holder.configuration.brand) {
+        Surface(modifier.fillMaxSize(), color = Tokens.background) {
+            BoxWithConstraints(Modifier.safeDrawingPadding().imePadding().onPreviewKeyEvent {
+                if (it.type == KeyEventType.KeyDown && it.key == Key.Escape && state.session != null) {
+                    controller.navigate(Route.HOME)
+                    true
+                } else false
+            }) {
+                val fontScale = LocalDensity.current.fontScale
+                val rail = maxWidth >= 600.dp && maxWidth.value / fontScale >= 440
+                val split = maxWidth >= 1000.dp && maxWidth.value / fontScale >= 800
+                Column(Modifier.fillMaxSize()) {
+                    EnvironmentHeader(runtime, holder, state)
+                    if (state.busy) LinearProgressIndicator(Modifier.fillMaxWidth())
