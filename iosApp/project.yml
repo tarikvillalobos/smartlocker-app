@@ -35,6 +35,7 @@ targets:
         script: |
           cd "$SRCROOT/.."
           python3 scripts/prepare_resources.py
+          python3 scripts/prepare_icons.py
           ./gradlew :app:embedAndSignAppleFrameworkForXcode --console=plain
         basedOnDependencyAnalysis: false
   SmartLockerUITests:
