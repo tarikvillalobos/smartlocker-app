@@ -1,0 +1,20 @@
+package app.smartlocker
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.key.*
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.dp
+import app.smartlocker.auth.presentation.LoginScreen
+import app.smartlocker.config.*
+import app.smartlocker.design.*
+import app.smartlocker.parcels.presentation.*
+import app.smartlocker.profile.presentation.ProfileScreen
+import app.smartlocker.shared.presentation.*
+import app.smartlocker.support.presentation.*
