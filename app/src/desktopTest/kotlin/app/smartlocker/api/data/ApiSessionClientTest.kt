@@ -398,3 +398,7 @@ class ApiSessionClientTest {
 
     private companion object {
         const val BASE = "https://api.example.test/v1"
+        val JSON = headersOf(HttpHeaders.ContentType, ContentType.Application.Json.toString())
+        val PROBLEM = headersOf(HttpHeaders.ContentType, "application/problem+json")
+    }
+}
