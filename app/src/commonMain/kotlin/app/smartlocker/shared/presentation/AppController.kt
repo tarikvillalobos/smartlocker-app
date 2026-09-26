@@ -198,3 +198,23 @@ class AppController(
         mutable.update { it.copy(profile = profile, contactChallenge = null, route = Route.PROFILE,
             feedback = "Contato verificado e atualizado.") }
     }
+    fun report(message: String) = mutateSelected {
+        val issue = repository.reportIssue(it.membershipId, it.selectedId!!, message)
+        feedback("Solicitação ${issue.id} recebida. Acompanhe nesta tela.")
+    }
+    fun notice(value: DeliveryNotice) = execute {
+        repository.markNoticeRead(state.value.membershipId, value.id)
+        select(value.parcelId)
+    }
+    fun demoScenario(value: DemoScenario) = execute {
+        (repository as? DemoControls)?.scenario(value)
+        mutable.update { it.copy(selectedId = null, selected = null, credential = null) }
+        load()
+    }
+    fun deposit() = execute {
+        (repository as? DemoControls)?.deposit(state.value.membershipId)
+        load()
+        feedback("Depósito fictício criado. Veja a nova encomenda e o aviso.")
+    }
+    fun physicalPickup() = mutateSelected {
+        (repository as? DemoControls)?.physicalPickup(it.membershipId, it.selectedId!!)
