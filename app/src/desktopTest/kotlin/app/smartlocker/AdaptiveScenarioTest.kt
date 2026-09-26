@@ -78,3 +78,11 @@ class AdaptiveScenarioTest {
             onNodeWithText("Tudo em dia!").performScrollTo().assertIsDisplayed()
             onNodeWithText("Copiar código").assertDoesNotExist()
             capture("empty-390-2x")
+        } finally { runOnIdle { runtime.close() } }
+    }
+
+    private fun ComposeUiTest.capture(name: String) {
+        val directory = File("build/reports/screenshots").apply { mkdirs() }
+        ImageIO.write(onRoot().captureToImage().toAwtImage(), "png", File(directory, "$name.png"))
+    }
+}
