@@ -38,3 +38,10 @@ object Brands {
     )
     val all = listOf(smartLocker, aurora)
 }
+
+enum class Environment { DEMO, PRODUCTION }
+data class AppConfiguration(
+    val brand: Brand,
+    val environment: Environment,
+    val apiBaseUrl: String? = null,
+)
