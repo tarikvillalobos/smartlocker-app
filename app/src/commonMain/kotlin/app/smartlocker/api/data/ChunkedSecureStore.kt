@@ -46,6 +46,7 @@ class ChunkedSecureStore(private val storage: SecureStorage, private val key: St
             (encoded.length + CHUNK_SIZE - 1) / CHUNK_SIZE, checksum(bytes),
         )
         val previous = readHead()
+        if (value == null) { clear(previous); return@guarded }
         // Never replace a journal until all of its obsolete generations were removed.
         cleanup(previous, required = true)
         val generations = listOfNotNull(previous, next)
