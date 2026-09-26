@@ -78,3 +78,23 @@ class AppController(
             route = if (previousUser == null || previousUser == session.userId) it.route else Route.HOME,
             selectedId = if (previousUser == null || previousUser == session.userId) it.selectedId else null) }
         load()
+    }
+
+    fun refresh() {
+        readJob?.cancel()
+        val generation = ++epoch
+        readJob = scope.launch {
+            mutable.update { it.copy(busy = true, credential = null, error = null) }
+            try { load(generation) }
+            catch (error: CancellationException) { throw error }
+            catch (error: Exception) { if (generation == epoch) handle(error) }
+            finally { if (generation == epoch) mutable.update { it.copy(busy = false) } }
+        }
+    }
+
+    private suspend fun load(generation: Int = epoch) {
+        val context = state.value
+        val profile = repository.profile()
+        val location = profile.memberships.find { it.id == context.membershipId }?.id
+            ?: profile.memberships.firstOrNull()?.id
+            ?: throw AppFailure(FailureKind.DENIED, "Nenhum local autorizado para esta conta.")
