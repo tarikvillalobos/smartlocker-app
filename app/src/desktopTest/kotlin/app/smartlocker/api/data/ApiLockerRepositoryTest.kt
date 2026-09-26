@@ -98,3 +98,23 @@ class ApiLockerRepositoryTest {
         }.useSuspend {
             val first = it.repo.noticePage("member-1")
             assertEquals(74, first.unreadCount)
+            assertEquals(cursor, first.nextCursor)
+            assertEquals(1, it.requests.count { request -> request.url.encodedPath.endsWith("/notifications") })
+            val second = it.repo.noticePage("member-1", first.nextCursor)
+            assertEquals(74, second.unreadCount)
+            assertNull(second.nextCursor)
+        }
+    }
+
+    @Test fun responseScopeAndRepeatingCursorAreRejected() = runTest {
+        withRepository { request ->
+            when {
+                request.url.encodedPath.endsWith("/pickup-credential") -> json(ApiPickupCredential("parcel-other", "member-1", "004321", "opaque", "active", NOW, LATER, SOON))
+                request.url.encodedPath.endsWith("/parcels/parcel-1") -> json(parcel().copy(membershipId = "member-other"))
+                request.url.encodedPath.endsWith("/parcels") -> json(ApiParcelPage(listOf(parcel()), page("same-cursor")))
+                else -> error("Unexpected path")
+            }
+        }.useSuspend {
+            assertEquals(FailureKind.UNAVAILABLE, assertFailsWith<AppFailure> { it.repo.parcel("member-1", "parcel-1") }.kind)
+            assertEquals(FailureKind.UNAVAILABLE, assertFailsWith<AppFailure> { it.repo.credential("member-1", "parcel-1") }.kind)
+            assertEquals(FailureKind.UNAVAILABLE, assertFailsWith<AppFailure> { it.repo.parcels("member-1", ParcelFilter.ALL, "same-cursor") }.kind)
