@@ -61,6 +61,7 @@ class AdaptiveScenarioTest {
             runOnIdle { controller.login(demoLogin) }
             waitUntil(timeoutMillis = 10_000) { controller.state.value.challenge != null }
             runOnIdle { controller.verify("123456") }
+            waitUntil(timeoutMillis = 15_000) { controller.state.value.profile != null && !controller.state.value.busy }
             runOnIdle { controller.demoScenario(DemoScenario.LONG_TEXT) }
             waitUntil(15_000) { controller.state.value.selected?.carrier?.startsWith("Cooperativa") == true && !controller.state.value.busy }
             onNodeWithText("Copiar código").performScrollTo().assertIsDisplayed()
