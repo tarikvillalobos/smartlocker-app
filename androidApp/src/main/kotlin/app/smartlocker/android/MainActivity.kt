@@ -24,7 +24,6 @@ class MainActivity : ComponentActivity() {
             val holder by model.runtime.state.collectAsState()
             val state by holder.controller.state.collectAsState()
             BackHandler(state.route != Route.HOME) { holder.controller.navigate(Route.HOME) }
-            SmartLockerApp(model.runtime)
         }
     }
 }
