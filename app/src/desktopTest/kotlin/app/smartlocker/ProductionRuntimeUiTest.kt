@@ -59,6 +59,7 @@ class ProductionRuntimeUiTest {
                 assertEquals(Route.HISTORY, controller.state.value.route)
                 val requestsBeforeDemoActions = fixture.requests.size
                 runOnIdle { controller.deposit(); controller.physicalPickup(); controller.demoScenario(DemoScenario.NORMAL) }
+                waitUntil(timeoutMillis = 10_000) { !controller.state.value.busy }
                 assertEquals(requestsBeforeDemoActions, fixture.requests.size)
                 assertEquals(Environment.PRODUCTION, runtime.state.value.configuration.environment)
                 onNodeWithText("Demonstração · dados fictícios").assertDoesNotExist()
