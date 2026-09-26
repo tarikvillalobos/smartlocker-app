@@ -38,3 +38,23 @@ class ApiMappingTest {
         failsSafely { dto.toDomain("contact_change") }
         failsSafely { dto.copy(channel = "future_channel").toDomain() }
         failsSafely { dto.copy(codeLength = 8).toDomain() }
+    }
+
+    @Test fun presentationSessionExpiresWithRefreshAndItsDiagnosticTextRedactsTokens() {
+        val tokens = ApiSessionTokens("Bearer", "opaque-access", start, "opaque-refresh", end,
+            "user", "smartlocker", "session", listOf("profile:read"))
+        assertEquals(Instant.parse(end).toEpochMilliseconds(), tokens.toDomain().expiresAt)
+        assertFalse(tokens.toString().contains(tokens.accessToken))
+        assertFalse(tokens.toString().contains(tokens.refreshToken))
+        failsSafely { tokens.copy(tokenType = "Basic").toDomain() }
+        failsSafely { tokens.copy(accessToken = "token\r\nInjected").toDomain() }
+    }
+
+    @Test fun standaloneMembershipAndAbsentContactsDoNotInventAUnitOrContact() {
+        val mapped = member.toDomain()
+        assertEquals("", mapped.unit)
+        assertEquals("America/Sao_Paulo", mapped.timeZone)
+        val profile = ApiProfile("user", "Ana", null, null, null, null,
+            ApiCommunicationPreferences(true, false, false), listOf(member)).toDomain(listOf(mapped))
+        assertEquals("", profile.phone)
+        assertEquals("", profile.email)
