@@ -47,6 +47,10 @@ interface LockerRepository {
     suspend fun markNoticeRead(locationId: String, id: String)
     suspend fun reportIssue(locationId: String, parcelId: String, message: String): SupportIssue
     suspend fun issues(locationId: String): List<SupportIssue>
+    suspend fun issuePage(locationId: String, cursor: String? = null): IssuePage {
+        require(cursor == null)
+        return IssuePage(issues(locationId), null)
+    }
     suspend fun recipients(locationId: String): List<Recipient>
 }
 
