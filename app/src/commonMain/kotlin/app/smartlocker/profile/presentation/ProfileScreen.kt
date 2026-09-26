@@ -17,6 +17,7 @@ import app.smartlocker.shared.presentation.*
 @Composable
 fun ProfileScreen(state: AppState, controller: AppController, platform: PlatformServices) {
     val profile = state.profile ?: return
+    val brand = controller.brand
     val scope = rememberCoroutineScope()
     var permission by remember { mutableStateOf("Consultar permissão do dispositivo") }
     PageTitle("Perfil")
