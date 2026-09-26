@@ -158,3 +158,23 @@ class AppController(
             statistics = null, nextCursor = null, residents = emptyList(), route = Route.HOME) }
         refresh()
     }
+    fun more() = execute {
+        val context = state.value
+        val generation = epoch
+        val cursor = context.nextCursor ?: return@execute
+        val page = repository.parcels(context.membershipId, context.filter, cursor)
+        if (generation == epoch) mutable.update {
+            it.copy(parcels = (it.parcels + page.items).distinctBy(Parcel::id), nextCursor = page.nextCursor)
+        }
+    }
+
+    fun markCollected() = mutateSelected {
+        repository.markCollected(it.membershipId, it.selectedId!!)
+        feedback("Retirada informada por você. Sem confirmação física do armário.")
+    }
+    fun undo() = mutateSelected {
+        repository.undoManual(it.membershipId, it.selectedId!!)
+        feedback("Marcação desfeita. O código anterior continua revogado.")
+    }
+    private fun mutateSelected(action: suspend (AppState) -> Unit) = execute {
+        val context = state.value
