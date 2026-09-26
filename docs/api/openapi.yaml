@@ -2318,3 +2318,23 @@ components:
           $ref: "#/components/schemas/Secret"
           writeOnly: true
         permission:
+          type: "string"
+          enum:
+            - "authorized"
+            - "provisional"
+        appVersion:
+          type: "string"
+          minLength: 1
+          maxLength: 50
+      required:
+        - "platform"
+        - "provider"
+        - "token"
+        - "permission"
+        - "appVersion"
+      additionalProperties: false
+      description: |-
+        Proposta opcional: android usa fcm; ios usa apns. O backend conhece projeto/ambiente pela distribuição. Nunca
+        aceitar credenciais de fornecedor do aplicativo. Desativação ou troca de conta exige remoção do registro.
+      oneOf:
+        -
