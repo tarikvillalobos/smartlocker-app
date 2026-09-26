@@ -38,3 +38,23 @@ fun ApiParcel.toDomain(): Parcel {
     tracking?.let { apiText(it, 200, true) }
     size?.let { apiText(it, 50, true) }
     return Parcel(id = apiId(id), recipientId = apiId(recipientId), locationId = apiId(membershipId),
+        carrier = apiText(carrier, 200), tracking = tracking, locker = apiText(locker.name, 200, true),
+        address = apiText(locker.address, 500, true), compartment = apiText(compartment, 100), size = size,
+        depositedAt = deposited, notifiedAt = notified, deadline = expiration, manualAt = manual,
+        collectedAt = collected, credentialStatus = credential, lockerAvailable = locker.available,
+        canMarkManually = actions.canMarkManually, canUndo = actions.canUndoManual, version = version.toString(),
+        canReportIssue = actions.canReportIssue)
+}
+
+fun ApiParcelPage.toDomain(): ParcelPage {
+    apiUniqueIds(items.map { it.id })
+    return ParcelPage(items.map { it.toDomain() }, pageInfo.validatedCursor())
+}
+
+fun ApiParcelMetrics.toDomain(): Statistics {
+    val start = apiInstant(since)
+    val endExclusive = apiInstant(until)
+    apiRequire(start < endExclusive && apiInstant(generatedAt) >= endExclusive)
+    if (!complete) {
+        apiRequire(totalReceived == null && physicalPickupCount == null && averagePickupDurationSeconds == null)
+        return Statistics(null, null, start, endExclusive, complete = false)
