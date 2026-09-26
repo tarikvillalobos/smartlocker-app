@@ -38,3 +38,14 @@ class AndroidSecureStorage(context: Context) : SecureStorage {
         }
     }
     override suspend fun write(key: String, value: String?) = withContext(Dispatchers.IO) {
+        val editor = preferences.edit()
+        if (value == null) editor.remove(key)
+        else {
+            val cipher = Cipher.getInstance("AES/GCM/NoPadding")
+            cipher.init(Cipher.ENCRYPT_MODE, key())
+            cipher.updateAAD(key.toByteArray())
+            editor.putString(key, Base64.encodeToString(cipher.iv + cipher.doFinal(value.toByteArray()), Base64.NO_WRAP))
+        }
+        check(editor.commit()) { "Could not persist protected session" }
+    }
+}
