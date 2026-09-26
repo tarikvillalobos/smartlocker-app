@@ -38,3 +38,14 @@ enum Keychain {
         let request = query(key)
         guard let value else {
             let result = SecItemDelete(request as CFDictionary)
+            return result == errSecSuccess || result == errSecItemNotFound
+        }
+        let attributes = [kSecValueData as String: Data(value.utf8)]
+        let result = SecItemUpdate(request as CFDictionary, attributes as CFDictionary)
+        if result == errSecSuccess { return true }
+        guard result == errSecItemNotFound else { return false }
+        var addition = request.merging(attributes) { _, new in new }
+        addition[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
+        return SecItemAdd(addition as CFDictionary, nil) == errSecSuccess
+    }
+}
