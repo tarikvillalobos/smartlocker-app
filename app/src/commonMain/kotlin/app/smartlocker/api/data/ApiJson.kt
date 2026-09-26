@@ -38,3 +38,7 @@ internal fun apiInstant(value: String): Long {
     catch (_: IllegalArgumentException) { invalidApiResponse() }
 }
 
+internal fun apiUniqueIds(ids: List<String>) {
+    ids.forEach { apiId(it) }
+    apiRequire(ids.size == ids.toSet().size)
+}
