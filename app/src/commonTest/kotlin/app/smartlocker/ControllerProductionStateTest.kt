@@ -58,3 +58,23 @@ class ControllerProductionStateTest {
         for (route in listOf(Route.RESIDENTS, Route.ISSUES, Route.CONTACT, Route.DEMO)) {
             controller.navigate(route)
             assertNotEquals(route, controller.state.value.route)
+        }
+    }
+
+    @Test fun transientSessionRefreshFailureKeepsAccountButRevocationClearsPersonalData() = runTest {
+        val clock = TestClock()
+        val demo = DemoRepository(MemoryStorage(), MemorySecure(), Brands.smartLocker, clock, 0)
+        demo.signIn()
+        var failure: FailureKind? = null
+        val repository = object : LockerRepository by demo {
+            override suspend fun profile(): Profile {
+                failure?.let { throw AppFailure(it, "Falha simulada na renovação") }
+                return demo.profile()
+            }
+        }
+        val controller = AppController(AppConfiguration(Brands.smartLocker, Environment.PRODUCTION), repository, clock, backgroundScope)
+        val signedIn = controller.state.first { it.profile != null && !it.busy }
+        failure = FailureKind.NETWORK
+        controller.refresh()
+        val unavailable = controller.state.first { it.error != null && !it.busy }
+        assertEquals(signedIn.session?.userId, unavailable.session?.userId)
