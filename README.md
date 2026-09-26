@@ -107,7 +107,6 @@ open iosApp/SmartLocker.xcodeproj
 Selecione o scheme SmartLocker e um simulador. O build phase compila e incorpora
 o framework Compose. Configure uma equipe Apple e o bundle ID para um aparelho
 físico. O teste nativo `SmartLockerUITests` pode ser executado com Product → Test
-ou `xcodebuild test` selecionando um simulador instalado. O projeto Xcode é gerado e ignorado pelo Git; edite `project.yml`.
 
 ## Fluxo demonstrativo
 
