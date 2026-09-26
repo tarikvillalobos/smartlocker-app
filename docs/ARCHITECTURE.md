@@ -25,8 +25,6 @@ operação e informa separadamente que os dados precisam ser atualizados.
   reutilizados após login do mesmo usuário e revalidação dos vínculos retornados.
 - Erros preservam os metadados visíveis como desatualizados e removem códigos.
 - Credenciais só são exibidas enquanto ativas, não expiradas e verificadas
-  recentemente. A janela conservadora de apresentação é de 60 segundos;
-  a validade real deverá continuar sob controle da API.
 - Não existe fila offline de confirmação com sucesso otimista.
 
 ## Ciclo de vida Android
