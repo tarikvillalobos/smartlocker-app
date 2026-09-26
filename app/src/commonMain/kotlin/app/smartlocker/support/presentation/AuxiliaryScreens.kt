@@ -78,3 +78,23 @@ fun AuxiliaryScreen(state: AppState, controller: AppController, platform: Platfo
                 if (email == null || !platform.openLink("mailto:$email")) controller.feedback("Canal externo de suporte ainda não configurado.")
             }) { Text("Contato do suporte") }
         }
+        else -> Unit
+    }
+}
+
+@Composable
+private fun IssueScreen(state: AppState, controller: AppController) {
+    var message by rememberSaveable(state.selectedId) { mutableStateOf("") }
+    PageTitle("Solicitações", { controller.navigate(if (state.selectedId != null) Route.DETAIL else Route.PROFILE) })
+    if (state.selectedId != null) Panel {
+        Text("Problema com ${state.selected?.carrier ?: "a encomenda selecionada"}", style = MaterialTheme.typography.titleMedium)
+        OutlinedTextField(message, { message = it.take(2000) }, Modifier.fillMaxWidth(),
+            label = { Text("Descreva o problema") }, minLines = 3, shape = Tokens.control)
+        PrimaryButton("Enviar relato", !state.busy && !state.stale && message.trim().length >= 10) { controller.report(message) }
+        if (controller.configuration.environment == Environment.DEMO) Text("Solicitações fictícias, salvas apenas neste dispositivo.",
+            style = MaterialTheme.typography.bodySmall, color = Tokens.secondary)
+    }
+    if (state.issues.isEmpty()) EmptyState("Nenhuma solicitação", "Relate problemas a partir do detalhe da encomenda.")
+    state.issues.reversed().forEach { issue ->
+        Panel {
+            Text("${issue.id} · ${issue.status}", style = MaterialTheme.typography.labelLarge)
