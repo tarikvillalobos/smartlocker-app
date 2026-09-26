@@ -58,3 +58,12 @@ internal class ProductionApiFixture {
             "/memberships/member-api/parcels/parcel-api/manual-pickup" -> {
                 check(request.method == HttpMethod.Post && request.headers["If-Match"] == "\"3\"")
                 check(request.headers["Idempotency-Key"] != null)
+                manual = true
+                json(parcel())
+            }
+            else -> error("Unexpected documented path: $path")
+        }
+    }
+    private inline fun <reified T> MockRequestHandleScope.json(value: T, status: HttpStatusCode = HttpStatusCode.OK): HttpResponseData = respond(
+        ApiJson.encodeToString(value), status, headersOf(HttpHeaders.ContentType, "application/json"))
+}
