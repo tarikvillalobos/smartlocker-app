@@ -26,6 +26,7 @@ fun SmartLockerApp(runtime: AppRuntime, modifier: Modifier = Modifier) {
     val holder by runtime.state.collectAsState()
     val controller = holder.controller
     val state by controller.state.collectAsState()
+    MembershipTimeZone(state.membership?.timeZone) {
     SmartLockerTheme(holder.configuration.brand) {
         Surface(modifier.fillMaxSize(), color = Tokens.background) {
             BoxWithConstraints(Modifier.safeDrawingPadding().imePadding().onPreviewKeyEvent {
