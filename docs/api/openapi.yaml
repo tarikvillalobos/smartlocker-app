@@ -978,3 +978,23 @@ paths:
           $ref: "#/components/responses/Problem"
         "503":
           $ref: "#/components/responses/Problem"
+        default:
+          $ref: "#/components/responses/Problem"
+  "/memberships/{membershipId}/notifications/{noticeId}/read":
+    parameters:
+      -
+        $ref: "#/components/parameters/MembershipId"
+      -
+        $ref: "#/components/parameters/NoticeId"
+    put:
+      operationId: "markNoticeRead"
+      tags:
+        - "Notifications"
+      summary: "Marcar aviso como lido"
+      description: "Operação naturalmente idempotente; primeira leitura define readAt e chamadas seguintes preservam esse instante."
+      x-required-permission: "notifications:write"
+      parameters:
+        -
+          $ref: "#/components/parameters/BrandId"
+      responses:
+        "200":
