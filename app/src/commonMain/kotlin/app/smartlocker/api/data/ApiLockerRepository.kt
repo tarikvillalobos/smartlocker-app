@@ -98,3 +98,23 @@ class ApiLockerRepository(private val session: ApiSessionClient) : LockerReposit
     override suspend fun undoManual(locationId: String, parcelId: String): Parcel =
         manualPickup(locationId, parcelId, undo = true)
 
+    private suspend fun manualPickup(locationId: String, parcelId: String, undo: Boolean): Parcel {
+        val user = currentUser()
+        val membership = membership(locationId, user)
+        val reviewed = restrictActions(reviewedParcel(locationId, parcelId, user),
+            membership.capabilities, configuration().capabilities)
+        val allowed = if (undo) reviewed.canUndo && reviewed.status == ParcelStatus.MANUAL
+            else reviewed.canMarkManually && reviewed.status == ParcelStatus.WAITING
+        if (!allowed) throw AppFailure(FailureKind.CONFLICT, "Esta ação não está disponível. Atualize a encomenda.")
+        val version = reviewed.version
+        requireResponse(version != null && Regex("[1-9][0-9]*").matches(version))
+        val response = request<ApiParcel>(user, "${parcelPath(locationId, parcelId)}/manual-pickup",
+            if (undo) HttpMethod.Delete else HttpMethod.Post,
+            headers = mapOf("If-Match" to "\"$version\""))
+        // A version conflict is surfaced unchanged; never fetch a newer version and retry a command.
+        requireResponse(if (undo) response.status == "waiting" else response.status == "manual")
+        return parcel(response, locationId, parcelId, membership.capabilities, user)
+    }
+
+    override suspend fun updatePreferences(value: CommunicationPreferences): Profile {
+        val user = currentUser()
