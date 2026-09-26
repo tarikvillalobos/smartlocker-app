@@ -22,6 +22,7 @@ class AppFailure(val kind: FailureKind, override val message: String) : Exceptio
 
 interface LockerRepository {
     suspend fun requestLogin(request: LoginRequest): Challenge
+    suspend fun resendLogin(challengeId: String, request: LoginRequest): Challenge = requestLogin(request)
     suspend fun verifyLogin(challengeId: String, code: String): Session
     suspend fun restoreSession(): Session?
     suspend fun logout()
