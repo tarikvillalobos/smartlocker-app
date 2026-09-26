@@ -38,3 +38,23 @@ incluindo janelas de 840 × 390 e 390 × 400 dp. Total: **68 capturas** em
 `app/build/reports/screenshots/`.
 
 O redimensionamento mantém contato digitado, filtro e encomenda selecionada.
+Ações de retirada e cópia continuam alcançáveis por rolagem. A navegação inferior
+quebra em linhas completas com fonte ampliada, sem comprimir o texto.
+O teste de altura reduzida simula área disponível; sozinho não testa um IME nativo.
+
+Os cinco templates HTML foram renderizados no navegador. Uma seleção das capturas
+Compose foi comparada visualmente: login, início, histórico, detalhe e perfil,
+mais layouts amplos, fonte ampliada, paisagem e conteúdo longo. A revisão resultou
+em correções de paleta, QR imediato, colunas e navegação. Não há comparação de
+pixels automatizada nem aprovação manual de cada uma das 68 imagens.
+
+Os testes usam semântica de acessibilidade e verificam limites horizontais de
+ações visíveis. Não substituem uma auditoria integral com TalkBack/VoiceOver,
+nem ensaios de dobradiça física ou de foco por teclado em cada sistema.
+
+## Builds e recursos nativos
+
+| Plataforma | Evidência | Limites |
+| --- | --- | --- |
+| Desktop macOS | Compilação e testes Compose/JVM aprovados | DMG e assinatura não ensaiados |
+| Android | APK debug e lint aprovados | Distribuição e aparelho físico pendentes |
