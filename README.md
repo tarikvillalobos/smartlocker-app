@@ -47,5 +47,6 @@ Sem `--demo`, a primeira abertura usa o ambiente externo não configurado.
 A escolha explícita de ambiente e marca é lembrada no dispositivo.
 No Windows, substitua `./gradlew` por `gradlew.bat` e `python3` por `python`.
 
+## Android
 
 Private and proprietary software.
