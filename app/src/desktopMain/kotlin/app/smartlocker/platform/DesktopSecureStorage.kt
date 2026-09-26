@@ -18,3 +18,23 @@ class DesktopSecureStorage(private val directory: Path) : SecureStorage {
     override suspend fun read(key: String): String? = withContext(Dispatchers.IO) {
         when {
             "mac" in os -> command(listOf("/usr/bin/security", "find-generic-password", "-a", key, "-s", service, "-w"), allowMissing = true)
+                ?.let(::decoded)
+            "win" in os -> {
+                val path = directory.resolve(encoded(key) + ".protected")
+                if (Files.exists(path)) String(Crypt32Util.cryptUnprotectData(Files.readAllBytes(path))) else null
+            }
+            else -> command(listOf("secret-tool", "lookup", "service", service, "account", key), allowMissing = true)
+                ?.takeIf { it.isNotBlank() }?.let(::decoded)
+        }
+    }
+
+    override suspend fun write(key: String, value: String?) = withContext(Dispatchers.IO) {
+        require(key.matches(Regex("[a-zA-Z0-9._-]+")))
+        when {
+            "mac" in os -> {
+                if (value == null) command(listOf("/usr/bin/security", "delete-generic-password", "-a", key, "-s", service), allowMissing = true)
+                else {
+                    // The secret is sent on stdin, not exposed in the process argument list.
+                    val input = "add-generic-password -U -a $key -s $service -w ${encoded(value)}\n"
+                    command(listOf("/usr/bin/security", "-i"), input)
+                }
