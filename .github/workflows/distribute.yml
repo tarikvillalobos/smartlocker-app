@@ -43,6 +43,20 @@ jobs:
       - run: python scripts/prepare_icons.py
       - name: Build native installer with bundled Java runtime
         run: python scripts/gradle.py :app:packageDistributionForCurrentOS -Pbrand=${{ matrix.brand }} --console=plain
+      - name: Show packaging diagnostics on failure
+        if: failure()
+        shell: python
+        run: |
+          from pathlib import Path
+          for folder in ("logs", "tmp"):
+              for path in Path("app/build/compose", folder).rglob("*"):
+                  if path.is_file() and path.suffix in (".txt", ".log"):
+                      print(path, path.read_text(errors="replace")[-12000:], sep="\n")
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: packaging-diagnostics-${{ matrix.brand }}-${{ runner.os }}
+          path: app/build/compose/logs/
       - uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.brand }}-${{ runner.os }}-${{ runner.arch }}-unsigned
