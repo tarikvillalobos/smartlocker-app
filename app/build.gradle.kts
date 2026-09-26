@@ -22,7 +22,6 @@ kotlin {
             implementation(project(":core"))
             implementation(compose.runtime)
             implementation(compose.foundation)
-            implementation(compose.material3)
             implementation(compose.components.resources)
             implementation(libs.coroutines)
             implementation(libs.serialization)
