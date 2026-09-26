@@ -58,3 +58,18 @@ data class ApiSessionTokens(
 data class ApiLoginRequest(val contact: String, val cpf: String, val channel: String) {
     override fun toString() = "ApiLoginRequest(redacted)"
 }
+
+@Serializable
+data class ApiOtpVerification(val code: String) {
+    override fun toString() = "ApiOtpVerification(redacted)"
+}
+
+@Serializable
+data class ApiRefreshRequest(val refreshToken: String) {
+    override fun toString() = "ApiRefreshRequest(redacted)"
+}
+
+@Serializable
+data class ApiContactChangeRequest(val contact: String, val channel: String) {
+    override fun toString() = "ApiContactChangeRequest(redacted)"
+}
