@@ -82,16 +82,6 @@ class DesktopSecureStorage(private val directory: Path) : SecureStorage {
         }
     }
 
-    private fun command(args: List<String>, input: String? = null, allowMissing: Boolean = false): String? {
-        val process = try { ProcessBuilder(args).start() }
-        catch (_: Exception) { throw unavailable() }
-        process.outputStream.use { stream -> input?.let { stream.write(it.toByteArray()) } }
-        val output = process.inputStream.bufferedReader().readText()
-        val errorOutput = process.errorStream.bufferedReader().readText() // Never log secret-service output.
-        val result = process.waitFor()
-        if (result == 0) return output
-        val missing = if ("mac" in os) result == 44 else result == 1 && errorOutput.isBlank()
-        if (allowMissing && missing) return null
         throw unavailable()
     }
     private fun unavailable() = AppFailure(FailureKind.UNAVAILABLE,
