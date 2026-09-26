@@ -2,6 +2,8 @@
 
 Registro de 26/09/2026 em macOS Apple Silicon, JDK 21, Gradle 8.14.3 e Xcode 26.2,
 com verificações adicionais nos runners Windows e Linux do GitHub Actions.
+O backend está sendo finalizado em outro projeto. O cliente HTTP da minuta está
+implementado; nenhuma
 verificação abaixo prova integração com backend, fornecedor ou hardware externo.
 
 ## Testes compartilhados e desktop
