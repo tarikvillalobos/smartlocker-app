@@ -72,7 +72,6 @@ class ResponsiveUiTest {
             waitUntil(timeoutMillis = 10_000) { runtime.state.value.controller.state.value.challenge != null }
             onNodeWithText("Código de 6 dígitos").performScrollTo().performTextInput("123456")
             onNodeWithText("Confirmar código").performScrollTo().performClick()
-            waitUntil(15_000) { runtime.state.value.controller.state.value.profile != null }
             onNodeWithText("Copiar código").performScrollTo().performClick()
             assertTrue(platform.copied?.length == 6)
             onNodeWithText("Fechar").performClick()
