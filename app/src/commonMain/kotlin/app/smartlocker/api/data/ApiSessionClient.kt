@@ -78,3 +78,23 @@ class ApiSessionClient(
             throw error
         }
         val tokens = decodeApi<ApiSessionTokens>(response)
+        validateTokens(tokens)
+        ensureCurrent(epoch)
+        save(StoredApiSession(baseUrl, tokens), epoch)
+        restored = true
+        verificationKeys.clear()
+        tokens.toDomain()
+    }
+
+    suspend fun restoreSession(): Session? = mutex.withLock {
+        restoreLocked()
+        if (stored == null) return@withLock null
+        accessLocked()
+        currentSession()
+    }
+
+    private suspend fun restoreLocked() {
+        if (restored) return
+        val epoch = generation
+        val raw = store.read()
+        ensureCurrent(epoch)
