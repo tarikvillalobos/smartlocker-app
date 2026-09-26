@@ -78,3 +78,16 @@ fun Metadata(label: String, value: String, light: Boolean = false) {
     Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
         Text(label, style = MaterialTheme.typography.bodySmall, color = if (light) Tokens.soft else Tokens.secondary)
         Text(value, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
+    }
+}
+
+fun dateTime(timestamp: Long): String {
+    val value = Instant.fromEpochMilliseconds(timestamp).toLocalDateTime(TimeZone.of("America/Sao_Paulo"))
+    fun Int.pad() = toString().padStart(2, '0')
+    return "${value.dayOfMonth.pad()}/${value.monthNumber.pad()} · ${value.hour.pad()}:${value.minute.pad()}"
+}
+fun durationLabel(millis: Long?): String {
+    if (millis == null) return "Sem dados"
+    val minutes = millis / 60_000
+    return "${minutes / 60}h ${minutes % 60}min"
+}
