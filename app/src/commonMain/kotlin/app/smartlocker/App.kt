@@ -83,7 +83,6 @@ fun SmartLockerApp(runtime: AppRuntime, modifier: Modifier = Modifier) {
                         if (!rail) AppNavigation(state, controller, false)
                     }
                     state.feedback?.let { message ->
-                        Snackbar(action = { TextButton({ controller.feedback(null) }) { Text("Fechar") } }, Modifier.padding(8.dp)) {
                             Text(message)
                         }
                     }
