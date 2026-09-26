@@ -86,6 +86,18 @@ class NativeAppFlowTest {
         ui.onNodeWithText("Copiar código").assertDoesNotExist()
     }
 
+    private fun waitForWindowFocus() {
+        try {
+            ui.waitUntil(10_000) {
+                var focused = false
+                scenario.onActivity { focused = it.hasWindowFocus() }
+                focused
+            }
+        } catch (error: ComposeTimeoutException) {
+            throw AssertionError("Validation app did not obtain window focus. Check for a system dialog or another foreground window.", error)
+        }
+    }
+
     private fun focusWithVisibleIme(label: String): SemanticsNodeInteraction {
         val field = ui.onNode(hasSetTextAction() and hasText(label))
         field.performScrollTo().performClick()
