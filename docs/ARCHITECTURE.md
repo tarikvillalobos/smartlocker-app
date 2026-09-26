@@ -70,6 +70,9 @@ Marcação manual e retirada física são eventos diferentes. Na demonstração,
 a marcação revoga a credencial, permite desfazer por dez minutos e nunca é
 apresentada como confirmação do hardware. Desfazer não reativa a credencial.
 Retirada física consome a credencial, é idempotente e não permite desfazer.
+No cliente HTTP, permissões de ação vêm do detalhe da encomenda e das
+capacidades do vínculo e da marca. `If-Match` usa a versão previamente validada;
+um conflito não provoca atualização de versão e repetição automática.
 
 Indicadores usam a coleção completa dos últimos 30 dias no repositório demo,
 independentemente da página exibida. Média inclui apenas timestamps físicos
