@@ -238,3 +238,23 @@ class ApiLockerRepository(private val session: ApiSessionClient) : LockerReposit
         val mapped = response.items.map { it.toDomain() }
         requireResponse(mapped.map { it.id }.distinct().size == mapped.size)
         cache(user) {
+            memberships.clear()
+            response.items.forEach { memberships[it.id] = it }
+        }
+        return response.items.singleOrNull { it.id == id }
+            ?: throw AppFailure(FailureKind.DENIED, "Você não tem acesso a este local.")
+    }
+
+    private suspend fun parcel(value: ApiParcel, locationId: String, id: String, membership: ApiCapabilities, user: String): Parcel {
+        requireResponse(value.membershipId == locationId && value.id == id)
+        val result = restrictActions(value.toDomain(), membership, configuration().capabilities)
+        cache(user) { reviewedParcels[locationId to id] = result }
+        return result
+    }
+
+    private suspend fun reviewedParcel(locationId: String, id: String, user: String): Parcel =
+        cache(user) { reviewedParcels[locationId to id] } ?: parcel(locationId, id).also { checkUser(user) }
+
+    private fun restrictActions(value: Parcel, membership: ApiCapabilities, global: ApiCapabilities): Parcel = value.copy(
+        canMarkManually = value.canMarkManually && membership.features.manualPickup && global.features.manualPickup,
+        canUndo = value.canUndo && membership.features.undoManualPickup && global.features.undoManualPickup,
