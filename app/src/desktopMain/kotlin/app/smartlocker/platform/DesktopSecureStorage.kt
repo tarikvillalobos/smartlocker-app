@@ -57,7 +57,6 @@ class DesktopSecureStorage(private val directory: Path) : SecureStorage {
         catch (_: Exception) { throw unavailable() }
         process.outputStream.use { stream -> input?.let { stream.write(it.toByteArray()) } }
         val output = process.inputStream.bufferedReader().readText()
-        process.errorStream.bufferedReader().readText() // Never log secret-service output.
         val result = process.waitFor()
         if (result == 0) return output
         if (allowMissing && (result == 44 || result == 1)) return null
