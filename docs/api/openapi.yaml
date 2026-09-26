@@ -1693,7 +1693,6 @@ components:
             - $ref: "#/components/schemas/Identifier"
             - type: "null"
         unitLabel:
-          type: "string"
           maxLength: 200
         timeZone:
           type: "string"
