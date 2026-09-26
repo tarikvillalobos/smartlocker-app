@@ -118,3 +118,23 @@ class ControllerRecoveryTest {
         assertNull(controller.state.value.error)
         controller.correctProfileContact()
         assertNull(controller.state.value.contactChallenge)
+        assertEquals("11912345678", controller.state.value.contactValue)
+    }
+
+    @Test fun confirmedIssueSurvivesTheFollowingReadFailure() = runTest {
+        val clock = TestClock()
+        val demo = DemoRepository(MemoryStorage(), MemorySecure(), Brands.smartLocker, clock, 0)
+        demo.signIn()
+        var failRead = false
+        val repository = object : LockerRepository by demo {
+            override suspend fun profile(): Profile {
+                if (failRead) throw AppFailure(FailureKind.NETWORK, "Sem rede")
+                return demo.profile()
+            }
+        }
+        val controller = AppController(AppConfiguration(Brands.smartLocker, Environment.DEMO), repository, clock, backgroundScope)
+        controller.state.first { it.profile != null }
+        failRead = true
+        controller.report("O compartimento permanece fechado.")
+        val current = controller.state.first { it.issueSubmission == 1L && !it.busy }
+        assertEquals(1, current.issues.size)
