@@ -43,5 +43,4 @@ data class AppState(
     val lastUpdated: Long? = null,
 ) {
     val membership: Membership? get() = profile?.memberships?.find { it.id == membershipId }
-    val unreadCount: Int get() = notices.count { !it.read }
 }
