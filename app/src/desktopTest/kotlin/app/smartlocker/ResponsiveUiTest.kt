@@ -78,3 +78,14 @@ class ResponsiveUiTest {
             onNodeWithText("Fechar").performClick()
             onNodeWithContentDescription("Ver detalhes").performScrollTo().performClick()
             onNodeWithText("Já retirei a encomenda").performScrollTo().performClick()
+            onNodeWithText("Sim, retirei").performClick()
+            waitUntil(10_000) { runtime.state.value.controller.state.value.selected?.manualAt != null }
+            onNodeWithText("Retirada informada").assertExists()
+        } finally { runOnIdle { runtime.close() } }
+    }
+
+    private fun ComposeUiTest.capture(screen: String, width: Int, fontScale: Float) {
+        val directory = File("build/reports/screenshots").apply { mkdirs() }
+        ImageIO.write(onRoot().captureToImage().toAwtImage(), "png", File(directory, "$screen-$width-${fontScale.toInt()}x.png"))
+    }
+}
