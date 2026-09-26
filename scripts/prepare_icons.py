@@ -38,3 +38,23 @@ def mark(brand, rounded):
     draw = ImageDraw.Draw(image)
     if rounded:
         draw.rounded_rectangle((64 * scale, 64 * scale, 960 * scale, 960 * scale),
+                               radius=208 * scale, fill=color)
+    unit = 34 * scale
+    offset = side / 2 - 12 * unit
+    width = 48 * scale
+    def line(points):
+        transformed = [(round(offset + x * unit), round(offset + y * unit)) for x, y in points]
+        draw.line(transformed, fill="white", width=width, joint="curve")
+        for x, y in transformed:
+            draw.ellipse((x - width / 2, y - width / 2, x + width / 2, y + width / 2), fill="white")
+    if brand == "smartlocker":
+        line([(21, 8), (12, 3), (3, 8), (3, 16), (12, 21), (21, 16), (21, 8)])
+        line([(3, 8), (12, 13), (21, 8)])
+        line([(12, 13), (12, 21)])
+    else:
+        line([(4, 18), (8, 6), (12, 18)])
+        line([(5.5, 14), (10.5, 14)])
+        line([(15, 6), (15, 18), (21, 18)])
+    return image.resize((1024, 1024), Image.Resampling.LANCZOS)
+
+
