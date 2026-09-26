@@ -34,6 +34,16 @@ compilação, testes e integração real.
 Versões fixadas em `gradle/libs.versions.toml`. O bootstrap baixa Gradle de sua
 origem oficial, confere SHA-256 e não exige um JAR binário no repositório.
 Fontes são baixadas de revisões fixas do Google Fonts e geradas localmente.
+Se outras versões instaladas causarem falha do lint, isole o SDK testado:
+
+```sh
+python3 scripts/prepare_android_sdk.py --source "$ANDROID_HOME"
+export ANDROID_HOME="$PWD/.tools/android-sdk"
+export ANDROID_SDK_ROOT="$ANDROID_HOME"
+```
+
+A cópia contém apenas Android 35 e ferramentas necessárias. O SDK original não
+é alterado. Um `sdk.dir` em `local.properties` tem precedência sobre essas variáveis.
 
 ## Execução rápida no desktop
 
