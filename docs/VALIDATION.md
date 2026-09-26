@@ -70,7 +70,6 @@ Os testes usam semântica de acessibilidade e verificam limites de ações visí
 Não substituem auditoria integral com TalkBack/VoiceOver, ensaios em dobradiça
 física nem verificação completa de foco por teclado em cada sistema.
 
-## Builds e recursos nativos
 
 | Plataforma | Evidência | Limites |
 | --- | --- | --- |
