@@ -1,8 +1,5 @@
 # Validação executada
 
-Registro de 26/09/2026 em macOS Apple Silicon, JDK 21, Gradle 8.14.3 e Xcode 26.2.
-A implementação real da API permanece pendente; nenhuma verificação abaixo prova
-segurança ou funcionamento de um backend ou de hardware externo.
 
 ## Testes compartilhados e desktop
 
