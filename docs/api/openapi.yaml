@@ -1538,3 +1538,23 @@ components:
       additionalProperties: false
     SessionTokens:
       type: "object"
+      properties:
+        tokenType:
+          type: "string"
+          const: "Bearer"
+        accessToken:
+          $ref: "#/components/schemas/Secret"
+        accessExpiresAt:
+          $ref: "#/components/schemas/Instant"
+        refreshToken:
+          $ref: "#/components/schemas/Secret"
+        refreshExpiresAt:
+          $ref: "#/components/schemas/Instant"
+        userId:
+          $ref: "#/components/schemas/Identifier"
+        brandId:
+          $ref: "#/components/schemas/Identifier"
+        sessionId:
+          $ref: "#/components/schemas/Identifier"
+        permissions:
+          type: "array"
