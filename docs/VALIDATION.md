@@ -92,6 +92,26 @@ erros e dois avisos sobre atualização do SDK 35. APK de desenvolvimento:
 `androidApp/build/outputs/apk/debug/androidApp-debug.apk`.
 
 A suíte nativa ampliada teve **sete testes aprovados**: cinco de Keystore e dois
+de fluxo da Activity. Cobriu ciphertext aleatório, restauração, isolamento por
+AAD, rejeição de adulteração, logout, login/OTP, rotação e retirada manual.
+
+O teste exige IME realmente visível e os campos Celular/CPF inteiros acima dele
+em retrato. Após girar, verifica o CPF em paisagem antes de qualquer refoco ou
+rolagem manual; depois também refoca os dois campos em paisagem. O OTP parcial
+sobrevive ao retorno para retrato e a uma recriação explícita da Activity antes
+de concluir o login e a retirada manual. Fechar/reabrir a Activity restaura a
+sessão, e logout impede sua restauração. Isso não simula morte do processo.
+
+A ampliação identificou perda de foco/IME quando a rotação recriava a Activity.
+O manifesto agora permite ao Compose tratar diretamente orientação e tamanho;
+fonte e densidade continuam sujeitas à recriação normal. O teste explícito de
+recriação mantém a verificação de estado independente dessa decisão de layout.
+Veja [RESPONSIVE.md](RESPONSIVE.md). O lint final manteve zero erros e dois avisos.
+
+O app foi aberto no emulador Google APIs Android 34 arm64, aproximadamente
+411 × 731 dp. Para repetir testes nativos, use um emulador dedicado e
+`./gradlew :androidApp:connectedDebugAndroidTest -PapplicationId=app.smartlocker.validation`.
+O identificador separado evita alterar dados de outra instalação.
 | --- | --- | --- |
 | Desktop macOS | Compilação e testes Compose/JVM aprovados | DMG e assinatura não ensaiados |
 | Android | APK, lint e abertura no emulador API 34 aprovados | Distribuição e aparelho físico pendentes |
