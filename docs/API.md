@@ -6,6 +6,9 @@ projeto; este repositório contém o aplicativo, sem implementar esse servidor.
 A especificação continua identificada como minuta `0.1.0-draft` até homologação.
 Seu domínio `.invalid` é um placeholder não operacional.
 
+A existência do cliente e dos testes com respostas controladas não comprova
+conectividade com homologação, entrega de mensagens nem operação de lockers reais.
+Consulte [OPENAPI.md](OPENAPI.md) e os registros datados de [VALIDATION.md](VALIDATION.md).
 
 - Portas `LockerRepository`, `SecureStorage`, `LocalStorage` e `PlatformServices`.
 - `HttpTransport`: Ktor Client, HTTPS obrigatório, JSON, timeouts, cancelamento,
