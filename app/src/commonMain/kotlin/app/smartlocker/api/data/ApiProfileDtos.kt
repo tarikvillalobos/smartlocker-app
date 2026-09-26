@@ -138,3 +138,15 @@ internal fun validateApiEmail(value: String) {
     apiRequire(value.length <= 254 && Regex("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$").matches(value))
 }
 
+@Serializable
+data class ApiRecipient(val id: String, val name: String, val relationship: String) {
+    fun toDomain() = Recipient(apiId(id), apiText(name, 200, true), apiText(relationship, 100, true))
+}
+
+@Serializable
+data class ApiRecipientList(val items: List<ApiRecipient>) {
+    fun toDomain(): List<Recipient> {
+        apiUniqueIds(items.map { it.id })
+        return items.map { it.toDomain() }
+    }
+}
