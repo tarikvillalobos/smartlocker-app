@@ -38,3 +38,23 @@ fun SmartLockerApp(runtime: AppRuntime, modifier: Modifier = Modifier) {
                 Column(Modifier.fillMaxSize()) {
                     EnvironmentHeader(runtime, holder, state)
                     if (state.busy) LinearProgressIndicator(Modifier.fillMaxWidth())
+                    state.error?.let { message ->
+                        Surface(color = Tokens.warning, modifier = Modifier.fillMaxWidth()) {
+                            Column(Modifier.padding(horizontal = 20.dp, vertical = 8.dp)) {
+                                Text(message, color = Tokens.warningText, style = MaterialTheme.typography.bodySmall)
+                                if (state.session != null) TextButton(controller::refresh, enabled = !state.busy) { Text("Tentar novamente") }
+                            }
+                        }
+                    }
+                    if (state.stale) Text("Dados desatualizados. Códigos ocultos até nova verificação.",
+                        Modifier.padding(horizontal = 20.dp, vertical = 8.dp), style = MaterialTheme.typography.bodySmall,
+                        color = Tokens.warningText)
+                    if (state.session == null) {
+                        Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.TopCenter) {
+                            if (state.route == Route.LEGAL) ScrollPage {
+                                LegalScreen(controller, runtime.platform)
+                                TextButton({ controller.navigate(Route.HOME) }) { Text("Voltar ao login") }
+                            } else LoginScreen(controller, state) { controller.navigate(Route.LEGAL) }
+                        }
+                    } else {
+                        Row(Modifier.weight(1f).fillMaxWidth()) {
