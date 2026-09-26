@@ -96,7 +96,6 @@ class AppController(
         if (generation != epoch) return@execute
         mutable.update { it.copy(challenge = challenge) }
     }
-    fun resend() { lastLogin?.let(::login) }
     fun correctContact() {
         epoch++
         readJob?.cancel()
