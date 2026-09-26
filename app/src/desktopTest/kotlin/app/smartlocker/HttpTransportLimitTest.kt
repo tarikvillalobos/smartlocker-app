@@ -38,3 +38,23 @@ class HttpTransportLimitTest {
                 respond(bytes, status)
             }, "https://api.example.test")
             try {
+                val failure = assertFailsWith<AppFailure> { transport.execute("/fixture", HttpMethod.Post, jsonBody = "{}") }
+                assertEquals(FailureKind.UNAVAILABLE, failure.kind)
+                assertEquals("Resposta da API excedeu o limite permitido.", failure.message)
+                assertEquals(1, calls)
+            } finally { transport.close() }
+        }
+    }
+
+    @Test fun oversizedStreamIsCancelledBeforeTheProducerWritesTheEntireResponse() = runTest {
+        val channel = ByteChannel(autoFlush = true)
+        val chunk = ByteArray(8192) { 'a'.code.toByte() }
+        var produced = 0
+        var calls = 0
+        val producer = backgroundScope.launch {
+            try {
+                repeat(512) {
+                    channel.writeFully(chunk)
+                    produced += chunk.size
+                }
+                channel.flushAndClose()
