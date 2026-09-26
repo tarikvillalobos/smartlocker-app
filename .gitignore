@@ -1,0 +1,12 @@
+.gradle/
+.kotlin/
+.tools/
+**/build/
+local.properties
+*.db*
+.env
+.DS_Store
+artifacts/
+app/src/commonMain/composeResources/font/*.ttf
+iosApp/*.xcodeproj/
+iosApp/Pods/
