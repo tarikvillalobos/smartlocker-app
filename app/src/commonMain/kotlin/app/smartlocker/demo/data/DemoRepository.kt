@@ -66,6 +66,7 @@ class DemoRepository(
     }
     override suspend fun statistics(locationId: String): Statistics {
         check()
+        return calculateStatistics(parcels.all(locationId), clock.now() - 30 * 86_400_000L, clock.now() + 1)
     }
     override suspend fun credential(locationId: String, parcelId: String): PickupCredential {
         check()
