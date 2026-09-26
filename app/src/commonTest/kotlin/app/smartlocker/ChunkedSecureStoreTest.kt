@@ -38,3 +38,23 @@ class ChunkedSecureStoreTest {
             val vault = FaultVault()
             val store = ChunkedSecureStore(vault, KEY)
             store.write("previous")
+            val previousKeys = vault.memory.values.keys.toSet()
+            vault.fail = { key, _ -> key == "$KEY.head" }
+            assertFailsWith<AppFailure> { store.write(if (clear) null else "replacement".repeat(1000)) }
+            vault.fail = { _, _ -> false }
+            assertTrue(ChunkedSecureStore(vault, KEY).read() == "previous")
+            assertEquals(previousKeys, vault.memory.values.keys)
+        }
+    }
+
+    @Test fun cleanupFailureDoesNotUndoCommitAndIsRetriedBeforeAnotherWrite() = runTest {
+        val vault = FaultVault()
+        val store = ChunkedSecureStore(vault, KEY)
+        store.write("previous")
+        val obsolete = vault.memory.values.keys.filter { ".chunk." in it }.toSet()
+        vault.fail = { key, value -> key in obsolete && value == null }
+        store.write("replacement".repeat(1000))
+        assertTrue(store.read() == "replacement".repeat(1000))
+        assertTrue(vault.memory.values.containsKey("$KEY.journal"))
+        assertFailsWith<AppFailure> { store.write("third") }
+        vault.fail = { _, _ -> false }
