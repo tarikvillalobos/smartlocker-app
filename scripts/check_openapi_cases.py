@@ -7,6 +7,13 @@ login = {'contact': '+5511987654321', 'cpf': '52998224725', 'channel': 'sms'}
 metrics = {'since': '2026-08-27T12:00:00.000Z', 'until': '2026-09-26T12:00:00.000Z',
            'generatedAt': '2026-09-26T12:00:00.000Z', 'complete': True,
            'totalReceived': 8, 'physicalPickupCount': 6, 'averagePickupDurationSeconds': 9900}
+capabilities = {
+ 'features': {key: False for key in ['manualPickup', 'undoManualPickup', 'contactEditing',
+                                    'recipients', 'supportIssues', 'pushRegistration']},
+ 'channels': {key: {'available': False} for key in ['inApp', 'sms', 'email', 'whatsapp', 'push']},
+}
+standalone = {'id': 'membership', 'locationId': 'station', 'locationName': 'Estação Central',
+              'unitId': None, 'unitLabel': None, 'timeZone': 'America/Sao_Paulo', 'capabilities': capabilities}
 cases = [
  ('LoginRequest', login, True),
  ('LoginRequest', dict(login, contact='ana@example.test', channel='email'), True),
