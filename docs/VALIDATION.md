@@ -180,6 +180,10 @@ a implementação e está fora da contagem. Binários não são versionados.
 
 ## Pendências externas
 
+O cliente HTTP está implementado contra a OpenAPI proposta. O backend é mantido
+em outro projeto; URL de homologação, conta de teste e compatibilidade precisam
+ser confirmadas. Testes MockEngine não demonstram integração com o servidor real.
+Push nativo ainda não está integrado; canais e lockers dependem do backend.
 A demonstração contém dados fictícios e nunca substitui a API após uma falha.
 Continuam pendentes aparelhos físicos, leitores de tela, canais reais, identidades
 de assinatura comercial, notarização e distribuição nas lojas.
