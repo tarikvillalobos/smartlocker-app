@@ -307,6 +307,10 @@ class ApiSessionClientTest {
             assertEquals(keys[0], keys[1])
             mutation()
             assertEquals(3, keys.size)
+            assertEquals(keys[1], keys[2])
+            mutation()
+            assertEquals(4, keys.size)
+            assertNotEquals(keys[2], keys[3])
         } finally { client.close() }
     }
 
