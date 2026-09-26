@@ -98,3 +98,23 @@ data class ApiMembership(
 
 @Serializable
 data class ApiMembershipList(val items: List<ApiMembership>) {
+    fun toDomain(): List<Membership> {
+        apiUniqueIds(items.map { it.id })
+        return items.map { it.toDomain() }
+    }
+}
+
+@Serializable
+data class ApiCommunicationPreferences(val inApp: Boolean, val sms: Boolean, val whatsapp: Boolean) {
+    fun toDomain() = CommunicationPreferences(inApp, sms, whatsapp)
+}
+
+@Serializable
+data class ApiPreferencesUpdate(val inApp: Boolean? = null, val sms: Boolean? = null, val whatsapp: Boolean? = null)
+
+@Serializable
+data class ApiProfile(
+    val id: String,
+    val name: String,
+    val phone: String?,
+    val phoneVerifiedAt: String?,
