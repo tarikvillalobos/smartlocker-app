@@ -91,6 +91,7 @@ class AppController(
     fun correctContact() {
         epoch++
         readJob?.cancel()
+        actionJob?.cancel()
         mutable.update { it.copy(challenge = null, error = null, busy = false) }
     }
     fun verify(code: String) = execute { generation ->
