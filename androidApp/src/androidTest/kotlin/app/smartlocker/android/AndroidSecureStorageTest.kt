@@ -58,3 +58,23 @@ class AndroidSecureStorageTest {
 
     @Test fun alteredAuthenticationTagFailsClosedAndOnlyRemovesCorruptRecord() = runBlocking {
         val key = "$prefix.corrupt-session"
+        val other = "$prefix.other-session"
+        storage.write(key, "private-token")
+        storage.write(other, "unaffected-token")
+        val bytes = Base64.decode(preferences.getString(key, null), Base64.NO_WRAP)
+        bytes[bytes.lastIndex] = (bytes.last().toInt() xor 1).toByte()
+        preferences.edit().putString(key, Base64.encodeToString(bytes, Base64.NO_WRAP)).commit()
+        val failure = runCatching { storage.read(key) }.exceptionOrNull()
+        assertTrue(failure is AppFailure)
+        assertEquals(FailureKind.EXPIRED_SESSION, (failure as AppFailure).kind)
+        assertNull(AndroidSecureStorage(context).read(key))
+        assertEquals("unaffected-token", storage.read(other))
+    }
+
+    @Test fun deletingOneSessionKeepsOtherScopesReadable() = runBlocking {
+        val first = "$prefix.first"
+        val second = "$prefix.second"
+        storage.write(first, "one")
+        storage.write(second, "two")
+        storage.write(first, null)
+        assertFalse(preferences.contains(first))
