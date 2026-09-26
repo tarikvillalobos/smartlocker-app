@@ -114,7 +114,6 @@ python3 scripts/audit_commits.py
 
 Testes desktop geram capturas em `app/build/reports/screenshots/` e relatórios
 em `app/build/reports/tests/desktopTest/`. Use `xvfb-run` em Linux sem display.
-A CI configura runners Linux, Windows e macOS, além de Android e simulador iOS.
 
 ## Organização
 
