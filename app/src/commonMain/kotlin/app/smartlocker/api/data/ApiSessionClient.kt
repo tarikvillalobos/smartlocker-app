@@ -138,3 +138,23 @@ class ApiSessionClient(
             return tokens
         } catch (error: AppFailure) {
             if (error.kind == FailureKind.EXPIRED_SESSION) expired()
+            throw error
+        }
+    }
+
+    private suspend fun save(value: StoredApiSession, epoch: Int) {
+        ensureCurrent(epoch)
+        store.write(ApiJson.encodeToString(value))
+        ensureCurrent(epoch)
+        stored = value
+    }
+
+    private suspend fun expired(): Nothing {
+        stored = null
+        store.write(null)
+        throw AppFailure(FailureKind.EXPIRED_SESSION, "Sua sessão expirou. Entre novamente.")
+    }
+
+    suspend fun request(
+        path: String, method: HttpMethod = HttpMethod.Get, body: String? = null,
+        headers: Map<String, String> = emptyMap(), authenticated: Boolean = true,
