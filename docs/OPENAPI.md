@@ -69,6 +69,7 @@ para esse papel; esta minuta define apenas o cliente de usuários finais.
     vinculado no servidor. Trocar destinatário exige a mesma prova; conhecer apenas
     installationId não autoriza reassociação. Logout não apaga essa proteção.
 
+## Mapeamento implementado no cliente
 
 - Session atual tem apenas access token; storage/modelos precisarão representar
   refresh, sessionId, brandId e os respectivos prazos.
