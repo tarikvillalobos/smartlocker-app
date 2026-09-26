@@ -158,3 +158,23 @@ class ApiSessionClient(
     suspend fun request(
         path: String, method: HttpMethod = HttpMethod.Get, body: String? = null,
         headers: Map<String, String> = emptyMap(), authenticated: Boolean = true,
+    ): String {
+        val epoch = generation
+        val token = if (authenticated) mutex.withLock { accessLocked().accessToken } else null
+        ensureCurrent(epoch)
+        val requestHeaders = headers.toMutableMap()
+        requestHeaders["X-Brand-Id"] = brand.id
+        if (token != null) requestHeaders["Authorization"] = "Bearer $token"
+        val intent = if (method != HttpMethod.Get && "Idempotency-Key" !in headers) Intent(method.value, path, body, headers) else null
+        if (intent != null) {
+            if (intent !in uncertain && uncertain.size >= 64) {
+                throw AppFailure(FailureKind.UNAVAILABLE, "Há operações sem confirmação. Atualize antes de tentar novamente.")
+            }
+            requestHeaders["Idempotency-Key"] = uncertain.getOrPut(intent) { Uuid.random().toString() }
+        }
+        try {
+            val response = transport.execute(path, method, requestHeaders, body)
+            ensureCurrent(epoch)
+            if (intent != null) uncertain.remove(intent)
+            return response
+        } catch (error: AppFailure) {
