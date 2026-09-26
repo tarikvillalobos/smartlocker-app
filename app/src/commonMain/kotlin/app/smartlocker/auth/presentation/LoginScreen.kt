@@ -78,3 +78,5 @@ fun LoginScreen(controller: AppController, state: AppState, legal: () -> Unit) {
             }
             TextButton(legal, Modifier.fillMaxWidth()) { Text("Termos de uso e privacidade") }
         }
+    }
+}
