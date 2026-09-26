@@ -11,7 +11,6 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
         versionName = providers.gradleProperty("appVersion").get()
         manifestPlaceholders["apiBaseUrl"] = providers.gradleProperty("apiBaseUrl").getOrElse("")
         manifestPlaceholders["appName"] = providers.gradleProperty("appName").getOrElse("SmartLocker")
