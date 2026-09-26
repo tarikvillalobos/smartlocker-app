@@ -30,7 +30,6 @@ fun ProfileScreen(state: AppState, controller: AppController, platform: Platform
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(profile.name, style = MaterialTheme.typography.titleLarge)
                 Text(brand.name, color = Tokens.soft, style = MaterialTheme.typography.bodySmall)
-                Text("${state.membership?.location} · ${state.membership?.unit}", color = Tokens.soft,
                     style = MaterialTheme.typography.bodySmall)
             }
         }
