@@ -189,6 +189,7 @@ class AppController(
         repository.undoManual(it.membershipId, it.selectedId!!)
         "Marcação desfeita. O código anterior continua revogado."
     }
+    private fun mutateSelected(action: suspend (AppState) -> String) = execute {
         val context = state.value
         if (context.selectedId == null) return@execute
         val generation = epoch
