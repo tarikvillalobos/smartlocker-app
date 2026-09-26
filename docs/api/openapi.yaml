@@ -1698,3 +1698,23 @@ components:
           examples:
             - "America/Sao_Paulo"
           maxLength: 100
+          description: "Identificador IANA do local."
+        capabilities:
+          $ref: "#/components/schemas/Capabilities"
+      required:
+        - "id"
+        - "locationId"
+        - "locationName"
+        - "unitId"
+        - "unitLabel"
+        - "timeZone"
+        - "capabilities"
+    MembershipList:
+      type: "object"
+      properties:
+        items:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Membership"
+      required:
+        - "items"
