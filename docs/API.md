@@ -19,7 +19,6 @@ O transporte não presume Bearer, cookies ou renovação automática. Cabe ao fu
 adaptador fornecer exatamente o método, caminho e autenticação documentados.
 Nenhum corpo de resposta de erro é exibido diretamente nem registrado em logs.
 
-## Informações necessárias
 
 1. OpenAPI/Swagger ou coleção com exemplos de sucesso e erro.
 2. URLs de homologação e produção por cliente/ambiente.
