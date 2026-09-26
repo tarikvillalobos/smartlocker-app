@@ -27,6 +27,7 @@ kotlin {
             implementation(libs.coroutines)
             implementation(libs.serialization)
             implementation(libs.datetime)
+            implementation(libs.qrcode)
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content)
             implementation(libs.ktor.json)
