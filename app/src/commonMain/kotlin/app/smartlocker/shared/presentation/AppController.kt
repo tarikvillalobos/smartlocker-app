@@ -187,7 +187,6 @@ class AppController(
     }
     fun undo() = mutateSelected {
         repository.undoManual(it.membershipId, it.selectedId!!)
-        feedback("Marcação desfeita. O código anterior continua revogado.")
     }
     private fun mutateSelected(action: suspend (AppState) -> Unit) = execute {
         val context = state.value
