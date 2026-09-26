@@ -118,3 +118,23 @@ class ApiMappingTest {
     @Test fun pagesRejectDuplicateIdentifiersAndPreserveAuthoritativeUnreadTotal() {
         val notice = ApiDeliveryNotice("notice", "membership", "parcel", "Sua encomenda chegou", start, null)
         val mapped = ApiNoticePage(listOf(notice), page, 25).toDomain()
+        assertEquals(25, mapped.unreadCount)
+        assertFalse(mapped.items.single().read)
+        failsSafely { ApiNoticePage(listOf(notice), page, 0).toDomain() }
+        failsSafely { ApiNoticePage(listOf(notice, notice), page, 25).toDomain() }
+        failsSafely { ApiParcelPage(listOf(parcel, parcel), page).toDomain() }
+        failsSafely { page.copy(snapshotExpiresAt = earlier).validatedCursor() }
+    }
+
+    @Test fun supportStatesAndDatesAreExplicitAndFailuresNeverEchoRemoteInput() {
+        val issue = ApiSupportIssue("issue", "SL-001", "membership", "parcel", "A porta não abriu.",
+            "resolved", start, end, "Problema resolvido.")
+        assertEquals("Resolvida", issue.toDomain().status)
+        val invalid = "unexpected-sensitive-remote-value"
+        val failure = assertFailsWith<AppFailure> { issue.copy(status = invalid).toDomain() }
+        assertFalse(failure.message.contains(invalid))
+        failsSafely { issue.copy(updatedAt = earlier).toDomain() }
+        failsSafely { issue.copy(createdAt = "2026-09-26T09:00:00-03:00").toDomain() }
+    }
+
+    private fun failsSafely(block: () -> Unit) {
