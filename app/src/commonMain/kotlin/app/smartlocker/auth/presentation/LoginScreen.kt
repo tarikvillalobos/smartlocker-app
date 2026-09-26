@@ -38,3 +38,23 @@ fun LoginScreen(controller: AppController, state: AppState, legal: () -> Unit) {
                 }
             }
             Text(brand.headline, style = MaterialTheme.typography.displaySmall, color = Color.White)
+            Text(brand.introduction, color = Tokens.soft, style = MaterialTheme.typography.bodyLarge)
+        }
+        Column(Modifier.padding(24.dp), verticalArrangement = Arrangement.spacedBy(18.dp)) {
+            if (state.challenge == null) {
+                OutlinedTextField(contact, { contact = it }, label = { Text(if (email) "E-mail" else "Celular") },
+                    modifier = Modifier.fillMaxWidth(), singleLine = true, shape = Tokens.control,
+                    placeholder = { Text(if (email) "voce@exemplo.com" else "(11) 90000-0000") },
+                    keyboardOptions = KeyboardOptions(keyboardType = if (email) KeyboardType.Email else KeyboardType.Phone))
+                OutlinedTextField(cpf, { cpf = it.take(14) }, label = { Text("CPF") },
+                    modifier = Modifier.fillMaxWidth(), singleLine = true, shape = Tokens.control,
+                    placeholder = { Text("000.000.000-00") }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number))
+                PrimaryButton(if (email) "Receber código por e-mail" else "Receber código por SMS", !state.busy) {
+                    controller.login(LoginRequest(contact.trim(), cpf, if (email) LoginChannel.EMAIL else LoginChannel.SMS))
+                }
+                TextButton({ email = !email; contact = "" }, Modifier.fillMaxWidth(), enabled = !state.busy) {
+                    Text(if (email) "Entrar com celular" else "Entrar com e-mail")
+                }
+                if (demo) Panel {
+                    Text("Experimente com dados fictícios", style = MaterialTheme.typography.labelLarge)
+                    Text("Nenhum SMS ou e-mail será enviado.", color = Tokens.secondary)
