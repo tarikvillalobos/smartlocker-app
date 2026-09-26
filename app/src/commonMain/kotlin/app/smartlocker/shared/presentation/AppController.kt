@@ -173,6 +173,10 @@ class AppController(
         refreshData(detailOnly = true)
     }
     fun navigate(route: Route) {
+        if (route == Route.RESIDENTS && state.value.busy) {
+            feedback("Aguarde a operação em andamento para abrir os moradores.")
+            return
+        }
         val features = configuration.brand.features
         if ((route == Route.RESIDENTS && !features.residents) ||
             (route == Route.ISSUES && !features.issues) ||
