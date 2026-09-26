@@ -78,3 +78,23 @@ class ChunkedSecureStoreTest {
         assertFailsWith<AppFailure> { store.write("replacement".repeat(1000)) }
         storage.failAfterCommit = false
         assertTrue(ChunkedSecureStore(storage, KEY).read() == "replacement".repeat(1000))
+        assertFalse(memory.values.containsKey("$KEY.journal"))
+    }
+
+    @Test fun interruptedClearStaysClearedWhileCleanupWaitsForTheVault() = runTest {
+        val vault = FaultVault()
+        val store = ChunkedSecureStore(vault, KEY)
+        store.write("session".repeat(1000))
+        vault.fail = { key, value -> ".chunk." in key && value == null }
+        store.write(null)
+        assertNull(store.read())
+        assertTrue(vault.memory.values.containsKey("$KEY.journal"))
+        vault.fail = { _, _ -> false }
+        store.write(null)
+        store.write(null)
+        assertTrue(vault.memory.values.isEmpty())
+    }
+
+    @Test fun cancellationLeavesTrackedChunksAndNeverCommitsPartialData() = runTest {
+        val memory = MemorySecure()
+        val storage = object : SecureStorage by memory {
