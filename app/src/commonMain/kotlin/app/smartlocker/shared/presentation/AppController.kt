@@ -227,6 +227,7 @@ class AppController(
     }
     fun demoScenario(value: DemoScenario) = execute { generation ->
         (repository as? DemoControls)?.scenario(value)
+        if (generation != epoch) return@execute
         mutable.update { it.copy(selectedId = null, selected = null, credential = null) }
         load()
     }
