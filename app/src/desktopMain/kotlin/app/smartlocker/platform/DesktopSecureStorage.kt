@@ -25,8 +25,6 @@ class DesktopSecureStorage(private val directory: Path) : SecureStorage {
     private val isMac = "mac" in os || "darwin" in os
     private val isWindows = "windows" in os
     private val service = "app.smartlocker.session"
-    private fun encoded(value: String) = Base64.getEncoder().encodeToString(value.toByteArray())
-    private fun decoded(value: String) = String(Base64.getDecoder().decode(value.trim()))
 
     override suspend fun read(key: String): String? = withContext(Dispatchers.IO) {
         when {
