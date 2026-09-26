@@ -35,3 +35,12 @@ try:
     subprocess.run(["python3", "scripts/prepare_icons.py"], cwd=root, check=True)
     subprocess.run(["xcodegen", "generate", "--spec", "iosApp/project.yml"], cwd=root, check=True)
     subprocess.run([
+        "xcodebuild", "-project", "iosApp/SmartLocker.xcodeproj", "-scheme", "SmartLocker",
+        "-configuration", "Debug", "-destination", f"platform=iOS Simulator,id={device}",
+        "-derivedDataPath", str(output), "-resultBundlePath", str(output.with_suffix(".xcresult")),
+        "-parallel-testing-enabled", "NO", "CODE_SIGNING_ALLOWED=YES", "CODE_SIGN_IDENTITY=-", "test",
+    ], cwd=root, check=True)
+finally:
+    if owned:
+        subprocess.run(["xcrun", "simctl", "shutdown", device], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.run(["xcrun", "simctl", "delete", device], check=True)
