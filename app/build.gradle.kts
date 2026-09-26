@@ -38,3 +38,23 @@ kotlin {
                 implementation(compose.desktop.currentOs)
                 implementation(libs.ktor.client.cio)
                 implementation(libs.jna)
+            }
+        }
+        commonTest.dependencies {
+            implementation(kotlin("test"))
+            implementation(libs.coroutines.test)
+        }
+        val desktopTest by getting {
+            dependencies { implementation(compose.desktop.uiTestJUnit4) }
+        }
+    }
+}
+android {
+    namespace = "app.smartlocker.shared"
+    compileSdk = 35
+    defaultConfig { minSdk = 26 }
+}
+compose.desktop {
+    application {
+        mainClass = "app.smartlocker.MainKt"
+        nativeDistributions {
