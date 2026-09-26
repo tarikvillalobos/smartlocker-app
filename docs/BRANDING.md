@@ -19,6 +19,10 @@ funcionalidade de moradores; a rota também é bloqueada no controller.
    o registro `design/BrandSymbol.kt`; as telas permanecem genéricas. Personalize
    o vetor de launcher Android por recurso de build. Não há WebView.
 5. Android: use `-PapplicationId=seu.pacote -PappName=SuaMarca` e recursos de ícone
+   específicos. iOS: ajuste bundle ID, display name e `ASSETCATALOG_COMPILER_APPICON_NAME` em `project.yml`.
+6. Desktop: gere ícones com `scripts/prepare_icons.py` e empacote com
+   `-Pbrand=smartlocker` ou `-Pbrand=aurora`. O pacote define também a marca inicial.
+   Para novas marcas, amplie o registro do gerador e a configuração de distribuição.
 7. Configure endpoint e autenticação somente com o contrato externo documentado.
 8. Execute os testes e compare contrastes, textos longos e fonte a 200%.
 
