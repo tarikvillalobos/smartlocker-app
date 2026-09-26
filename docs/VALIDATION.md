@@ -62,6 +62,8 @@ altura em testes Compose simula área disponível; sozinha não testa um IME nat
 
 Os cinco templates HTML foram renderizados no navegador. Uma seleção das capturas
 Compose foi comparada visualmente: login, início, histórico, detalhe e perfil,
+mais layouts amplos, fonte ampliada, paisagem e conteúdo longo. A revisão levou
+a correções de paleta, QR imediato, colunas e navegação. Não há comparação de
 pixels automatizada nem aprovação manual de cada uma das 68 imagens.
 
 Os testes usam semântica de acessibilidade e verificam limites horizontais de
