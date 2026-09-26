@@ -38,3 +38,14 @@ Nenhum corpo de resposta de erro é exibido diretamente nem registrado em logs.
 Criar DTOs em `data` e mapeamentos validados para os modelos de domínio. Implementar
 `LockerRepository` com o transporte e a autenticação documentados. Injetar esse
 adaptador no ramo PRODUCTION de `AppRuntime`; nunca delegar para `DemoRepository`.
+Configurar o endpoint em `AppConfiguration.apiBaseUrl` a partir do ambiente da
+marca, sem segredos embutidos. Validar os fluxos em homologação com contas de teste.
+
+Adicionar testes de contrato para payloads desconhecidos, expiração, paginação,
+autorização, respostas atrasadas e retirada concorrente. Implementar registro de
+push somente quando a API determinar fornecedor e protocolo. A central local
+não representa push integrado.
+
+O servidor externo deverá emitir, consumir, revogar e autorizar credenciais;
+nenhuma validação no app prova a segurança interna desse servidor. Os QR Codes
+demonstrativos começam com `SMARTLOCKER-DEMO` e não funcionam em lockers reais.
