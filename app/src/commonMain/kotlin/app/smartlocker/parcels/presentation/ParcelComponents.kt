@@ -78,3 +78,23 @@ fun PickupCard(state: AppState, controller: AppController, platform: PlatformSer
                     AppIcon(Symbol.HELP, modifier = Modifier.size(36.dp), tint = Tokens.warningText)
                     Text(state.credentialMessage ?: if (state.stale) "Conecte-se para verificar o código."
                         else "Atualize para verificar a validade do código.", color = Tokens.secondary)
+                    TextButton(controller::refresh, enabled = !state.busy) { Text("Verificar código") }
+                }
+            }
+        }
+        Text("${parcel.locker} · Porta ${parcel.compartment}${parcel.size?.let { " ($it)" } ?: ""}",
+            style = MaterialTheme.typography.bodySmall, color = Tokens.soft)
+        Text("Chegou em ${dateTime(parcel.depositedAt)}", style = MaterialTheme.typography.bodySmall, color = Tokens.soft)
+        if (parcel.deadline < state.now && parcel.status == ParcelStatus.WAITING) {
+            Text("Prazo vencido · entre em contato com o suporte", color = Color(0xFFFFD99A))
+        }
+        val credential = state.credential
+        if (credential?.canDisplay(state.now, !state.stale) == true) {
+            Row(horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
+                Box(Modifier.weight(1f)) {
+                    PrimaryButton("Copiar código") {
+                        platform.copyText(credential.code)
+                        controller.feedback("Código copiado.")
+                    }
+                }
+                if (!detail) OutlinedIconButton({ controller.navigate(Route.DETAIL) }) {
