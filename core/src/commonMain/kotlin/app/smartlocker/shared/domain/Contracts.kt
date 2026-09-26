@@ -38,3 +38,13 @@ interface LockerRepository {
     suspend fun notifications(locationId: String): List<DeliveryNotice>
     suspend fun markNoticeRead(locationId: String, id: String)
     suspend fun reportIssue(locationId: String, parcelId: String, message: String): SupportIssue
+    suspend fun issues(locationId: String): List<SupportIssue>
+    suspend fun recipients(locationId: String): List<Recipient>
+}
+
+interface DemoControls {
+    suspend fun deposit(locationId: String)
+    suspend fun physicalPickup(locationId: String, parcelId: String)
+    suspend fun scenario(value: DemoScenario)
+}
+enum class DemoScenario { NORMAL, EMPTY, MANY, NETWORK, DENIED, EXPIRED_SESSION, EXPIRED_CODE, LOCKER_OFFLINE }
