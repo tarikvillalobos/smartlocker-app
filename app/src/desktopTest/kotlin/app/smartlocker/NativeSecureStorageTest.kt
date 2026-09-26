@@ -78,3 +78,20 @@ class NativeSecureStorageTest {
                 if (failure == null) failure = cleanup else failure.addSuppressed(cleanup)
             }
             failure?.let { throw it }
+        }
+    }
+
+    private fun assertSecret(expected: String, actual: String?) {
+        // Avoid equality assertions which print secrets into JUnit reports on failure.
+        assertTrue(expected == actual, "Native vault must return the complete stored value")
+    }
+
+    private fun assertNoPlaintext(directory: Path, vararg secrets: String) {
+        Files.walk(directory).use { paths ->
+            paths.filter { Files.isRegularFile(it) }.forEach { file ->
+                val bytes = Files.readAllBytes(file).toString(Charsets.UTF_8)
+                for (secret in secrets) assertFalse(bytes.contains(secret), "Cache must not contain plaintext session data")
+            }
+        }
+    }
+}
