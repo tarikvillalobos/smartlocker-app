@@ -183,7 +183,6 @@ class AppController(
 
     fun markCollected() = mutateSelected {
         repository.markCollected(it.membershipId, it.selectedId!!)
-        feedback("Retirada informada por você. Sem confirmação física do armário.")
     }
     fun undo() = mutateSelected {
         repository.undoManual(it.membershipId, it.selectedId!!)
