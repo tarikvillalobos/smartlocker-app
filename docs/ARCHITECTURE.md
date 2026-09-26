@@ -38,3 +38,23 @@ A indisponibilidade do cofre é apresentada ao usuário.
 Dados locais do desktop ficam em `~/.smartlocker`, com diretório 0700 e arquivos
 0600 em sistemas POSIX. No Windows, as sessões usam DPAPI do usuário corrente.
 O logout apaga o registro de sessão e o snapshot demonstrativo; a chave de
+criptografia do sistema pode permanecer, sem conteúdo de sessão.
+
+## Regras de retirada
+
+Marcação manual e retirada física são eventos diferentes. Na demonstração,
+a marcação revoga a credencial, permite desfazer por dez minutos e nunca é
+apresentada como confirmação do hardware. Desfazer não reativa a credencial.
+Retirada física consome a credencial, é idempotente e não permite desfazer.
+Essas regras demonstram a UI; o adaptador real deverá respeitar as capacidades
+e decisões retornadas pela API.
+
+Indicadores usam a coleção completa dos últimos 30 dias no repositório demo,
+independentemente da página exibida. Média inclui apenas timestamps físicos
+válidos. Datas são apresentadas explicitamente em America/Sao_Paulo.
+
+## Extensão
+
+Novas integrações devem implementar portas existentes. Não adicionar supostos
+contratos de fornecedor. A lista de moradores não concede acesso às encomendas
+de outra pessoa. Flags escondem e bloqueiam rotas, mas não substituem autorização.
