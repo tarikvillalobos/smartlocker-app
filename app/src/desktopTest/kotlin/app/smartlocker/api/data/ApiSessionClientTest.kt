@@ -430,6 +430,13 @@ class ApiSessionClientTest {
         var failClearing = false
         override suspend fun read(key: String): String? = memory.read(key)
         override suspend fun write(key: String, value: String?) {
+            if (failClearing && key.endsWith(".head") && value == null) {
+                throw AppFailure(FailureKind.UNAVAILABLE, "Synthetic protected-pointer deletion failure")
+            }
+            memory.write(key, value)
+        }
+    }
+
     private fun TestScope.client(
         clock: TestClock, secure: SecureStorage = MemorySecure(), baseUrl: String = BASE,
         handler: suspend MockRequestHandleScope.(HttpRequestData) -> HttpResponseData,
