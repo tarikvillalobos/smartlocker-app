@@ -52,6 +52,7 @@ interface LockerRepository {
         return IssuePage(issues(locationId), null)
     }
     suspend fun recipients(locationId: String): List<Recipient>
+    fun close() = Unit
 }
 
 interface DemoControls {
