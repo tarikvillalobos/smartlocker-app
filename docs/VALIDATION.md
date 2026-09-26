@@ -160,8 +160,6 @@ launcher do pacote macOS foi aberto localmente com seu runtime Java incluído,
 sem erro de inicialização; isso não substitui instalação em uma máquina limpa.
 
 A auditoria exige um arquivo textual e até 20 linhas alteradas por commit de
-implementação, com autoria `tarik.villalobos@gmail.com`. O README inicial é
-preexistente e está fora dessa contagem. Nenhum binário foi adicionado ao Git.
 
 ## Pendências externas
 
