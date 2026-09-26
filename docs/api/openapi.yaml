@@ -1718,3 +1718,23 @@ components:
             $ref: "#/components/schemas/Membership"
       required:
         - "items"
+      description: "Lista completa dos vínculos atualmente autorizados."
+    CommunicationPreferences:
+      type: "object"
+      properties:
+        inApp:
+          type: "boolean"
+        sms:
+          type: "boolean"
+        whatsapp:
+          type: "boolean"
+      required:
+        - "inApp"
+        - "sms"
+        - "whatsapp"
+      description: "Preferências do usuário. Não atestam permissão do sistema, registro push ou disponibilidade do fornecedor."
+    PreferencesUpdate:
+      type: "object"
+      properties:
+        inApp:
+          type: "boolean"
