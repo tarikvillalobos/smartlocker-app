@@ -32,6 +32,19 @@ class DesktopSecureStorage(private val directory: Path) : SecureStorage {
     }
 
     override suspend fun read(key: String): String? = withContext(Dispatchers.IO) {
+        validateKey(key)
+        nativeOperation {
+            when {
+                isMac -> command(listOf("/usr/bin/security", "find-generic-password", "-a", key, "-s", service, "-w"),
+                    allowMissing = true)?.let(::decoded)
+                isWindows -> {
+                    val path = directory.resolve(encoded(key) + ".protected")
+                    val protected = try { Files.readAllBytes(path) } catch (_: NoSuchFileException) { null }
+                    protected?.let { Crypt32Util.cryptUnprotectData(it).toString(Charsets.UTF_8) }
+                }
+                "linux" in os -> command(listOf("secret-tool", "lookup", "service", service, "account", key),
+                    allowMissing = true)?.let(::decoded)
+                else -> throw unavailable()
             }
             else -> command(listOf("secret-tool", "lookup", "service", service, "account", key), allowMissing = true)
                 ?.takeIf { it.isNotBlank() }?.let(::decoded)
