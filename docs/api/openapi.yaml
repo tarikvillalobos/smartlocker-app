@@ -1878,3 +1878,23 @@ components:
         canUndoManual:
           type: "boolean"
         undoUntil:
+          anyOf:
+            -
+              $ref: "#/components/schemas/Instant"
+            -
+              type: "null"
+        canReportIssue:
+          type: "boolean"
+      required:
+        - "canMarkManually"
+        - "canUndoManual"
+        - "undoUntil"
+        - "canReportIssue"
+      description: "Decisão do servidor válida no instante da resposta. O servidor revalida cada comando."
+    TimelineEvent:
+      type: "object"
+      properties:
+        type:
+          type: "string"
+          enum:
+            - "deposited"
