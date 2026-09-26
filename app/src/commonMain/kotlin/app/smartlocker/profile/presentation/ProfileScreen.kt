@@ -53,7 +53,6 @@ fun ProfileScreen(state: AppState, controller: AppController, platform: Platform
         if ("whatsapp" in state.channels(brand)) PreferenceRow("WhatsApp", profile.preferences.whatsapp, !state.busy) {
             controller.preferences(profile.preferences.copy(whatsapp = it))
         }
-        Text("Preferência salva no app. O envio depende do fornecedor e da permissão do dispositivo.",
             style = MaterialTheme.typography.bodySmall, color = Tokens.secondary)
         Text(if (controller.configuration.environment == Environment.DEMO) "Demonstração: nenhum canal externo envia mensagens."
             else "Disponibilidade dos canais: aguardando contrato da API.", style = MaterialTheme.typography.bodySmall)
