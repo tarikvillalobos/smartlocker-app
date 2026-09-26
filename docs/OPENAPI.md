@@ -1,5 +1,14 @@
 # Base OpenAPI proposta para SmartLocker
 
+A especificação em [`api/openapi.yaml`](api/openapi.yaml) foi criada como base de
+integração do aplicativo. O cliente HTTP correspondente já está implementado;
+o backend está sendo finalizado em outro projeto. A versão segue `0.1.0-draft`,
+em OpenAPI 3.1.1/JSON Schema 2020-12, até homologação conjunta.
+
+O host `.example.invalid` continua deliberadamente não operacional. Definir um
+contrato e testar o cliente com respostas controladas não demonstra serviço
+publicado, entrega de mensagens ou integração com hardware. Configuração e
+limites da implementação atual estão em [API.md](API.md).
 
 ## Cobertura
 
