@@ -43,6 +43,7 @@ recriação normal. O runtime é retido pelo ViewModel; campos usam rememberSave
 O teste nativo também chama ActivityScenario.recreate() durante o OTP para
 verificar restauração fora da rotação. Essa recriação explícita não equivale a
 morte do processo. O resultado do teste ampliado permanece em [VALIDATION.md](VALIDATION.md).
+
 ## Verificação
 
 Testes Compose exercitam 320, 390, 430, 600, 840 e 1200 dp, em escala 100% e 200%,
