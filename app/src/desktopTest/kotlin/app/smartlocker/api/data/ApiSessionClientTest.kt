@@ -18,3 +18,23 @@ import kotlinx.serialization.json.*
 import java.io.IOException
 import java.util.UUID
 import kotlin.test.*
+import kotlin.time.Instant
+
+@OptIn(ExperimentalCoroutinesApi::class)
+class ApiSessionClientTest {
+    @Test fun loginNormalizesCpfAndBrazilianPhoneAndSuppliesBrandAndIdempotencyHeaders() = runTest {
+        val clock = TestClock()
+        var challenges = 0
+        val client = client(clock) { request ->
+            assertEquals("smartlocker", request.headers["X-Brand-Id"])
+            assertNull(request.headers[HttpHeaders.Authorization])
+            when (request.path()) {
+                "/configuration" -> respond(configuration(), headers = JSON)
+                "/auth/challenges" -> {
+                    challenges++
+                    assertEquals(HttpMethod.Post, request.method)
+                    assertNotNull(UUID.fromString(request.headers["Idempotency-Key"]))
+                    val body = request.jsonBody()
+                    assertEquals("+5511987654321", body.getValue("contact").jsonPrimitive.content)
+                    assertEquals("52998224725", body.getValue("cpf").jsonPrimitive.content)
+                    assertEquals("sms", body.getValue("channel").jsonPrimitive.content)
