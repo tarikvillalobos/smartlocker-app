@@ -98,3 +98,23 @@ class ChunkedSecureStore(private val storage: SecureStorage, private val key: St
         val value = Manifest(fields[1], bytes, encodedLength, chunks, fields[5])
         if (value.encode() != raw) throw failure()
         return value
+    }
+
+    private data class Manifest(
+        val generation: String, val bytes: Int, val encodedLength: Int, val chunks: Int, val checksum: String,
+    ) {
+        fun encode() = "1|$generation|$bytes|$encodedLength|$chunks|$checksum"
+    }
+
+    private suspend fun <T> guarded(block: suspend () -> T): T = try {
+        block()
+    } catch (cancelled: CancellationException) {
+        throw cancelled
+    } catch (_: Exception) {
+        throw failure()
+    }
+
+    // Detect accidental chunk corruption; confidentiality/integrity protection belongs to the native vault.
+    private fun checksum(bytes: ByteArray): String {
+        var crc = -1
+        for (byte in bytes) {
