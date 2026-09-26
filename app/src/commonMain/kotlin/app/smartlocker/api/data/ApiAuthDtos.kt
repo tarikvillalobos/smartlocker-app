@@ -18,3 +18,23 @@ data class ApiChallenge(
     fun toDomain(expectedPurpose: String? = null): Challenge {
         apiRequire(codeLength == 6 && purpose in setOf("login", "contact_change"))
         apiRequire(expectedPurpose == null || purpose == expectedPurpose)
+        val mappedChannel = when (channel) {
+            "sms" -> LoginChannel.SMS
+            "email" -> LoginChannel.EMAIL
+            else -> invalidApiResponse()
+        }
+        return Challenge(apiId(id), apiInstant(expiresAt), apiInstant(resendAt),
+            apiText(maskedDestination, 254), mappedChannel)
+    }
+}
+
+@Serializable
+data class ApiSessionTokens(
+    val tokenType: String,
+    val accessToken: String,
+    val accessExpiresAt: String,
+    val refreshToken: String,
+    val refreshExpiresAt: String,
+    val userId: String,
+    val brandId: String,
+    val sessionId: String,
