@@ -38,3 +38,23 @@ data class DemoSnapshot(
     val notices: List<NoticeRecord>,
     val issues: List<IssueRecord> = emptyList(),
     val phone: String = "11987654321",
+    val email: String = "ana@example.test",
+    val inApp: Boolean = true,
+    val sms: Boolean = true,
+    val whatsapp: Boolean = false,
+    val sequence: Int = 10,
+)
+
+class DemoDatabase(private val storage: LocalStorage, brandId: String, private val clock: AppClock) {
+    private val key = "demo.$brandId.ana.snapshot.v1"
+    var snapshot: DemoSnapshot = storage.read(key)?.let {
+        runCatching { Json.decodeFromString<DemoSnapshot>(it) }.getOrNull()
+    } ?: seed(clock.now())
+        private set
+
+    fun update(change: (DemoSnapshot) -> DemoSnapshot) {
+        val next = change(snapshot)
+        storage.write(key, Json.encodeToString(next))
+        snapshot = next
+    }
+
