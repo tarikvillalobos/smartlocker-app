@@ -23,5 +23,7 @@ A UI mede as restrições da janela. Não utiliza uma tela fixa de 390 × 844.
 ## Verificação
 
 Testes Compose exercitam 320, 390, 430, 600, 840 e 1200 dp, em escala 100% e 200%,
+e geram capturas das cinco telas. Testes adicionais reduzem a altura até 390/400 dp,
+redimensionam a mesma composição e exercitam conteúdo longo, 73 registros e vazio. A validação visual e as verificações adicionais
 realmente executadas são registradas em VALIDATION.md. Simulação de janela não
 substitui ensaio em um dobrável físico nem auditoria com VoiceOver/TalkBack.
