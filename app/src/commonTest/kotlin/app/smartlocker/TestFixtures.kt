@@ -1,7 +1,6 @@
 package app.smartlocker
 
 import app.smartlocker.auth.domain.*
-import app.smartlocker.demo.data.DemoRepository
 import app.smartlocker.shared.domain.*
 
 class MemoryStorage : LocalStorage, SecureStorage {
