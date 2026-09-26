@@ -57,6 +57,7 @@ class AdaptiveScenarioTest {
         val controller = runtime.state.value.controller
         try {
             setContent { CompositionLocalProvider(LocalDensity provides Density(1f, 2f)) { SmartLockerApp(runtime) } }
+            waitUntil(timeoutMillis = 10_000) { controller.state.value.initialized }
             runOnIdle { controller.login(demoLogin) }
             waitUntil(10_000) { controller.state.value.challenge != null }
             runOnIdle { controller.verify("123456") }
