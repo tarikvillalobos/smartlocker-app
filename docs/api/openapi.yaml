@@ -2098,3 +2098,23 @@ components:
           minimum: 0
       required:
         - "since"
+        - "until"
+        - "generatedAt"
+        - "complete"
+        - "totalReceived"
+        - "physicalPickupCount"
+        - "averagePickupDurationSeconds"
+      description: |-
+        Período por depositedAt, inclusivo em since e exclusivo em until. Total de encomendas autorizadas no vínculo.
+        Média aritmética collectedAt-depositedAt apenas para retiradas físicas válidas até until, excluindo manuais.
+        Sem retiradas físicas: contagem zero e média null. complete=false exige todas as métricas null. Indicadores
+        independem do filtro e das páginas da listagem.
+      allOf:
+        -
+          if:
+            properties:
+              complete:
+                const: false
+          then:
+            properties:
+              totalReceived:
