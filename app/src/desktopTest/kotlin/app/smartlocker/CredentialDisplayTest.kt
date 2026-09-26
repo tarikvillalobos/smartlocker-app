@@ -38,3 +38,17 @@ class CredentialDisplayTest {
         val credential = PickupCredential(parcel.id, "001234", "🔒".repeat(1024), now + 60_000, now, CredentialStatus.ACTIVE)
         val state = AppState(initialized = true, selected = parcel, credential = credential, now = now)
         try {
+            setContent {
+                SmartLockerTheme(Brands.smartLocker) {
+                    Column { PickupCard(state, runtime.state.value.controller, platform, detail = true) }
+                }
+            }
+            onNodeWithText("QR Code indisponível. Use o código numérico abaixo.").assertExists()
+            onNodeWithContentDescription("QR Code de retirada; código numérico disponível abaixo").assertDoesNotExist()
+            onNodeWithText("001").assertExists()
+            onNodeWithText("234").assertExists()
+            onNodeWithText("Copiar código").performClick()
+            assertEquals("001234", platform.copied)
+        } finally { runOnIdle { runtime.close() } }
+    }
+}
