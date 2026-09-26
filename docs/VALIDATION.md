@@ -94,8 +94,6 @@ O runner Linux abre uma sessão D-Bus e um cofre temporários, sem reutilizar o
 cofre pessoal. Os testes removem apenas suas próprias entradas. Relatório separado:
 `app/build/reports/tests/desktopNativeVaultTest/`. Isso verifica os caminhos do
 aplicativo nos ambientes testados, sem constituir auditoria do sistema operacional.
-Limites de tamanho dos cofres devem ser compatibilizados com os tokens reais do
-futuro fornecedor antes de integrar a API; não há fallback para texto puro.
 
 ## Android
 
