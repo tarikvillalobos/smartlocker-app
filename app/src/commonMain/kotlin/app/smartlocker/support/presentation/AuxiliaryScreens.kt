@@ -38,3 +38,23 @@ fun AuxiliaryScreen(state: AppState, controller: AppController, platform: Platfo
                         member.id != state.membershipId) { controller.membership(member.id) }
                 }
             }
+        }
+        Route.RESIDENTS -> {
+            PageTitle("Moradores", { controller.navigate(Route.PROFILE) })
+            Text("A lista de moradores não concede acesso às encomendas de outras pessoas.", color = Tokens.secondary)
+            state.residents.forEach { resident -> Panel { Metadata(resident.relationship, resident.name) } }
+        }
+        Route.ISSUES -> IssueScreen(state, controller)
+        Route.CONTACT -> app.smartlocker.profile.presentation.ContactScreen(state, controller)
+        Route.DEMO -> {
+            PageTitle("Demonstração", { controller.navigate(Route.PROFILE) })
+            Text("Dados fictícios locais. Nenhum hardware ou fornecedor é acionado.", color = Tokens.secondary)
+            PrimaryButton("Simular nova entrega", !state.busy, controller::deposit)
+            val scenarios = listOf(
+                DemoScenario.NORMAL to "Restaurar exemplo inicial",
+                DemoScenario.EMPTY to "Nenhuma encomenda",
+                DemoScenario.MANY to "Muitas encomendas",
+                DemoScenario.NETWORK to "Falha de rede",
+                DemoScenario.DENIED to "Acesso negado",
+                DemoScenario.EXPIRED_SESSION to "Sessão expirada",
+                DemoScenario.EXPIRED_CODE to "Código e prazo expirados",
