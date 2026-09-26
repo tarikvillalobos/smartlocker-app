@@ -21,5 +21,4 @@ Atualizado em 26/09/2026. Consulte [VALIDATION.md](VALIDATION.md) para as evidê
 - [ ] Ensaios em aparelhos físicos, TalkBack/VoiceOver e cofres Windows/Linux.
 - [ ] Assinatura, notarização e distribuição para lojas.
 
-Não há backend próprio, endpoints inventados ou fallback automático para demo.
 A implementação independente está entregue; o produto não está pronto para produção.
