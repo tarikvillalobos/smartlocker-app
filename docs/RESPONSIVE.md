@@ -18,3 +18,10 @@ A UI mede as restrições da janela. Não utiliza uma tela fixa de 390 × 844.
 - Botões têm altura mínima de 48/52 dp; ícones acionáveis têm descrições.
 - Status têm rótulos textuais. Material oferece foco e navegação por Tab;
   Escape volta ao início no desktop e o botão voltar Android é tratado.
+
+## Verificação
+
+Testes Compose exercitam 320, 390, 430, 600, 840 e 1200 dp, em escala 100% e 200%,
+e geram capturas das cinco telas. A validação visual e as verificações adicionais
+realmente executadas são registradas em VALIDATION.md. Simulação de janela não
+substitui ensaio em um dobrável físico nem auditoria com VoiceOver/TalkBack.
