@@ -104,7 +104,6 @@ class AppController(
         val generation = ++epoch
         readJob = scope.launch {
             mutable.update { it.copy(busy = true, credential = null, error = null) }
-            try { load(generation) }
             catch (error: CancellationException) { throw error }
             catch (error: Exception) { if (generation == epoch) handle(error) }
             finally { if (generation == epoch) mutable.update { it.copy(busy = false) } }
