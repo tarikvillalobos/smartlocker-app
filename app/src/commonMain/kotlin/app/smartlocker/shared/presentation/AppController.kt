@@ -38,3 +38,23 @@ class AppController(
     private fun execute(block: suspend () -> Unit) {
         val generation = epoch
         scope.launch {
+            mutable.update { it.copy(busy = true, error = null) }
+            try {
+                block()
+            } catch (error: CancellationException) {
+                throw error
+            } catch (error: Exception) {
+                if (generation == epoch) handle(error)
+            } finally {
+                if (generation == epoch) mutable.update { it.copy(busy = false, initialized = true) }
+            }
+        }
+    }
+
+    private fun handle(error: Exception) {
+        if (error is AppFailure && error.kind == FailureKind.EXPIRED_SESSION) {
+            previousUser = state.value.session?.userId
+            epoch++
+            val old = state.value
+            mutable.value = AppState(initialized = true, route = old.route,
+                selectedId = old.selectedId, filter = old.filter, now = clock.now(), error = error.message)
