@@ -38,3 +38,23 @@ data class ApiIssueRequest(val parcelId: String, val message: String)
 @Serializable
 data class ApiSupportIssue(
     val id: String,
+    val reference: String,
+    val membershipId: String,
+    val parcelId: String,
+    val message: String,
+    val status: String,
+    val createdAt: String,
+    val updatedAt: String,
+    val resolution: String?,
+) {
+    fun toDomain(): SupportIssue {
+        apiId(membershipId)
+        apiText(reference, 100, true)
+        val label = when (status) {
+            "received" -> "Recebida"
+            "in_progress" -> "Em atendimento"
+            "resolved" -> "Resolvida"
+            "closed" -> "Encerrada"
+            else -> invalidApiResponse()
+        }
+        val created = apiInstant(createdAt)
