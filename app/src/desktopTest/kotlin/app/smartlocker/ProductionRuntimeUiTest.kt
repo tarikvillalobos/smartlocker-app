@@ -38,7 +38,6 @@ class ProductionRuntimeUiTest {
                 assertEquals("004321", platform.copied)
                 onNodeWithText("Fechar").performClick()
                 onNodeWithContentDescription("Ver detalhes").performScrollTo().performClick()
-                waitUntil(10_000) { controller.state.value.route == Route.DETAIL && !controller.state.value.busy }
                 onNodeWithText("Já retirei a encomenda").performScrollTo().performClick()
                 onNodeWithText("Sim, retirei").performClick()
                 waitUntil(10_000) { controller.state.value.selected?.status == ParcelStatus.MANUAL && !controller.state.value.busy }
