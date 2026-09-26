@@ -5,3 +5,4 @@ dependencyResolutionManagement {
     repositories { google(); mavenCentral() }
 }
 rootProject.name = "SmartLocker"
+include(":core", ":app", ":androidApp")
