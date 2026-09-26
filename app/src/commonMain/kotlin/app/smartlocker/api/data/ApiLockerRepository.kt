@@ -198,3 +198,23 @@ class ApiLockerRepository(private val session: ApiSessionClient) : LockerReposit
         val response = request<ApiIssuePage>(user, pagePath("${membershipPath(locationId)}/issues", cursor))
         requireResponse(response.items.all { it.membershipId == locationId })
         val page = response.toDomain()
+        validateCursor(cursor, page.nextCursor)
+        return page
+    }
+
+    override suspend fun recipients(locationId: String): List<Recipient> {
+        val user = currentUser()
+        val membership = membership(locationId, user)
+        if (!membership.capabilities.features.recipients || !configuration().capabilities.features.recipients) unavailableFeature()
+        val response = request<ApiRecipientList>(user, "${membershipPath(locationId)}/recipients")
+        val items = response.items.map { it.toDomain() }
+        requireResponse(items.map { it.id }.distinct().size == items.size)
+        return items
+    }
+
+    private suspend fun profile(value: ApiProfile, values: List<ApiMembership>, user: String): Profile {
+        requireResponse(value.id == user)
+        val global = configuration().capabilities
+        val mapped = values.map { membership ->
+            val result = membership.toDomain()
+            result.copy(features = intersect(result.features, global.features.toDomain()),
