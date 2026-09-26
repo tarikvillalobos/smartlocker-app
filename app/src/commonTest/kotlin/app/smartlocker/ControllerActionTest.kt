@@ -38,3 +38,23 @@ class ControllerActionTest {
         assertEquals(selected, controller.state.value.selectedId)
         assertEquals("home", controller.state.value.membershipId)
         assertEquals(ParcelFilter.ALL, controller.state.value.filter)
+        response.complete(Unit)
+        val confirmed = controller.state.first { !it.busy && it.selected?.status == ParcelStatus.MANUAL }
+        assertEquals(1, calls)
+        assertEquals(ParcelStatus.MANUAL, confirmed.parcels.first { it.id == selected }.status)
+        assertTrue(confirmed.pending.none { it.id == selected })
+        assertNull(confirmed.credential)
+    }
+
+    @Test fun notificationReadUpdatesBadgeBeforeDetailFinishes() = runTest {
+        val clock = TestClock()
+        val demo = DemoRepository(MemoryStorage(), MemorySecure(), Brands.smartLocker, clock, 0)
+        demo.signIn()
+        val response = CompletableDeferred<Unit>()
+        var suspendDetail = false
+        val repository = object : LockerRepository by demo {
+            override suspend fun parcel(locationId: String, id: String): Parcel {
+                if (suspendDetail) response.await()
+                return demo.parcel(locationId, id)
+            }
+        }
