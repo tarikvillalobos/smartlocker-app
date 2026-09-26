@@ -178,3 +178,23 @@ class ApiLockerRepositoryTest {
             assertEquals(FailureKind.DENIED, assertFailsWith<AppFailure> { it.repo.recipients("member-1") }.kind)
         }
     }
+
+    @Test fun incompleteMetricsRemainUnknownAndNoticeReadResponseIsValidated() = runTest {
+        withRepository { request ->
+            when {
+                request.url.encodedPath.endsWith("/parcel-metrics") -> {
+                    assertNull(request.url.parameters["since"])
+                    assertNull(request.url.parameters["until"])
+                    json(ApiParcelMetrics(EARLIER, NOW, NOW, false, null, null, null))
+                }
+                request.url.encodedPath.endsWith("/notifications/notice-1/read") -> {
+                    assertEquals(HttpMethod.Put, request.method)
+                    json(notice.copy(readAt = NOW))
+                }
+                else -> error("Unexpected path")
+            }
+        }.useSuspend {
+            val metrics = it.repo.statistics("member-1")
+            assertFalse(metrics.complete)
+            assertNull(metrics.total)
+            assertNull(metrics.averageMillis)
