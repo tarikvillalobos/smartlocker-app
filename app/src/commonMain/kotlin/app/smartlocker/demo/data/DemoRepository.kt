@@ -138,3 +138,18 @@ class DemoRepository(
         return listOf(Recipient("ana", "Ana Souza", "Você"), Recipient("other", "Rafael Souza", "Destinatário"))
     }
     override suspend fun deposit(locationId: String) = mutex.withLock { check(); parcels.deposit(locationId) }
+    override suspend fun physicalPickup(locationId: String, parcelId: String) {
+        mutex.withLock { check(); parcels.mark(locationId, parcelId, true) }
+    }
+    override suspend fun scenario(value: DemoScenario) = mutex.withLock {
+        scenario = value
+        when (value) {
+            DemoScenario.NORMAL -> db.reset()
+            DemoScenario.EMPTY -> db.update { it.copy(parcels = emptyList(), notices = emptyList()) }
+            DemoScenario.MANY -> repeat(65) { parcels.deposit("home") }
+            DemoScenario.EXPIRED_CODE -> db.update { it.copy(parcels = it.parcels.map { p -> p.copy(deadline = clock.now() - 1) }) }
+            DemoScenario.LOCKER_OFFLINE -> db.update { it.copy(parcels = it.parcels.map { p -> p.copy(available = false) }) }
+            else -> Unit
+        }
+    }
+}
