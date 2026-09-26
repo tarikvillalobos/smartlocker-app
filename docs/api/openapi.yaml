@@ -18,3 +18,23 @@ info:
     Cada permissão deve ser concedida pelo servidor e novamente limitada ao usuário e ao vínculo solicitado.
     CPF identifica a conta e nunca substitui o código temporário como fator de autenticação.
     Erros públicos de login não revelam se um contato ou CPF está cadastrado.
+
+    Mutações POST/PATCH/DELETE descritas com Idempotency-Key exigem uma UUID aleatória por intenção do usuário.
+    O servidor guarda o resultado por 24 horas, no escopo marca+sujeito+operação+caminho+chave.
+    Antes da autenticação, a chave é isolada por marca+operação+caminho; o corpo não integra a chave.
+    O hash do corpo é comparado ao registro existente: conteúdo diferente com a mesma chave retorna 409.
+    Não registrar CPF, contato, OTP ou conteúdo de tokens para implementar esta comparação.
+    A mesma chave e corpo devolvem o resultado original; conteúdo diferente retorna 409 IDEMPOTENCY_CONFLICT.
+    Uma operação ainda em execução retorna 409 OPERATION_IN_PROGRESS com Retry-After; não cria outra operação.
+    A reprodução de resposta é avaliada antes de If-Match. O app não repete automaticamente operações mutáveis.
+    Reproduzir SessionTokens nunca prolonga prazos, reemite tokens nem reativa sessão ou família.
+    Se os tokens registrados expiraram, foram revogados ou substituídos, retornar 401 sem reproduzir segredos.
+    Essa recusa de reprodução não revoga por si só uma rotação mais recente ainda válida.
+    Registros de idempotência com tokens exigem criptografia em repouso, acesso restrito e nenhum log de segredos.
+    Eliminar material secreto ao revogar/expirar a sessão e ao vencer o TTL; manter só metadados não sensíveis
+    necessários.
+    Reenvio decidido pelo usuário após resposta incerta reutiliza a chave; uma nova intenção gera outra chave.
+
+    Confirmação física só aparece em consultas após processamento do evento confiável do locker pelo servidor.
+    Não há endpoint do aplicativo para declarar confirmação física, depositar encomendas ou abrir portas.
+    SMS, e-mail, WhatsApp e push são responsabilidades do backend e dependem das capacidades retornadas.
