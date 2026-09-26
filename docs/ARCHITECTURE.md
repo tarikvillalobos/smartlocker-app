@@ -17,6 +17,9 @@ operação e informa separadamente que os dados precisam ser atualizados.
 - Troca de local cancela leituras e incrementa uma geração; respostas antigas
   não substituem o contexto atual. Filtros e seleção permanecem no controller.
 - ViewModel retém o runtime Android durante recriação de Activity.
+- Sessão expirada cancela ações/leituras e remove dados visíveis, mantendo rota,
+  vínculo, seleção e filtro para recuperar o destino. Esses dados só são
+  reutilizados após login do mesmo usuário e revalidação dos vínculos retornados.
 - Erros preservam os metadados visíveis como desatualizados e removem códigos.
 - Credenciais só são exibidas enquanto ativas, não expiradas e verificadas
   recentemente. A janela conservadora de apresentação é de 60 segundos;
