@@ -138,3 +138,23 @@ class ControllerMembershipRevocationTest {
         val controller = start(repository, clock)
         controller.contact("new@example.test", LoginChannel.EMAIL)
         controller.state.first { !it.busy && it.contactChallenge != null }
+        controller.verifyContact("123456")
+        val current = controller.state.first { !it.busy && it.contactChallenge == null }
+        assertEquals("new@example.test", current.profile?.email)
+        assertTrue(current.profile!!.memberships.isEmpty())
+        assertEquals("", current.membershipId)
+        assertEquals(Route.PROFILE, current.route)
+        assertCleared(current)
+        assertEquals(Features(false, false, false, false), current.features(Brands.smartLocker))
+        assertTrue(current.channels(Brands.smartLocker).isEmpty())
+        assertFalse(current.stale)
+        assertEquals(0, parcelReadsAfterRevocation)
+        assertEquals("Nenhum local autorizado para esta conta.", current.error)
+        assertEquals("Contato verificado e atualizado.", current.feedback)
+    }
+
+    @Test fun contactVerificationNormalizesNewCapabilitiesEvenWhenMembershipRemains() = runTest {
+        val clock = TestClock()
+        val demo = DemoRepository(MemoryStorage(), MemorySecure(), Brands.smartLocker, clock, 0)
+        demo.signIn()
+        demo.reportIssue("home", "demo-0", "O compartimento permanece fechado.")
