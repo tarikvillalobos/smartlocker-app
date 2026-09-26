@@ -72,7 +72,6 @@ física nem verificação completa de foco por teclado em cada sistema.
 
 ## Cofres nativos desktop
 
-| Plataforma | Evidência | Limites |
 | --- | --- | --- |
 | Desktop macOS | Compilação e testes Compose/JVM aprovados | DMG e assinatura não ensaiados |
 | Android | APK, lint e abertura no emulador API 34 aprovados | Distribuição e aparelho físico pendentes |
