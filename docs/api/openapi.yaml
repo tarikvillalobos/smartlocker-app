@@ -1578,3 +1578,23 @@ components:
         refreshToken:
           $ref: "#/components/schemas/Secret"
       required:
+        - "refreshToken"
+      additionalProperties: false
+    ChannelCapability:
+      type: "object"
+      properties:
+        available:
+          type: "boolean"
+        reason:
+          type:
+            - "string"
+            - "null"
+          maxLength: 200
+      required:
+        - "available"
+      description: "Disponibilidade do fornecedor/backend, independente de preferência e permissão do sistema."
+    Features:
+      type: "object"
+      properties:
+        manualPickup:
+          type: "boolean"
