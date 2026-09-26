@@ -318,3 +318,23 @@ paths:
               $ref: "#/components/headers/NoStore"
         "400":
           $ref: "#/components/responses/Problem"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "409":
+          $ref: "#/components/responses/Problem"
+        "429":
+          $ref: "#/components/responses/Problem"
+        "503":
+          $ref: "#/components/responses/Problem"
+        default:
+          $ref: "#/components/responses/Problem"
+  "/me":
+    get:
+      operationId: "getProfile"
+      tags:
+        - "Profile"
+      summary: "Consultar perfil e vínculos autorizados"
+      x-required-permission: "profile:read"
+      parameters:
+        -
+          $ref: "#/components/parameters/BrandId"
