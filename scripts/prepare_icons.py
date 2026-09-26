@@ -18,3 +18,23 @@ if Path(sys.prefix).resolve() != venv.resolve():
                                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     if installed.returncode:
         subprocess.run([str(python), "-m", "pip", "install", "Pillow==11.3.0"], check=True)
+    subprocess.run([str(python), __file__, "--root", str(root)], check=True)
+    sys.exit(0)
+from PIL import Image, ImageDraw
+
+output = root / ".tools/packaging/icons"
+output.mkdir(parents=True, exist_ok=True)
+assets = root / "iosApp/GeneratedAssets.xcassets"
+assets.mkdir(parents=True, exist_ok=True)
+info = {"author": "xcode", "version": 1}
+(assets / "Contents.json").write_text(json.dumps({"info": info}, indent=2) + "\n")
+
+
+def mark(brand, rounded):
+    scale = 2
+    side = 1024 * scale
+    color = "#007A5E" if brand == "smartlocker" else "#6652B8"
+    image = Image.new("RGBA" if rounded else "RGB", (side, side), (0, 0, 0, 0) if rounded else color)
+    draw = ImageDraw.Draw(image)
+    if rounded:
+        draw.rounded_rectangle((64 * scale, 64 * scale, 960 * scale, 960 * scale),
