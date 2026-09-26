@@ -65,6 +65,26 @@ class ChunkedSecureStore(private val storage: SecureStorage, private val key: St
     private suspend fun readHead() = storage.read(headKey)?.let(::parse)
     private fun chunkKey(manifest: Manifest, index: Int) = "$key.chunk.${manifest.generation}.$index"
 
+    private suspend fun clear(head: Manifest?) {
+        val pending = readJournal()
+        if (head == null && pending == null) return
+        if (head != null) {
+            if (pending == null) storage.write(journalKey, head.encode())
+            else if (pending.none { it == head }) throw failure()
+        }
+        // Retain every tracked generation, but revoke the active pointer before any cleanup.
+        storage.write(headKey, null)
+        cleanup(null, required = false)
+    }
+
+    private suspend fun readJournal(): List<Manifest>? {
+        val raw = storage.read(journalKey) ?: return null
+        if (raw.length > 320) throw failure()
+        val lines = raw.split('\n')
+        if (lines.size !in 1..2) throw failure()
+        val entries = lines.map(::parse)
+        if (entries.map { it.generation }.distinct().size != entries.size) throw failure()
+        return entries
     private suspend fun cleanup(head: Manifest?, required: Boolean) {
         try {
             val raw = storage.read(journalKey) ?: return
