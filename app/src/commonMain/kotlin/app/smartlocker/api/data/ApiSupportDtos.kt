@@ -58,3 +58,16 @@ data class ApiSupportIssue(
             else -> invalidApiResponse()
         }
         val created = apiInstant(createdAt)
+        apiRequire(apiInstant(updatedAt) >= created && message.length in 10..2000)
+        resolution?.let { apiText(it, 2000, true) }
+        return SupportIssue(apiId(id), apiId(parcelId), message, created, label)
+    }
+}
+
+@Serializable
+data class ApiIssuePage(val items: List<ApiSupportIssue>, val pageInfo: ApiPageInfo) {
+    fun toDomain(): IssuePage {
+        apiUniqueIds(items.map { it.id })
+        return IssuePage(items.map { it.toDomain() }, pageInfo.validatedCursor())
+    }
+}
