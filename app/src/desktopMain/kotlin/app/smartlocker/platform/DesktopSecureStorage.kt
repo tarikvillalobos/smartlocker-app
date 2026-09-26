@@ -102,6 +102,7 @@ class DesktopSecureStorage(private val directory: Path) : SecureStorage {
         throw cancelled
     } catch (failure: AppFailure) {
         throw failure
+    } catch (_: Exception) {
         throw unavailable()
     }
     private fun unavailable() = AppFailure(FailureKind.UNAVAILABLE,
