@@ -1558,3 +1558,23 @@ components:
           $ref: "#/components/schemas/Identifier"
         permissions:
           type: "array"
+          items:
+            type: "string"
+          uniqueItems: true
+      required:
+        - "tokenType"
+        - "accessToken"
+        - "accessExpiresAt"
+        - "refreshToken"
+        - "refreshExpiresAt"
+        - "userId"
+        - "brandId"
+        - "sessionId"
+        - "permissions"
+      description: "Guardar tokens somente no cofre nativo. permissions são informativas; o servidor autoriza cada operação."
+    RefreshRequest:
+      type: "object"
+      properties:
+        refreshToken:
+          $ref: "#/components/schemas/Secret"
+      required:
