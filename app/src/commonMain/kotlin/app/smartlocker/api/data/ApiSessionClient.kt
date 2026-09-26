@@ -98,3 +98,23 @@ class ApiSessionClient(
         val epoch = generation
         val raw = store.read()
         ensureCurrent(epoch)
+        val value = raw?.let { runCatching { ApiJson.decodeFromString<StoredApiSession>(it) }.getOrNull() }
+        val valid = value != null && value.baseUrl == baseUrl &&
+            runCatching { validateTokens(value.tokens); value.pendingRefreshKey?.let(Uuid::parse) }.isSuccess
+        if (!valid) {
+            if (raw != null) store.write(null)
+            stored = null
+        } else stored = value
+        ensureCurrent(epoch)
+        restored = true
+    }
+
+    private fun validateTokens(tokens: ApiSessionTokens) {
+        tokens.toDomain()
+        apiRequire(tokens.brandId == brand.id)
+        apiRequire(apiInstant(tokens.accessExpiresAt) <= apiInstant(tokens.refreshExpiresAt))
+        apiRequire(tokens.accessToken.all { it.code in 33..126 })
+    }
+
+    private suspend fun accessLocked(): ApiSessionTokens {
+        restoreLocked()
