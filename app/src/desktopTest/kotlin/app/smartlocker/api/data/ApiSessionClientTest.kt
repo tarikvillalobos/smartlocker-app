@@ -118,3 +118,23 @@ class ApiSessionClientTest {
             client.verifyLogin("challenge-1", "123456")
             val reads = List(2) { async { client.request("/me") } }
             entered.await()
+            runCurrent()
+            assertEquals(1, rotations)
+            release.complete(Unit)
+            reads.awaitAll()
+            assertEquals(1, rotations)
+            assertEquals(listOf("Bearer access-new", "Bearer access-new"), authorizations)
+            assertTrue(client.currentSession()?.token == "access-new")
+        } finally { release.complete(Unit); client.close() }
+    }
+
+    @Test fun uncertainRefreshKeepsItsKeyAcrossExplicitRetryAndNewClientRestore() = runTest {
+        val clock = TestClock()
+        val secure = MemorySecure()
+        val keys = mutableListOf<String?>()
+        var refreshCalls = 0
+        val first = client(clock, secure) { request ->
+            if (request.path().endsWith("/verify")) respond(tokens(clock, accessIn = 10_000), headers = JSON)
+            else {
+                assertEquals("/auth/refresh", request.path())
+                refreshCalls++
