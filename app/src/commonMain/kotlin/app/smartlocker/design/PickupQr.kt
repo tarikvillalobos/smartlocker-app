@@ -18,3 +18,20 @@ import kotlin.math.floor
 fun qrMatrix(payload: String): List<List<Boolean>> {
     require(payload.isNotEmpty() && payload.length <= 2048)
     return QRCodeProcessor(payload).encode().map { row -> row.map { it.dark } }
+}
+
+@Composable
+fun PickupQr(payload: String, modifier: Modifier = Modifier) {
+    val matrix = remember(payload) { qrMatrix(payload) }
+    Canvas(modifier.widthIn(max = 232.dp).fillMaxWidth().aspectRatio(1f)
+        .background(Color.White).semantics { contentDescription = "QR Code de retirada; código numérico disponível abaixo" }) {
+        val cells = matrix.size + 8 // Four white modules on every edge.
+        val unit = floor(size.minDimension / cells).coerceAtLeast(1f)
+        val inset = (size.minDimension - unit * cells) / 2
+        matrix.forEachIndexed { row, values ->
+            values.forEachIndexed { col, dark ->
+                if (dark) drawRect(Color.Black, Offset(inset + (col + 4) * unit, inset + (row + 4) * unit), Size(unit, unit))
+            }
+        }
+    }
+}
