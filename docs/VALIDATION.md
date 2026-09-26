@@ -180,8 +180,6 @@ a implementação e está fora da contagem. Binários não são versionados.
 
 ## Pendências externas
 
-Implementação da API, ambientes, credenciais e homologação não estão disponíveis.
-Não há integração real com autenticação, lockers, SMS, e-mail, WhatsApp ou push.
 A demonstração contém dados fictícios e nunca substitui a API após uma falha.
 Continuam pendentes aparelhos físicos, leitores de tela, canais reais, identidades
 de assinatura comercial, notarização e distribuição nas lojas.
