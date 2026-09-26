@@ -301,7 +301,6 @@ class ApiSessionClientTest {
                 HttpMethod.Post, headers = mapOf(HttpHeaders.IfMatch to "\"3\""))
             assertFailsWith<AppFailure> { mutation() }
             assertEquals(1, keys.size)
-            mutation()
             assertEquals(2, keys.size)
             assertNotNull(keys[0])
             assertEquals(keys[0], keys[1])
