@@ -184,6 +184,9 @@ Veja [arquitetura e segurança local](docs/ARCHITECTURE.md),
 DMG, MSI, DEB e app de simulador iOS. Execute `python3 scripts/prepare_icons.py`
 antes de empacotar. O workflow **Build installable artifacts** configura pacotes
 das duas marcas, com Java incluído no desktop, como artefatos privados de CI.
+A versão 1.1.0 inclui o cliente HTTP. Os sete jobs de instaladores e os sete jobs
+de verificação passaram na revisão registrada em [VALIDATION.md](docs/VALIDATION.md).
+A entrega local está em `artifacts/delivery/1.1.0/`, com instruções, manifesto e hashes.
 Assinatura comercial, notarização e exportação para aparelhos iOS dependem das
 identidades do proprietário. Não inclua segredos no repositório.
 
