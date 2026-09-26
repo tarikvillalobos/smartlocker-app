@@ -30,6 +30,7 @@ class AppRuntime(
     val state = mutable.asStateFlow()
 
     private fun create(configuration: AppConfiguration): RuntimeState {
+        val baseUrl = configuredApiEndpoint(configuration.apiBaseUrl)
         val repository = when (configuration.environment) {
             Environment.DEMO -> DemoRepository(platform.local, platform.secure, configuration.brand, clock)
             Environment.PRODUCTION -> if (configuration.apiBaseUrl.isNullOrBlank()) UnconfiguredRepository() else {
