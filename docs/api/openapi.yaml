@@ -2058,3 +2058,23 @@ components:
       description: |-
         Cursor opaco vinculado ao usuário, marca, vínculo, filtro, ordenação e snapshot. Uma página não é um total
         global. Cursor expirado retorna 410 CURSOR_EXPIRED; reiniciar a primeira página.
+    ParcelPage:
+      type: "object"
+      properties:
+        items:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Parcel"
+        pageInfo:
+          $ref: "#/components/schemas/PageInfo"
+      required:
+        - "items"
+        - "pageInfo"
+    ParcelMetrics:
+      type: "object"
+      properties:
+        since:
+          $ref: "#/components/schemas/Instant"
+        until:
+          $ref: "#/components/schemas/Instant"
+        generatedAt:
