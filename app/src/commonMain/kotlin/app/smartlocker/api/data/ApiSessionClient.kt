@@ -180,6 +180,11 @@ class ApiSessionClient(
         } catch (error: AppFailure) {
             ensureCurrent(epoch)
             if (intent != null && error.kind !in setOf(FailureKind.NETWORK, FailureKind.UNAVAILABLE)) uncertain.remove(intent)
+            if (authenticated && error.kind == FailureKind.EXPIRED_SESSION) mutex.withLock {
+                ensureCurrent(epoch)
+                if (stored?.tokens?.accessToken == token) expired()
+                throw AppFailure(FailureKind.CONFLICT, "A sessão foi renovada durante a operação. Atualize para conferir.")
+            }
             throw error
         }
     }
