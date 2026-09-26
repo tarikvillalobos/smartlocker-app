@@ -27,4 +27,5 @@ funcionalidade de moradores; a rota também é bloqueada no controller.
 Não há URLs de suporte ou documentos legais ficticiamente apresentados como
 reais. A ausência de configuração é informada quando a ação é acionada.
 As fontes e as cores de texto/superfície ficam centralizadas em `design/Tokens.kt`.
+O campo applicationId registra a identidade esperada da marca; o empacotamento
 nativo precisa ser configurado em cada build como descrito acima.
