@@ -72,6 +72,7 @@ fun LoginScreen(controller: AppController, state: AppState, legal: () -> Unit) {
                 OutlinedTextField(code, { code = it.filter(Char::isDigit).take(6) },
                     label = { Text("Código de 6 dígitos") }, singleLine = true, shape = Tokens.control,
                     modifier = Modifier.fillMaxWidth().keepAboveKeyboard(), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword))
+                PrimaryButton("Confirmar código", !state.busy && code.length == 6 && state.now < state.challenge.expiresAt) { controller.verify(code) }
                 val seconds = ((state.challenge.resendAt - state.now + 999) / 1000).coerceAtLeast(0)
                 TextButton({ code = ""; controller.resend() }, Modifier.fillMaxWidth(), enabled = !state.busy && seconds == 0L) {
                     Text(if (seconds > 0) "Reenviar em ${seconds}s" else "Reenviar código")
