@@ -338,3 +338,23 @@ class ApiSessionClientTest {
                 "/auth/challenges/challenge-1/verify" -> respond(tokens(clock, accessIn = 20_000), headers = JSON)
                 "/older" -> {
                     olderCalls++
+                    assertEquals("Bearer access-old", request.headers[HttpHeaders.Authorization])
+                    entered.complete(Unit)
+                    release.await()
+                    respond("""{"status":401,"code":"SESSION_EXPIRED"}""", HttpStatusCode.Unauthorized, PROBLEM)
+                }
+                "/auth/refresh" -> respond(tokens(clock, access = "access-new", refresh = "refresh-new"), headers = JSON)
+                "/newer" -> {
+                    assertEquals("Bearer access-new", request.headers[HttpHeaders.Authorization])
+                    respond("{}", headers = JSON)
+                }
+                else -> error("Unexpected fixture path")
+            }
+        }
+        try {
+            client.verifyLogin("challenge-1", "123456")
+            val older = async { runCatching { client.request("/older") } }
+            entered.await()
+            clock.time += 6_000
+            client.request("/newer")
+            release.complete(Unit)
