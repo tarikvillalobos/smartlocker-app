@@ -1798,3 +1798,23 @@ components:
           type: "string"
           minLength: 3
           maxLength: 254
+          description: "Novo contato normalizado: E.164 para sms ou e-mail válido para email."
+        channel:
+          type: "string"
+          enum:
+            - "sms"
+            - "email"
+      required:
+        - "contact"
+        - "channel"
+      additionalProperties: false
+      allOf:
+        -
+          if:
+            properties:
+              channel:
+                const: "sms"
+          then:
+            properties:
+              contact:
+                pattern: "^\\+55[1-9][0-9]9[0-9]{8}$"
