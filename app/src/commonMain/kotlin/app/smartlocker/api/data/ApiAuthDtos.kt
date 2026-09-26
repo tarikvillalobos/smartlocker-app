@@ -38,3 +38,23 @@ data class ApiSessionTokens(
     val userId: String,
     val brandId: String,
     val sessionId: String,
+    val permissions: List<String>,
+) {
+    fun toDomain(): Session {
+        apiRequire(tokenType == "Bearer")
+        apiRequire(accessToken.length in 1..8192 && accessToken.none { it.isWhitespace() || it.code < 32 || it.code == 127 })
+        apiRequire(refreshToken.length in 1..8192 && refreshToken.isNotBlank())
+        apiId(brandId)
+        apiId(sessionId)
+        apiInstant(accessExpiresAt)
+        apiRequire(permissions.all { it.isNotBlank() } && permissions.size == permissions.toSet().size)
+        return Session(accessToken, apiId(userId), apiInstant(refreshExpiresAt))
+    }
+
+    override fun toString() = "ApiSessionTokens(redacted)"
+}
+
+@Serializable
+data class ApiLoginRequest(val contact: String, val cpf: String, val channel: String) {
+    override fun toString() = "ApiLoginRequest(redacted)"
+}
