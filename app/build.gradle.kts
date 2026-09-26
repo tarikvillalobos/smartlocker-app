@@ -123,6 +123,5 @@ tasks.register<org.gradle.api.tasks.testing.Test>("desktopNativeVaultTest") {
 
 tasks.withType<org.jetbrains.compose.desktop.application.tasks.AbstractJPackageTask>().configureEach {
     if (targetFormat == TargetFormat.Deb) {
-        freeArgs.addAll("--linux-package-deps", "libsecret-tools, gnome-keyring")
     }
 }
