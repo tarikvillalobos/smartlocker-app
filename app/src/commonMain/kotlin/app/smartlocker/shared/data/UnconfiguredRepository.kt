@@ -8,7 +8,6 @@ import app.smartlocker.shared.domain.*
 /** Fail closed: production never delegates to a demo repository. */
 class UnconfiguredRepository : LockerRepository {
     private fun unavailable(): Nothing = throw AppFailure(FailureKind.MISSING_CONTRACT,
-        "API externa não configurada. Aguardando documentação e homologação.")
     override suspend fun requestLogin(request: LoginRequest): Challenge = unavailable()
     override suspend fun verifyLogin(challengeId: String, code: String): Session = unavailable()
     override suspend fun restoreSession(): Session? = null
