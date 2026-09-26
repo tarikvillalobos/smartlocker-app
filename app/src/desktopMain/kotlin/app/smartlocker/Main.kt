@@ -18,3 +18,5 @@ fun main(args: Array<String>) = application {
     Window(onCloseRequest = { runtime.close(); exitApplication() }, title = holder.configuration.brand.name,
         state = rememberWindowState(width = 1100.dp, height = 900.dp)) {
         SmartLockerApp(runtime)
+    }
+}
