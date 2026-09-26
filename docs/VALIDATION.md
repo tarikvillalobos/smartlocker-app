@@ -8,6 +8,7 @@ verificação abaixo prova integração com backend, fornecedor ou hardware exte
 
 ## Testes compartilhados e desktop
 
+`./gradlew :core:jvmTest :app:desktopTest`: **97 testes executados e aprovados**.
 Três testes de cofre nativo são descobertos, mas pulados nessa suíte por padrão;
 sua execução separada e os sistemas verificados estão registrados abaixo.
 
