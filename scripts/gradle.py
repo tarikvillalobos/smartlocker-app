@@ -11,6 +11,15 @@ import zipfile
 
 root = pathlib.Path(__file__).resolve().parents[1]
 os.chdir(root)
+if sys.platform == "darwin":
+    discovered = subprocess.run(
+        ["/usr/libexec/java_home", "-v", "21"], capture_output=True, text=True,
+    )
+    if discovered.returncode == 0 and discovered.stdout.strip():
+        os.environ["JAVA_HOME"] = discovered.stdout.strip()
+        os.environ["PATH"] = str(pathlib.Path(os.environ["JAVA_HOME"], "bin")) + os.pathsep + os.environ.get("PATH", "")
+    else:
+        sys.exit("JDK 21 is required. Install it and rerun this command.")
 versions = (root / "gradle/libs.versions.toml").read_text()
 version = re.search(r'^gradle = "([0-9.]+)"', versions, re.M).group(1)
 tools = root / ".tools"
