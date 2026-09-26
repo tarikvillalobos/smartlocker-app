@@ -158,7 +158,6 @@ class AppController(
         mutable.update { it.copy(selectedId = detail.parcel?.id, selected = detail.parcel,
             credential = detail.credential, credentialMessage = detail.message, now = clock.now()) }
     }
-
     fun select(id: String, openDetail: Boolean = true) {
         mutable.update { it.copy(selectedId = id, selected = null, credential = null,
             route = if (openDetail) Route.DETAIL else it.route) }
