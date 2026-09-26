@@ -1,6 +1,5 @@
 package app.smartlocker.profile.domain
 
-data class Membership(val id: String, val location: String, val unit: String)
 data class CommunicationPreferences(
     val inApp: Boolean = true,
     val sms: Boolean = true,
