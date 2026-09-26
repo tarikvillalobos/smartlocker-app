@@ -48,6 +48,8 @@ class NativeAppFlowTest {
         focusWithVisibleIme("Celular").performTextInput("11987654321")
         focusWithVisibleIme("CPF").performTextInput("52998224725")
         rotate(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE, Configuration.ORIENTATION_LANDSCAPE)
+        // Assert before any manual scroll or refocus can repair a rotation regression.
+        assertFieldAboveVisibleIme("CPF")
         ui.onNodeWithText("11987654321").assertExists()
         ui.onNodeWithText("52998224725").assertExists()
         ui.onNodeWithText("Receber código por SMS").performScrollTo().performClick()
