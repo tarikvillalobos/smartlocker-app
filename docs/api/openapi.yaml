@@ -1218,3 +1218,23 @@ paths:
       tags:
         - "Devices"
       summary: "Remover registro push desta instalação e sessão"
+      description: |-
+        Naturalmente idempotente. Só remove registro que pertence à sessão/marca atual. Remover ao revogar a
+        permissão, sair da conta ou mudar o destinatário.
+      x-required-permission: "devices:write"
+      parameters:
+        -
+          $ref: "#/components/parameters/BrandId"
+      responses:
+        "204":
+          description: "Resultado confirmado pelo servidor."
+          headers:
+            X-Request-Id:
+              $ref: "#/components/headers/RequestId"
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+        "400":
+          $ref: "#/components/responses/Problem"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
