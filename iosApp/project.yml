@@ -29,4 +29,5 @@ targets:
         script: |
           cd "$SRCROOT/.."
           python3 scripts/prepare_resources.py
+          ./gradlew :app:embedAndSignAppleFrameworkForXcode --console=plain
         basedOnDependencyAnalysis: false
