@@ -28,11 +28,6 @@ páginas carregadas ao abrir detalhes, recentes independentes do filtro históri
 e reenvio de verificação de contato depois de navegar. Uma ação já confirmada
 continua confirmada se a atualização posterior falhar, evitando relatos repetidos.
 
-O transporte é testado com Ktor MockEngine, sem endpoints inventados no produto.
-Os testes verificam respostas 401/403/409/429/503, cancelamento e ausência de
-retentativa automática. ZXing decodifica o QR e confirma o payload de origem.
-Relatórios: `core/build/reports/tests/jvmTest/index.html` e
-`app/build/reports/tests/desktopTest/index.html`.
 
 ## Layout e acessibilidade
 
