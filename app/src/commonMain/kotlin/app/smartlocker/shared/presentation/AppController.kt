@@ -231,7 +231,6 @@ class AppController(
         mutable.update { it.copy(selectedId = null, selected = null, credential = null) }
         load()
     }
-    fun deposit() = execute {
         (repository as? DemoControls)?.deposit(state.value.membershipId)
         load()
         feedback("Depósito fictício criado. Veja a nova encomenda e o aviso.")
