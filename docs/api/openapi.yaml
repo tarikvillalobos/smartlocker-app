@@ -458,3 +458,23 @@ paths:
         Desafio vinculado à sessão, usuário, marca, canal e novo contato; não pode ser usado para login.
       x-required-permission: "profile:write"
       parameters:
+        -
+          $ref: "#/components/parameters/BrandId"
+        -
+          $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/ContactChangeRequest"
+      responses:
+        "202":
+          description: "Resultado confirmado pelo servidor."
+          headers:
+            X-Request-Id:
+              $ref: "#/components/headers/RequestId"
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+          content:
+            "application/json":
