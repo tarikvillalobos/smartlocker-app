@@ -93,6 +93,8 @@ private fun IssueScreen(state: AppState, controller: AppController) {
         observedSubmission = state.issueSubmission
     }
     PageTitle("Solicitações", { controller.navigate(if (state.selectedId != null) Route.DETAIL else Route.PROFILE) })
+    if (state.selectedId != null && state.selected?.canReportIssue == true && controller.features.issues) Panel {
+        Text("Problema com ${state.selected.carrier}", style = MaterialTheme.typography.titleMedium)
         OutlinedTextField(message, { message = it.take(2000) }, Modifier.fillMaxWidth().keepAboveKeyboard(),
             label = { Text("Descreva o problema") }, minLines = 3, shape = Tokens.control)
         PrimaryButton("Enviar relato", !state.busy && !state.stale && message.trim().length >= 10) { controller.report(message) }
