@@ -39,8 +39,6 @@ fun ProfileScreen(state: AppState, controller: AppController, platform: Platform
     Panel {
         Metadata("Celular", profile.phone.ifBlank { "Não informado" })
         HorizontalDivider(color = Tokens.border)
-        Metadata("E-mail", profile.email)
-        if (brand.features.contactEditing) MenuRow("Editar e verificar contato", Symbol.EDIT) { controller.navigate(Route.CONTACT) }
     }
     Text("AVISOS DE ENCOMENDA", style = MaterialTheme.typography.labelMedium, color = Tokens.secondary)
     Panel {
