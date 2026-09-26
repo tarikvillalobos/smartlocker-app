@@ -38,3 +38,13 @@ class DesktopServices : PlatformServices {
         val uri = URI(url)
         require(uri.scheme in setOf("https", "mailto"))
         if (uri.scheme == "mailto") Desktop.getDesktop().mail(uri) else Desktop.getDesktop().browse(uri)
+        true
+    }.getOrDefault(false)
+    override suspend fun notificationPermission() = "Central disponível; push do sistema não integrado."
+}
+
+internal fun restrict(path: Path, directory: Boolean = false) {
+    if (Files.getFileStore(path).supportsFileAttributeView("posix")) {
+        Files.setPosixFilePermissions(path, PosixFilePermissions.fromString(if (directory) "rwx------" else "rw-------"))
+    }
+}
