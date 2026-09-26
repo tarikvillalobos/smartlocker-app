@@ -47,6 +47,7 @@ fun ProfileScreen(state: AppState, controller: AppController, platform: Platform
         PreferenceRow("Notificação no aplicativo", profile.preferences.inApp, !state.busy && "app" in state.channels(brand)) {
             controller.preferences(profile.preferences.copy(inApp = it))
         }
+        if ("sms" in state.channels(brand)) PreferenceRow("SMS", profile.preferences.sms, !state.busy) {
             controller.preferences(profile.preferences.copy(sms = it))
         }
         if ("whatsapp" in brand.channels) PreferenceRow("WhatsApp", profile.preferences.whatsapp, !state.busy) {
