@@ -18,3 +18,14 @@ data class Recipient(val id: String, val name: String, val relationship: String)
 data class DeliveryNotice(
     val id: String,
     val parcelId: String,
+    val title: String,
+    val createdAt: Long,
+    val read: Boolean = false,
+)
+data class SupportIssue(
+    val id: String,
+    val parcelId: String,
+    val message: String,
+    val createdAt: Long,
+    val status: String = "Recebida",
+)
