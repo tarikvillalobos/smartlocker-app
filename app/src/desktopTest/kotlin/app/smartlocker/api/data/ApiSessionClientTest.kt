@@ -318,3 +318,23 @@ class ApiSessionClientTest {
             else respond("""{"status":{},"code":[],"detail":"SECRET_FIXTURE_BODY"}""", HttpStatusCode.Unauthorized, PROBLEM)
         }
         try {
+            client.verifyLogin("challenge-1", "123456")
+            val failure = assertFailsWith<AppFailure> { client.request("/me") }
+            assertEquals(FailureKind.EXPIRED_SESSION, failure.kind)
+            assertFalse(failure.message.contains("SECRET_FIXTURE_BODY"))
+            assertNull(client.currentSession())
+            assertTrue(secure.values.isEmpty())
+        } finally { client.close() }
+    }
+
+    @Test fun lateUnauthorizedResponseFromOldAccessTokenCannotEraseARotatedSession() = runTest {
+        val clock = TestClock()
+        val secure = MemorySecure()
+        val entered = CompletableDeferred<Unit>()
+        val release = CompletableDeferred<Unit>()
+        var olderCalls = 0
+        val client = client(clock, secure) { request ->
+            when (request.path()) {
+                "/auth/challenges/challenge-1/verify" -> respond(tokens(clock, accessIn = 20_000), headers = JSON)
+                "/older" -> {
+                    olderCalls++
