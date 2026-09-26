@@ -39,6 +39,11 @@ interface LockerRepository {
         requestContactChange(contact, channel)
     suspend fun verifyContactChange(challengeId: String, code: String): Profile
     suspend fun notifications(locationId: String): List<DeliveryNotice>
+    suspend fun noticePage(locationId: String, cursor: String? = null): NoticePage {
+        require(cursor == null)
+        val values = notifications(locationId)
+        return NoticePage(values, null, values.count { !it.read })
+    }
     suspend fun markNoticeRead(locationId: String, id: String)
     suspend fun reportIssue(locationId: String, parcelId: String, message: String): SupportIssue
     suspend fun issues(locationId: String): List<SupportIssue>
