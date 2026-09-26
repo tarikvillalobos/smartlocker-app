@@ -18,3 +18,16 @@ class QrSafetyTest {
     @Test fun supportedUnicodePayloadRoundTripsWithoutChangingTheAuthorizedContent() {
         val payload = "https://locker.example.test/retirada/área-🔒"
         val matrix = assertNotNull(qrMatrixOrNull(payload))
+        val scale = 8
+        val size = (matrix.size + 8) * scale
+        val pixels = IntArray(size * size) { -1 }
+        matrix.forEachIndexed { row, values -> values.forEachIndexed { col, dark ->
+            if (dark) for (dy in 0 until scale) for (dx in 0 until scale) {
+                pixels[((row + 4) * scale + dy) * size + (col + 4) * scale + dx] = 0xFF000000.toInt()
+            }
+        } }
+        val bitmap = BinaryBitmap(HybridBinarizer(RGBLuminanceSource(size, size, pixels)))
+        val decoded = MultiFormatReader().decode(bitmap, mapOf(DecodeHintType.CHARACTER_SET to "UTF-8"))
+        assertEquals(payload, decoded.text)
+    }
+}
