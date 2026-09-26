@@ -27,6 +27,7 @@ sua execução separada e os sistemas verificados estão registrados abaixo.
 | ApiMappingTest | 9 | Estados, unidade opcional, métricas e capacidades |
 | ChunkedSecureStoreTest | 11 | Fragmentação, gravação atômica, recuperação e logout |
 | ApiLockerRepositoryTest | 8 | Escopo, versão, paginação, suporte, contato e permissões |
+| ApiSessionClientTest | 15 | OTP, refresh, cofre, identidade, idempotência e respostas atrasadas |
 | ControllerProductionStateTest | 3 | Contadores globais, capacidades e falhas de sessão |
 | ControllerMembershipRevocationTest | 5 | Revogação antes de recarga e ausência de vínculos |
 | ProductionRuntimeUiTest | 1 | Login HTTP, cópia, retirada, histórico e falha sem demo |
