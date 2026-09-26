@@ -75,9 +75,6 @@ também usa essa cópia. Não foram ocultadas regras de lint.
 
 O build iOS usa `CODE_SIGNING_ALLOWED=NO`. O plist final contém a chave booleana
 `CADisableMinimumFrameDurationOnPhone=true`, exigida pelo Compose. O app abriu
-e renderizou o login no iOS 26.2. O target `SmartLockerUITests` verifica teclado
-e rotação; o resultado dessa execução nativa é registrado ao concluir o ensaio.
-Artefatos Xcode ficam em `artifacts/`, ignorados pelo Git.
 
 ## Integração contínua e histórico
 
