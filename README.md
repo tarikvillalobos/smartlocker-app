@@ -61,6 +61,16 @@ python3 scripts/prepare_resources.py
 ```
 
 Para Aurora: `./gradlew :app:run --args="--demo --aurora"`.
+Sem `--demo`, a primeira abertura usa o ambiente externo. Para uma API disponível:
+
+```sh
+export SMARTLOCKER_API_BASE_URL="https://api.seu-dominio.example/v1"
+./gradlew :app:run
+```
+
+Substitua o domínio de exemplo pela URL real fornecida pelo projeto do backend.
+A escolha explícita de ambiente e marca é lembrada no dispositivo; se a instalação
+estava em demonstração, selecione “Usar API externa” na tela de login.
 No Windows, substitua `./gradlew` por `gradlew.bat` e `python3` por `python`.
 
 ## Android
