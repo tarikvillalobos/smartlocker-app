@@ -222,6 +222,7 @@ class ApiSessionClient(
                 false -> "Não foi possível remover a sessão protegida deste dispositivo nem confirmar a revogação remota."
                 null -> "Não foi possível remover a sessão protegida deste dispositivo. Nenhuma revogação remota foi confirmada."
             }
+            throw AppFailure(FailureKind.UNAVAILABLE, message)
         }
     }
 
