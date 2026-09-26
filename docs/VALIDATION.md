@@ -7,7 +7,6 @@ verificação abaixo prova integração com backend, fornecedor ou hardware exte
 
 ## Testes compartilhados e desktop
 
-`./gradlew :core:jvmTest :app:desktopTest`: **26 testes aprovados, sem falhas**.
 
 | Suíte | Testes | Verificação |
 | --- | ---: | --- |
