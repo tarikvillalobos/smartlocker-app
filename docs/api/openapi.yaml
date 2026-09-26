@@ -1838,3 +1838,23 @@ components:
         relationship:
           type: "string"
           maxLength: 100
+      required:
+        - "id"
+        - "name"
+        - "relationship"
+      description: "Destinatário visível conforme autorização explícita. Sua presença não concede acesso às encomendas dele."
+    RecipientList:
+      type: "object"
+      properties:
+        items:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Recipient"
+      required:
+        - "items"
+    Locker:
+      type: "object"
+      properties:
+        id:
+          $ref: "#/components/schemas/Identifier"
+        name:
