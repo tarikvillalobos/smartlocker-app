@@ -178,3 +178,23 @@ class ApiLockerRepository(private val session: ApiSessionClient) : LockerReposit
         val user = currentUser()
         val membership = membership(locationId, user)
         if (!membership.capabilities.features.supportIssues || !configuration().capabilities.features.supportIssues) unavailableFeature()
+        val parcel = reviewedParcel(locationId, parcelId, user)
+        if (!parcel.canReportIssue) unavailableFeature()
+        val normalized = message.trim()
+        if (normalized.length !in 10..2000)
+            throw AppFailure(FailureKind.VALIDATION, "Descreva o problema em 10 a 2.000 caracteres.")
+        val body = buildJsonObject { put("parcelId", identifier(parcelId)); put("message", normalized) }.toString()
+        val response = request<ApiSupportIssue>(user, "${membershipPath(locationId)}/issues", HttpMethod.Post, body)
+        requireResponse(response.membershipId == locationId && response.parcelId == parcelId)
+        return response.toDomain()
+    }
+
+    override suspend fun issues(locationId: String): List<SupportIssue> = issuePage(locationId).items
+
+    override suspend fun issuePage(locationId: String, cursor: String?): IssuePage {
+        val user = currentUser()
+        val membership = membership(locationId, user)
+        if (!membership.capabilities.features.supportIssues || !configuration().capabilities.features.supportIssues) unavailableFeature()
+        val response = request<ApiIssuePage>(user, pagePath("${membershipPath(locationId)}/issues", cursor))
+        requireResponse(response.items.all { it.membershipId == locationId })
+        val page = response.toDomain()
