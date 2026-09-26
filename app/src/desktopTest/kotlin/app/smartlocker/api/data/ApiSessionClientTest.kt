@@ -58,3 +58,23 @@ class ApiSessionClientTest {
             calls++
             respond("""{"status":422,"code":"INVALID_OTP","detail":"SECRET_FIXTURE_BODY"}""",
                 HttpStatusCode.UnprocessableEntity, PROBLEM)
+        }
+        try {
+            assertEquals(FailureKind.VALIDATION, assertFailsWith<AppFailure> { client.verifyLogin("challenge-1", "12345") }.kind)
+            assertEquals(0, calls)
+            val failure = assertFailsWith<AppFailure> { client.verifyLogin("challenge-1", "123456") }
+            assertEquals(FailureKind.INVALID_CODE, failure.kind)
+            assertFalse(failure.message.contains("SECRET_FIXTURE_BODY"))
+            assertEquals(1, calls)
+            assertNull(client.currentSession())
+            assertTrue(secure.values.isEmpty())
+        } finally { client.close() }
+    }
+
+    @Test fun verifiedSessionUsesBoundedSecureEntriesAndRestoresWithoutAnotherLogin() = runTest {
+        val clock = TestClock()
+        val secure = MemorySecure()
+        val access = "access-" + "A".repeat(8000)
+        val refresh = "refresh-" + "R".repeat(8000)
+        val first = client(clock, secure) { respond(tokens(clock, access = access, refresh = refresh), headers = JSON) }
+        first.verifyLogin("challenge-1", "123456")
