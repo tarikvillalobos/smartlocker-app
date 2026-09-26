@@ -38,3 +38,10 @@ def main():
         ["gnome-keyring-daemon", "--daemonize", "--unlock", "--components=secrets"],
         input=password, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=environment, timeout=20,
     )
+    if started.returncode:
+        raise RuntimeError("Could not start the isolated CI Secret Service")
+    return gradle(environment)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
