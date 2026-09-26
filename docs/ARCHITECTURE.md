@@ -26,6 +26,16 @@ operação e informa separadamente que os dados precisam ser atualizados.
   a validade real deverá continuar sob controle da API.
 - Não existe fila offline de confirmação com sucesso otimista.
 
+## Ciclo de vida Android
+
+A tela Android contém apenas Compose. O manifesto permite à UI tratar rotação e
+mudanças de tamanho sem recriar a Activity, preservando o foco enquanto restrições
+e insets são atualizados. Fonte, densidade e outras configurações não declaradas
+mantêm a recriação normal; ViewModel e rememberSaveable continuam necessários.
+O teste nativo inclui recriação explícita durante o OTP, além da rotação. Isso
+não substitui persistência para morte do processo. Critérios e fundamento oficial
+estão em [RESPONSIVE.md](RESPONSIVE.md).
+
 ## Persistência e proteção
 
 Demonstração: snapshots versionados de dados fictícios, separados por marca e
