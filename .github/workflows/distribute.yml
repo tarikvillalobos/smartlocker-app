@@ -87,6 +87,7 @@ jobs:
           artifacts/SmartLocker-ios-simulator.zip
       - uses: actions/upload-artifact@v4
         with:
+          name: smartlocker-iOS-simulator-arm64-local-signing
           if-no-files-found: error
           retention-days: 14
           path: artifacts/SmartLocker-ios-simulator.zip
