@@ -102,6 +102,8 @@ class AppController(
         val location = profile.memberships.find { it.id == context.membershipId }?.id
             ?: profile.memberships.firstOrNull()?.id
             ?: throw AppFailure(FailureKind.DENIED, "Nenhum local autorizado para esta conta.")
+        val history = LoadHistory(repository)(location, context.filter)
+        val page = history.page
         val pending = repository.parcels(location, ParcelFilter.WAITING, null).items
         val statistics = repository.statistics(location)
         val notices = repository.notifications(location)
