@@ -198,3 +198,23 @@ class ApiLockerRepositoryTest {
             assertFalse(metrics.complete)
             assertNull(metrics.total)
             assertNull(metrics.averageMillis)
+            it.repo.markNoticeRead("member-1", "notice-1")
+        }
+    }
+
+    private class Fixture(val repo: ApiLockerRepository, val requests: MutableList<HttpRequestData>) {
+        suspend fun useSuspend(block: suspend (Fixture) -> Unit) { try { block(this) } finally { repo.close() } }
+    }
+
+    private suspend fun withRepository(
+        public: ApiBrandConfiguration = configuration,
+        handler: suspend MockRequestHandleScope.(HttpRequestData) -> HttpResponseData,
+    ): Fixture {
+        val requests = mutableListOf<HttpRequestData>()
+        val engine = MockEngine { request ->
+            requests += request
+            when (request.url.encodedPath) {
+                "/v1/auth/challenges/login-1/verify" -> json(tokens)
+                "/v1/configuration" -> json(public)
+                "/v1/me/memberships" -> json(ApiMembershipList(listOf(membership)))
+                else -> handler(request)
