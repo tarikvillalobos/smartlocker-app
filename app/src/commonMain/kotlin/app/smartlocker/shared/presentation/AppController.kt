@@ -204,6 +204,7 @@ class AppController(
         val profile = repository.updatePreferences(value)
         if (generation == epoch) mutable.update { it.copy(profile = profile, feedback = "Preferências salvas.") }
     }
+    fun contact(value: String, channel: LoginChannel) = execute { generation ->
         val challenge = repository.requestContactChange(value, channel)
         mutable.update { it.copy(contactChallenge = challenge) }
     }
