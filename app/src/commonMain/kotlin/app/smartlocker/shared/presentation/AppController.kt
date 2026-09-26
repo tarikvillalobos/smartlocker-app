@@ -83,6 +83,8 @@ class AppController(
         } else if (error is AppFailure && error.kind == FailureKind.DENIED) {
             mutable.update { it.copy(error = error.message, parcels = emptyList(), pending = emptyList(), recent = emptyList(),
                 selected = null, selectedId = null, credential = null, notices = emptyList(),
+                issues = emptyList(), residents = emptyList(), statistics = null, nextCursor = null,
+                noticeCursor = null, serverUnreadCount = null, issueCursor = null, stale = false) }
         } else {
             mutable.update { it.copy(error = (error as? AppFailure)?.message ?: "Não foi possível concluir. Tente novamente.",
                 stale = it.profile != null, credential = null) }
