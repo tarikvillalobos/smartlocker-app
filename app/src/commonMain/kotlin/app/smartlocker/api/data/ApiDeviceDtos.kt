@@ -38,3 +38,23 @@ data class ApiPushData(
 ) {
     fun validate() {
         apiRequire(type == "parcel_update")
+        listOf(brandId, membershipId, parcelId, noticeId).forEach(::apiId)
+    }
+}
+
+@Serializable
+data class ApiFieldError(val field: String, val code: String)
+
+/** The client must select safe local copy by code, never display server detail. */
+@Serializable
+data class ApiProblem(
+    val type: String,
+    val title: String,
+    val status: Int,
+    val code: String,
+    val requestId: String,
+    val detail: String? = null,
+    val instance: String? = null,
+    val fieldErrors: List<ApiFieldError> = emptyList(),
+    val retryAt: String? = null,
+)
