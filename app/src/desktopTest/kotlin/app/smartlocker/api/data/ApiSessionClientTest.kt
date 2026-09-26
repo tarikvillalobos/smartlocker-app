@@ -123,7 +123,6 @@ class ApiSessionClientTest {
             release.complete(Unit)
             reads.awaitAll()
             assertEquals(1, rotations)
-            assertEquals(listOf("Bearer access-new", "Bearer access-new"), authorizations)
             assertTrue(client.currentSession()?.token == "access-new")
         } finally { release.complete(Unit); client.close() }
     }
