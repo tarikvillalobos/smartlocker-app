@@ -78,3 +78,23 @@ data class ApiBrandConfiguration(
 @Serializable
 data class ApiMembership(
     val id: String,
+    val locationId: String,
+    val locationName: String,
+    val unitId: String?,
+    val unitLabel: String?,
+    val timeZone: String,
+    val capabilities: ApiCapabilities,
+) {
+    fun toDomain(): Membership {
+        apiId(locationId)
+        apiRequire((unitId == null) == (unitLabel == null))
+        unitId?.let(::apiId)
+        apiText(timeZone, 100)
+        try { TimeZone.of(timeZone) } catch (_: IllegalArgumentException) { invalidApiResponse() }
+        return Membership(apiId(id), apiText(locationName, 200, true), apiText(unitLabel.orEmpty(), 200, true),
+            timeZone = timeZone, features = capabilities.features.toDomain(), channels = capabilities.channels.availableChannels())
+    }
+}
+
+@Serializable
+data class ApiMembershipList(val items: List<ApiMembership>) {
