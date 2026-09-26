@@ -220,7 +220,6 @@ class AppController(
         val issue = repository.reportIssue(it.membershipId, it.selectedId!!, message)
         "Solicitação ${issue.id} recebida. Acompanhe nesta tela."
     }
-    fun notice(value: DeliveryNotice) = execute {
         repository.markNoticeRead(state.value.membershipId, value.id)
         select(value.parcelId)
     }
