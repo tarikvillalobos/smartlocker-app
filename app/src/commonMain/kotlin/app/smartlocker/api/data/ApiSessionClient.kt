@@ -197,7 +197,6 @@ class ApiSessionClient(
     suspend fun logout() {
         generation++
         val token = stored?.tokens?.accessToken
-        mutex.withLock {
             stored = null
             restored = true
             uncertain.clear()
