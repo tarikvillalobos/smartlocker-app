@@ -30,6 +30,9 @@ rede em produção nunca trocam o repositório para dados demonstrativos.
 
 ## Configurar o endpoint
 
+Use a URL base HTTPS disponibilizada pelo projeto do backend, incluindo o prefixo
+de versão, como `/v1`. A configuração não aceita credenciais na URL, query ou
+fragmento. Endpoint e identificador público de marca não são segredos.
 
 Criar DTOs em `data` e mapeamentos validados para os modelos de domínio. Implementar
 `LockerRepository` com o transporte e a autenticação documentados. Injetar esse
