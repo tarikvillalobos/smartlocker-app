@@ -18,3 +18,7 @@ internal fun normalizedApiContact(value: String, channel: LoginChannel): String 
     if (!InputValidation.phone(value)) invalidInput("Confira o celular informado.")
     val digits = value.filter(Char::isDigit)
     return if (digits.length == 11) "+55$digits" else "+$digits"
+}
+internal fun validateApiOtp(code: String) {
+    if (!Regex("^[0-9]{6}$").matches(code)) invalidInput("Informe os seis dígitos do código recebido.")
+}
