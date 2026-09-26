@@ -98,3 +98,23 @@ fun DetailScreen(state: AppState, controller: AppController, platform: PlatformS
     if (parcel.status == ParcelStatus.WAITING && parcel.canMarkManually && controller.configuration.brand.features.manualPickup) {
         PrimaryButton("Já retirei a encomenda", !state.busy && !state.stale) { confirmation = true }
     }
+    if (parcel.canUndo && controller.configuration.brand.features.manualPickup) {
+        TextButton(controller::undo, Modifier.fillMaxWidth(), enabled = !state.busy && !state.stale) { Text("Desfazer marcação manual") }
+    }
+    if (parcel.status != ParcelStatus.WAITING) PrimaryButton("Ver histórico") { controller.navigate(Route.HISTORY) }
+    if (controller.configuration.brand.features.issues) {
+        TextButton({ controller.navigate(Route.ISSUES) }, Modifier.fillMaxWidth()) { Text("Relatar um problema") }
+    }
+    if (controller.configuration.environment == Environment.DEMO && parcel.status == ParcelStatus.WAITING) {
+        OutlinedButton(controller::physicalPickup, Modifier.fillMaxWidth(), enabled = !state.busy && !state.stale) {
+            Text("Simular retirada física")
+        }
+    }
+    if (confirmation) AlertDialog(onDismissRequest = { confirmation = false },
+        title = { Text("Confirmar sua retirada?") },
+        text = { Text("Esta marcação informa que você retirou a encomenda. Ela não representa confirmação do armário e revoga o código atual.") },
+        confirmButton = { TextButton({ confirmation = false; controller.markCollected() }) { Text("Sim, retirei") } },
+        dismissButton = { TextButton({ confirmation = false }) { Text("Cancelar") } })
+}
+
+@Composable
