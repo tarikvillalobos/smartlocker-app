@@ -138,3 +138,23 @@ class ApiSessionClientTest {
             else {
                 assertEquals("/auth/refresh", request.path())
                 refreshCalls++
+                keys += request.headers["Idempotency-Key"]
+                throw IOException("Synthetic uncertain refresh")
+            }
+        }
+        try {
+            first.verifyLogin("challenge-1", "123456")
+            repeat(2) { assertEquals(FailureKind.NETWORK, assertFailsWith<AppFailure> { first.request("/me") }.kind) }
+            assertEquals(2, refreshCalls)
+            assertNotNull(keys.first())
+            assertEquals(keys[0], keys[1])
+        } finally { first.close() }
+        val second = client(clock, secure) { request ->
+            assertEquals("/auth/refresh", request.path())
+            keys += request.headers["Idempotency-Key"]
+            assertEquals("refresh-old", request.jsonBody().getValue("refreshToken").jsonPrimitive.content)
+            respond(tokens(clock, access = "access-rotated", refresh = "refresh-rotated"), headers = JSON)
+        }
+        try {
+            assertTrue(second.restoreSession()?.token == "access-rotated")
+            assertEquals(keys[0], keys[2])
