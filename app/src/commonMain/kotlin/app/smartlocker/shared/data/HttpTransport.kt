@@ -50,6 +50,10 @@ class HttpTransport(engine: HttpClientEngine, private val baseUrl: String) : Aut
                     setBody(jsonBody)
                 }
             }
+            val body = response.bodyAsText()
+            if (body.length > 2_000_000) throw AppFailure(FailureKind.UNAVAILABLE, "Resposta da API excedeu o limite permitido.")
+            if (response.status.value in 200..299) return body
+            throw apiFailure(response.status.value, body)
         } catch (error: CancellationException) {
             throw error
         } catch (error: AppFailure) {
