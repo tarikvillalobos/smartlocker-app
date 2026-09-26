@@ -27,6 +27,7 @@ fun AuxiliaryScreen(state: AppState, controller: AppController, platform: Platfo
                     TextButton({ controller.notice(notice) }) { Text("Ver encomenda") }
                 }
             }
+            if (state.noticeCursor != null) PrimaryButton("Carregar mais avisos", !state.busy, controller::moreNotices)
         }
         Route.LOCATIONS -> {
             PageTitle("Meus locais", { controller.navigate(Route.PROFILE) })
