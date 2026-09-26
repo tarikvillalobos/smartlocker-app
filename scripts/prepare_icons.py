@@ -58,3 +58,22 @@ def mark(brand, rounded):
     return image.resize((1024, 1024), Image.Resampling.LANCZOS)
 
 
+for brand, name in (("smartlocker", "AppIcon"), ("aurora", "AuroraIcon")):
+    desktop = mark(brand, rounded=True)
+    desktop.save(output / f"{brand}.png")
+    desktop.save(output / f"{brand}.ico", sizes=[(x, x) for x in (16, 24, 32, 48, 64, 128, 256)])
+    desktop.save(output / f"{brand}.icns")
+    ios = mark(brand, rounded=False)
+    target = assets / f"{name}.appiconset"
+    target.mkdir(parents=True, exist_ok=True)
+    images = []
+    slots = [("iphone", x, s) for x in (20, 29, 40, 60) for s in (2, 3)]
+    slots += [("ipad", x, s) for x in (20, 29, 40, 76) for s in (1, 2)]
+    slots += [("ipad", 83.5, 2), ("ios-marketing", 1024, 1)]
+    for idiom, size, scale in slots:
+        filename = f"icon-{size}@{scale}x.png"
+        pixels = round(size * scale)
+        ios.resize((pixels, pixels), Image.Resampling.LANCZOS).save(target / filename)
+        images.append({"idiom": idiom, "size": f"{size}x{size}", "scale": f"{scale}x", "filename": filename})
+    (target / "Contents.json").write_text(json.dumps({"images": images, "info": info}, indent=2) + "\n")
+print("Generated SmartLocker and Aurora desktop icons and opaque iOS icon catalogs.")
