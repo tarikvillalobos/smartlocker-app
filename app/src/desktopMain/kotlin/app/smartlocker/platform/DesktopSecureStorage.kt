@@ -22,6 +22,8 @@ import java.util.concurrent.TimeUnit
 /** Keychain on macOS, DPAPI on Windows, Secret Service on Linux. Never plaintext fallback. */
 class DesktopSecureStorage(private val directory: Path) : SecureStorage {
     private val os = System.getProperty("os.name").lowercase()
+    private val isMac = "mac" in os || "darwin" in os
+    private val isWindows = "windows" in os
     private val service = "app.smartlocker.session"
     private fun encoded(value: String) = Base64.getEncoder().encodeToString(value.toByteArray())
     private fun decoded(value: String) = String(Base64.getDecoder().decode(value.trim()))
