@@ -155,10 +155,6 @@ class AppController(
         val context = state.value
         val detail = readDetail(context.membershipId, context.selectedId)
         if (generation != epoch) return
-        mutable.update { it.copy(profile = profile, membershipId = location, parcels = page.items,
-            pending = pending, nextCursor = page.nextCursor, statistics = statistics, notices = notices,
-            issues = issues, selectedId = selected?.id, selected = selected, credential = credential,
-            credentialMessage = credentialMessage, stale = false, now = clock.now(), lastUpdated = clock.now()) }
     }
 
     fun select(id: String, openDetail: Boolean = true) {
