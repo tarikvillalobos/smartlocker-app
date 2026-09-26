@@ -29,6 +29,10 @@ class AppRuntime(val platform: PlatformServices, initial: AppConfiguration? = nu
     private fun create(configuration: AppConfiguration): RuntimeState {
         val repository = when (configuration.environment) {
             Environment.DEMO -> DemoRepository(platform.local, platform.secure, configuration.brand, clock)
+            Environment.PRODUCTION -> if (configuration.apiBaseUrl.isNullOrBlank()) UnconfiguredRepository() else {
+                val transport = HttpTransport(createApiEngine(), configuration.apiBaseUrl)
+                ApiLockerRepository(ApiSessionClient(transport, configuration.brand, configuration.apiBaseUrl, platform.secure, clock))
+            }
         }
         val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
         return RuntimeState(configuration, AppController(configuration, repository, clock, scope))
