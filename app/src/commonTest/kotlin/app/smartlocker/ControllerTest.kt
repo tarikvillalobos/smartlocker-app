@@ -7,6 +7,8 @@ import app.smartlocker.shared.data.ScopedCache
 import app.smartlocker.shared.data.CacheScope
 import app.smartlocker.shared.domain.*
 import app.smartlocker.shared.presentation.*
+import kotlinx.coroutines.CompletableDeferred
+import app.smartlocker.auth.domain.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.*
