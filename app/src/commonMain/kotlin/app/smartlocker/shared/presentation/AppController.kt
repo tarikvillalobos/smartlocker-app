@@ -66,7 +66,6 @@ class AppController(
                 selectedId = old.selectedId, filter = old.filter, membershipId = old.membershipId,
                 now = clock.now(), error = error.message)
         } else if (error is AppFailure && error.kind == FailureKind.DENIED) {
-            mutable.update { it.copy(error = error.message, parcels = emptyList(), pending = emptyList(),
                 selected = null, selectedId = null, credential = null, notices = emptyList(),
                 issues = emptyList(), residents = emptyList(), statistics = null, nextCursor = null, stale = false) }
         } else {
