@@ -265,6 +265,20 @@ class AppController(
             }
         }
     }
+    fun moreNotices() = execute { generation ->
+        val context = state.value
+        val cursor = context.noticeCursor ?: return@execute
+        val page = repository.noticePage(context.membershipId, cursor)
+        if (generation == epoch) mutable.update { it.copy(notices = (it.notices + page.items).distinctBy { notice -> notice.id },
+            noticeCursor = page.nextCursor, serverUnreadCount = page.unreadCount) }
+    }
+    fun moreIssues() = execute { generation ->
+        val context = state.value
+        val cursor = context.issueCursor ?: return@execute
+        val page = repository.issuePage(context.membershipId, cursor)
+        if (generation == epoch) mutable.update { it.copy(issues = (it.issues + page.items).distinctBy { issue -> issue.id },
+            issueCursor = page.nextCursor) }
+    }
     fun preferences(value: CommunicationPreferences) = execute {
         val generation = epoch
         val profile = repository.updatePreferences(value)
