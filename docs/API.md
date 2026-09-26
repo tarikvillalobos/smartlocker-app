@@ -67,3 +67,23 @@ manifesto e journal para substituição e recuperação. O limite do registro é
 fallback para arquivo sem proteção. Logout limpa a sessão local mesmo se não
 for possível confirmar a revogação remota.
 
+## Consistência do contrato
+
+O app consulta `/me` e a lista completa `/me/memberships`. Os IDs usados nos
+caminhos são IDs de vínculo, distintos de IDs físicos de local ou unidade.
+Lockers avulsos podem retornar `unitId` e `unitLabel` nulos em conjunto.
+Capacidades públicas, capacidades do vínculo e configuração da marca limitam
+as opções da interface; o servidor continua responsável por autorizar cada chamada.
+
+Listas de encomendas, avisos e solicitações preservam cursores opacos. Cada ação
+“Carregar mais” solicita uma página. O contador de avisos usa `unreadCount` global;
+indicadores usam `/parcel-metrics`, incluindo valores desconhecidos quando
+`complete=false`, sem inventar totais a partir das linhas visíveis.
+
+Marcação manual e reversão enviam `If-Match` com a versão validada anteriormente.
+Sem versão disponível, o cliente consulta o detalhe antes do comando. Conflitos
+são apresentados ao usuário, sem adotar outra versão e repetir a mutação.
+Código e QR usam somente o conteúdo autorizado pelo servidor, sem persistência
+local; são ocultados ao atingir `revalidateAfter`, expirar ou perder frescor.
+
+## Homologação e integrações pendentes
