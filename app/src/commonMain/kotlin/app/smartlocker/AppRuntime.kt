@@ -29,7 +29,6 @@ class AppRuntime(val platform: PlatformServices, initial: AppConfiguration? = nu
     private fun create(configuration: AppConfiguration): RuntimeState {
         val repository = when (configuration.environment) {
             Environment.DEMO -> DemoRepository(platform.local, platform.secure, configuration.brand, clock)
-            Environment.PRODUCTION -> UnconfiguredRepository()
         }
         val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
         return RuntimeState(configuration, AppController(configuration, repository, clock, scope))
