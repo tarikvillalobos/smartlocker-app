@@ -22,8 +22,6 @@ fun Modifier.keepAboveKeyboard(): Modifier {
     var fieldSize by remember { mutableStateOf(IntSize.Zero) }
     val keyboardBottom = WindowInsets.ime.getBottom(LocalDensity.current)
     val windowSize = LocalWindowInfo.current.containerSize
-    LaunchedEffect(focused, keyboardBottom, windowSize) {
-        if (focused && keyboardBottom > 0) {
             withFrameNanos { }
             requester.bringIntoView()
         }
