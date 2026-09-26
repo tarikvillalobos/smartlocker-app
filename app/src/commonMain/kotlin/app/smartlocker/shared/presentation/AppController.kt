@@ -212,6 +212,7 @@ class AppController(
     fun verifyContact(code: String) = execute { generation ->
         val challenge = state.value.contactChallenge ?: return@execute
         val profile = repository.verifyContactChange(challenge.id, code)
+        if (generation != epoch) return@execute
         mutable.update { it.copy(profile = profile, contactChallenge = null, route = Route.PROFILE,
             feedback = "Contato verificado e atualizado.") }
     }
