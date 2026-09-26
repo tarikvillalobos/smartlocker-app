@@ -6,6 +6,7 @@ info:
   description: |-
     MINUTA PROPOSTA: não descreve uma API existente, publicada ou integrada.
     Documento de base para implementação e revisão conjunta do aplicativo e do futuro fornecedor.
+    O aplicativo inclui um cliente HTTP desta minuta; servidor e integração com hardware pertencem a projetos externos.
 
     O servidor deverá isolar marca, usuário e vínculo em cada operação; conhecer um ID não autoriza acesso.
     X-Brand-Id identifica a distribuição white-label e não é segredo nem prova de autorização.
