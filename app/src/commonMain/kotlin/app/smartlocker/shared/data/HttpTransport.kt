@@ -18,3 +18,23 @@ class HttpTransport(engine: HttpClientEngine, private val baseUrl: String) : Aut
         require(Url(baseUrl).protocol == URLProtocol.HTTPS) { "Production API must use HTTPS" }
         require(Url(baseUrl).user == null && Url(baseUrl).password == null)
     }
+    private val client = HttpClient(engine) {
+        install(ContentNegotiation) { json(Json { ignoreUnknownKeys = true }) }
+        install(HttpTimeout) {
+            connectTimeoutMillis = 10_000
+            requestTimeoutMillis = 20_000
+            socketTimeoutMillis = 20_000
+        }
+        followRedirects = false
+        expectSuccess = false
+    }
+
+    suspend fun execute(
+        documentedPath: String,
+        method: HttpMethod,
+        documentedHeaders: Map<String, String> = emptyMap(),
+        jsonBody: String? = null,
+    ): String {
+        require(documentedPath.startsWith("/") && !documentedPath.startsWith("//"))
+        require(!documentedPath.contains("://") && !documentedPath.contains(".."))
+        try {
