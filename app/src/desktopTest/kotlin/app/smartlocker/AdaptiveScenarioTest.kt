@@ -35,6 +35,7 @@ class AdaptiveScenarioTest {
             onNodeWithText("52998224725").assertExists()
             onNodeWithText("Receber código por SMS").performScrollTo().assertIsDisplayed()
             runOnIdle { controller.login(demoLogin) }
+            waitUntil(timeoutMillis = 10_000) { controller.state.value.challenge != null }
             runOnIdle { controller.verify("123456") }
             waitUntil(15_000) { controller.state.value.profile != null && !controller.state.value.busy }
             runOnIdle { controller.filter(ParcelFilter.WAITING); controller.select("demo-1") }
