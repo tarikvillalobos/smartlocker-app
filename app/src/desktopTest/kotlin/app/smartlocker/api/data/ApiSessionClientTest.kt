@@ -298,3 +298,23 @@ class ApiSessionClientTest {
             client.verifyLogin("challenge-1", "123456")
             suspend fun mutation() = client.request("/memberships/home/parcels/parcel-1/manual-pickup",
                 HttpMethod.Post, headers = mapOf(HttpHeaders.IfMatch to "\"3\""))
+            assertFailsWith<AppFailure> { mutation() }
+            assertEquals(1, keys.size)
+            mutation()
+            assertEquals(2, keys.size)
+            assertNotNull(keys[0])
+            assertEquals(keys[0], keys[1])
+            mutation()
+            assertEquals(3, keys.size)
+            assertNotEquals(keys[1], keys[2])
+        } finally { client.close() }
+    }
+
+    @Test fun malformedUnauthorizedProblemStillExpiresTheSession() = runTest {
+        val clock = TestClock()
+        val secure = MemorySecure()
+        val client = client(clock, secure) { request ->
+            if (request.path().endsWith("/verify")) respond(tokens(clock), headers = JSON)
+            else respond("""{"status":{},"code":[],"detail":"SECRET_FIXTURE_BODY"}""", HttpStatusCode.Unauthorized, PROBLEM)
+        }
+        try {
