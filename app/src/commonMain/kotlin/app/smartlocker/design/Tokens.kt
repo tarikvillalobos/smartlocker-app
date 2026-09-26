@@ -38,3 +38,23 @@ object Tokens {
     val maxContent = 1140.dp
 }
 
+@Composable
+fun SmartLockerTheme(brand: Brand, content: @Composable () -> Unit) {
+    val jakarta = FontFamily(
+        Font(Res.font.jakarta_400, FontWeight.Normal), Font(Res.font.jakarta_500, FontWeight.Medium),
+        Font(Res.font.jakarta_600, FontWeight.SemiBold), Font(Res.font.jakarta_700, FontWeight.Bold),
+    )
+    val sora = FontFamily(
+        Font(Res.font.sora_400, FontWeight.Normal), Font(Res.font.sora_500, FontWeight.Medium),
+        Font(Res.font.sora_600, FontWeight.SemiBold), Font(Res.font.sora_700, FontWeight.Bold),
+    )
+    val body = if (brand.bodyFont == "sora") sora else jakarta
+    val heading = if (brand.headingFont == "jakarta") jakarta else sora
+    fun title(size: Int) = TextStyle(fontFamily = heading, fontSize = size.sp,
+        fontWeight = FontWeight.Bold, lineHeight = (size * 1.3).sp)
+    fun text(size: Int, weight: FontWeight = FontWeight.Normal) =
+        TextStyle(fontFamily = body, fontSize = size.sp, fontWeight = weight, lineHeight = (size * 1.5).sp)
+    MaterialTheme(
+        colorScheme = lightColorScheme(primary = Color(brand.primary), secondary = Color(brand.dark),
+            background = Tokens.background, surface = Color.White, onSurface = Tokens.text,
+            onBackground = Tokens.text, outline = Tokens.strongBorder, error = Tokens.destructive,
