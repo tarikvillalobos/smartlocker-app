@@ -28,18 +28,6 @@ Consulte [OPENAPI.md](OPENAPI.md) e os registros datados de [VALIDATION.md](VALI
 A seleção de demonstração é explícita. Falhas de configuração, autenticação ou
 rede em produção nunca trocam o repositório para dados demonstrativos.
 
-1. Aprovação ou revisão da minuta pelo fornecedor que implementará a API.
-2. URLs de homologação e produção por cliente/ambiente.
-3. Mecanismo de login por SMS/e-mail, desafio, verificação, expiração e reenvio.
-4. Formato e armazenamento de sessão, renovação, logout e revogação.
-5. Autorizações por usuário, cliente, local, unidade e destinatário.
-6. Paginação, ordenação e definição do período dos indicadores.
-7. Credencial de retirada: payload/imagem, validade, escopo, estados e atualização.
-8. Capacidade de marcação manual e desfazer; eventos de confirmação física.
-9. Preferências, disponibilidade dos canais e permissões de contatos.
-10. Avisos, push, deep links, registro do dispositivo e identificadores permitidos.
-11. Relatos e consulta de solicitações; disponibilidade por cliente.
-12. Política de cache, ETags, erros, limites e idempotência, quando existentes.
 
 ## Trabalho após homologar e disponibilizar o contrato
 
