@@ -145,7 +145,6 @@ class AppController(
         if (selected?.status == ParcelStatus.WAITING) {
             try { credential = LoadPickupCredential(repository, clock)(location, selected) }
             catch (error: AppFailure) {
-                if (error.kind in setOf(FailureKind.EXPIRED_CODE, FailureKind.UNAVAILABLE)) credentialMessage = error.message
                 else throw error
             }
         }
