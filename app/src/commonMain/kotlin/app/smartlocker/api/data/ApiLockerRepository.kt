@@ -278,3 +278,23 @@ class ApiLockerRepository(private val session: ApiSessionClient) : LockerReposit
     }
     private suspend fun clearCache() = cacheMutex.withLock {
         memberships.clear(); reviewedParcels.clear(); cacheUser = null
+    }
+    private fun currentUser(): String = session.currentSession()?.userId
+        ?: throw AppFailure(FailureKind.EXPIRED_SESSION, "Sua sessão expirou. Entre novamente.")
+    private fun checkUser(user: String) {
+        if (session.currentSession()?.userId != user)
+            throw AppFailure(FailureKind.EXPIRED_SESSION, "Sua sessão mudou. Entre novamente.")
+    }
+    private fun membershipPath(id: String) = "/memberships/${identifier(id)}"
+    private fun parcelPath(membershipId: String, id: String) = "${membershipPath(membershipId)}/parcels/${identifier(id)}"
+    private fun identifier(value: String): String {
+        if (!Regex("[A-Za-z0-9_-]{1,128}").matches(value))
+            throw AppFailure(FailureKind.VALIDATION, "Identificador inválido.")
+        return value
+    }
+    private fun pagePath(path: String, cursor: String?): String {
+        if (cursor != null && (cursor.isEmpty() || cursor.length > 2048))
+            throw AppFailure(FailureKind.VALIDATION, "A página solicitada não é válida. Atualize a lista.")
+        return "$path?limit=20" + (cursor?.let { "&cursor=${it.encodeURLParameter()}" } ?: "")
+    }
+    private fun validateCursor(current: String?, next: String?) {
