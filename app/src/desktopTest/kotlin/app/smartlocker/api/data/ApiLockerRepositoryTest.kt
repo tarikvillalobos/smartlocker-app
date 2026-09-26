@@ -58,3 +58,23 @@ class ApiLockerRepositoryTest {
             assertEquals(listOf(HttpMethod.Get, HttpMethod.Post), requests.map { request -> request.method })
             assertTrue(requests.all { request -> request.headers["X-Brand-Id"] == "smartlocker" })
             assertTrue(requests.all { request -> request.headers[HttpHeaders.Authorization] == "Bearer access-1" })
+        }
+    }
+
+    @Test fun successfulManualAndUndoUseEachReturnedVersion() = runTest {
+        withRepository { request ->
+            when (request.method) {
+                HttpMethod.Get -> json(parcel())
+                HttpMethod.Post -> {
+                    assertEquals("\"3\"", request.headers["If-Match"])
+                    json(parcel(status = "manual", version = 4))
+                }
+                HttpMethod.Delete -> {
+                    assertEquals("\"4\"", request.headers["If-Match"])
+                    json(parcel(version = 5).copy(credentialStatus = "revoked"))
+                }
+                else -> error("Unexpected method")
+            }
+        }.useSuspend {
+            assertEquals(ParcelStatus.MANUAL, it.repo.markCollected("member-1", "parcel-1").status)
+            val undone = it.repo.undoManual("member-1", "parcel-1")
