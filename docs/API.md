@@ -30,7 +30,6 @@ rede em produção nunca trocam o repositório para dados demonstrativos.
 
 ## Configurar o endpoint
 
-## Trabalho após homologar e disponibilizar o contrato
 
 Criar DTOs em `data` e mapeamentos validados para os modelos de domínio. Implementar
 `LockerRepository` com o transporte e a autenticação documentados. Injetar esse
