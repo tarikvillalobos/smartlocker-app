@@ -108,5 +108,6 @@ fun ContactScreen(state: AppState, controller: AppController) {
         TextButton(controller::resendContact, enabled = !state.busy && seconds == 0L) {
             Text(if (seconds > 0) "Reenviar em ${seconds}s" else "Reenviar código")
         }
+        TextButton({ code = ""; controller.correctProfileContact() }, enabled = !state.busy) { Text("Corrigir novo contato") }
     }
 }
