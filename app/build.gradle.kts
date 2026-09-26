@@ -73,9 +73,6 @@ compose.desktop {
         args += "--brand=$packageBrand"
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "SmartLocker"
-            packageVersion = "1.0.0"
-            modules("java.sql", "java.net.http", "jdk.unsupported")
         }
     }
 }
