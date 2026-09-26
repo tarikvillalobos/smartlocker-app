@@ -132,6 +132,7 @@ private fun EnvironmentHeader(runtime: AppRuntime, holder: RuntimeState, state: 
             if (state.session == null) {
                 var menu by remember { mutableStateOf(false) }
                 Box {
+                    TextButton({ menu = true }) { Text(holder.controller.brand.name, style = MaterialTheme.typography.labelSmall) }
                     DropdownMenu(menu, { menu = false }) {
                         Brands.all.forEach { brand -> DropdownMenuItem(text = { Text(brand.name) },
                             onClick = { menu = false; runtime.configure(brand = brand) }) }
