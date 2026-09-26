@@ -37,6 +37,7 @@ class NativeAppFlowTest {
         context.getSharedPreferences("smartlocker.local", Context.MODE_PRIVATE).edit().clear()
             .putString("brand", Brands.smartLocker.id).putString("environment", "DEMO").commit()
         scenario = ActivityScenario.launch(MainActivity::class.java)
+        waitForWindowFocus()
         waitForText("Preencher dados de demonstração")
     }
 
