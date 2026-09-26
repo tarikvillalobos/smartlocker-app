@@ -18,3 +18,23 @@ class DesktopServices : PlatformServices {
             val digest = MessageDigest.getInstance("SHA-256").digest(key.toByteArray())
             return directory.resolve(digest.joinToString("") { "%02x".format(it) } + ".json")
         }
+        override fun read(key: String): String? = path(key).let { if (Files.exists(it)) Files.readString(it) else null }
+        override fun write(key: String, value: String?) {
+            val file = path(key)
+            if (value == null) Files.deleteIfExists(file)
+            else {
+                val temporary = Files.createTempFile(directory, "cache-", ".tmp")
+                restrict(temporary)
+                Files.writeString(temporary, value)
+                Files.move(temporary, file, java.nio.file.StandardCopyOption.REPLACE_EXISTING)
+            }
+        }
+    }
+    override val secure: SecureStorage = DesktopSecureStorage(directory)
+    override fun copyText(value: String) {
+        Toolkit.getDefaultToolkit().systemClipboard.setContents(StringSelection(value), null)
+    }
+    override fun openLink(url: String): Boolean = runCatching {
+        val uri = URI(url)
+        require(uri.scheme in setOf("https", "mailto"))
+        if (uri.scheme == "mailto") Desktop.getDesktop().mail(uri) else Desktop.getDesktop().browse(uri)
