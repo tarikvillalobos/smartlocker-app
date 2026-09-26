@@ -78,3 +78,20 @@ Artefatos Xcode ficam em `artifacts/`, ignorados pelo Git.
 
 ## Integração contínua e histórico
 
+A CI configura auditoria de commits, desktop em macOS/Windows/Linux, build/lint
+Android e build do simulador iOS. A primeira execução encontrou o pacote Android
+obsoleto `tools`; os jobs agora especificam os pacotes suportados e isolam o SDK.
+A execução final será identificada aqui após receber o resultado remoto.
+
+A auditoria exige um arquivo textual e até 20 linhas alteradas por commit de
+implementação, com autoria `tarik.villalobos@gmail.com`. O README inicial é
+preexistente e está fora dessa contagem. Nenhum binário foi adicionado ao Git.
+
+## Pendências externas
+
+Documentação, credenciais e homologação da API não foram fornecidas. Não há
+integração real validada com autenticação, lockers, SMS, e-mail, WhatsApp ou push.
+A demonstração contém dados fictícios e nunca substitui a API após falha.
+Continuam pendentes aparelhos físicos, leitores de tela, cofres Windows/Linux,
+permissões/push reais, assinatura de pacotes e distribuição.
+O produto ainda não está pronto para produção.
