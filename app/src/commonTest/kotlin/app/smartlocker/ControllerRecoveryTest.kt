@@ -78,3 +78,23 @@ class ControllerRecoveryTest {
         val demo = DemoRepository(MemoryStorage(), MemorySecure(), Brands.smartLocker, clock, 0)
         demo.signIn()
         val repository = object : LockerRepository by demo {
+            override suspend fun verifyLogin(challengeId: String, code: String): Session =
+                demo.verifyLogin(challengeId, code).copy(userId = "different-user")
+        }
+        val controller = AppController(AppConfiguration(Brands.smartLocker, Environment.DEMO), repository, clock, backgroundScope)
+        controller.state.first { it.profile != null }
+        controller.membership("office")
+        controller.state.first { !it.busy && it.membershipId == "office" }
+        controller.select("demo-8")
+        controller.state.first { !it.busy && it.selected?.id == "demo-8" }
+        clock.time = controller.state.value.session!!.expiresAt
+        advanceTimeBy(1_001)
+        runCurrent()
+        controller.login(demoLogin)
+        controller.state.first { it.challenge != null }
+        controller.verify("123456")
+        val current = controller.state.first { it.profile != null && !it.busy }
+        assertEquals(Route.HOME, current.route)
+        assertEquals("home", current.membershipId)
+        assertNotEquals("demo-8", current.selectedId)
+    }
