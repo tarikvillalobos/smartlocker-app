@@ -33,7 +33,6 @@ fun LoginScreen(controller: AppController, state: AppState, legal: () -> Unit) {
             Surface(shape = Tokens.control, color = Color.White.copy(alpha = .08f), contentColor = Tokens.soft) {
                 Row(Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    AppIcon(Symbol.PARCEL)
                     Text(brand.name, style = MaterialTheme.typography.labelLarge)
                 }
             }
