@@ -48,7 +48,6 @@ Relatórios: `core/build/reports/tests/jvmTest/` e `app/build/reports/tests/desk
 
 A base em `docs/api/openapi.yaml` contém **23 caminhos, 26 operações e 38 schemas**.
 A validação formal de OpenAPI 3.1.1, referências locais e oito exemplos passou.
-Também passaram **21 casos positivos e negativos de JSON Schema**, cobrindo
 CPF, contatos/canais, OTP, preferências, métricas, UTC e cadastro push.
 
 Execute `scripts/validate_openapi.py` e `scripts/check_openapi_cases.py` no ambiente
