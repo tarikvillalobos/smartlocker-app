@@ -2178,3 +2178,23 @@ components:
         - "code"
         - "qrPayload"
         - "status"
+        - "verifiedAt"
+        - "expiresAt"
+        - "revalidateAfter"
+      description: |-
+        Somente credencial ativa e encomenda waiting. verifiedAt <= revalidateAfter <= expiresAt; o app oculta
+        código/QR ao atingir revalidateAfter ou perder confirmação de conectividade. O servidor continua sendo fonte
+        de autorização no instante da retirada.
+    DeliveryNotice:
+      type: "object"
+      properties:
+        id:
+          $ref: "#/components/schemas/Identifier"
+        membershipId:
+          $ref: "#/components/schemas/Identifier"
+        parcelId:
+          $ref: "#/components/schemas/Identifier"
+        title:
+          type: "string"
+          minLength: 1
+          maxLength: 200
