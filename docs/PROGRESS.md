@@ -12,6 +12,11 @@ Atualizado em 26/09/2026. Consulte [VALIDATION.md](VALIDATION.md) para as evidê
 - [x] Layout adaptativo, fonte a 200%, paisagem e redimensionamento.
 - [x] Builds Android/iOS e testes compartilhados executados.
 - [x] Documentação de arquitetura, API, marcas, execução e distribuição.
+- [x] Base OpenAPI 3.1.1 proposta, validada e documentada, solicitada pelo usuário.
+- [x] Regressões de sessão/local, paginação, contato, avisos e concorrência corrigidas.
+- [x] Sete testes nativos Android aprovados, incluindo Keystore e fluxo com rotação.
+- [x] DMG local gerado; workflow de pacotes desktop das duas marcas e iOS configurado.
+- [ ] API real: implementação externa, credenciais e homologação ainda indisponíveis.
 - [ ] Integrações reais com locker, push, SMS, e-mail e WhatsApp.
 - [ ] Ensaios em aparelhos físicos, TalkBack/VoiceOver e cofres Windows/Linux.
 - [ ] Assinatura, notarização e distribuição para lojas.
