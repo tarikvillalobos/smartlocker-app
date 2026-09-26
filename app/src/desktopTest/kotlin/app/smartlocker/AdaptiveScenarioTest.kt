@@ -74,6 +74,7 @@ class AdaptiveScenarioTest {
             waitUntil(timeoutMillis = 15_000) { controller.state.value.parcels.size == 40 && !controller.state.value.busy }
             capture("many-390-2x")
             runOnIdle { controller.demoScenario(DemoScenario.EMPTY); controller.navigate(Route.HOME) }
+            waitUntil(timeoutMillis = 15_000) { controller.state.value.parcels.isEmpty() && !controller.state.value.busy }
             onNodeWithText("Tudo em dia!").performScrollTo().assertIsDisplayed()
             onNodeWithText("Copiar código").assertDoesNotExist()
             capture("empty-390-2x")
