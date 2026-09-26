@@ -78,6 +78,8 @@ O build iOS usa `CODE_SIGNING_ALLOWED=NO`. O plist final contém a chave boolean
 e renderizou o login no iOS 26.2. O target `SmartLockerUITests` passou: **1 teste
 nativo adicional**, digitando um contato com o teclado aberto e preservando seu
 valor ao girar de retrato para paisagem e voltar. iPhone 17 Pro: 402 × 874 pt.
+As capturas do XCTest acompanham `artifacts/ios-screen-verified`;
+`artifacts/native-screen-screenshots/` contém a exportação. Artefatos são ignorados pelo Git.
 Resultado local total: 26 testes JVM/Compose e 1 teste XCTest aprovados.
 
 ## Integração contínua e histórico
