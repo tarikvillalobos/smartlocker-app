@@ -278,3 +278,23 @@ paths:
             "application/json":
               schema:
                 $ref: "#/components/schemas/SessionTokens"
+        "400":
+          $ref: "#/components/responses/Problem"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "409":
+          $ref: "#/components/responses/Problem"
+        "422":
+          $ref: "#/components/responses/Problem"
+        "429":
+          $ref: "#/components/responses/Problem"
+        "503":
+          $ref: "#/components/responses/Problem"
+        default:
+          $ref: "#/components/responses/Problem"
+  "/auth/logout":
+    post:
+      operationId: "logoutSession"
+      tags:
+        - "Authentication"
+      summary: "Revogar a sessão atual"
