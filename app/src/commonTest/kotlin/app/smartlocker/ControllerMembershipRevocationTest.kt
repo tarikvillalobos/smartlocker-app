@@ -118,3 +118,23 @@ class ControllerMembershipRevocationTest {
         assertEquals("office", failed.membershipId)
         assertEquals(listOf("office"), failed.profile!!.memberships.map { it.id })
         assertTrue(failed.stale)
+        assertEquals("Sem rede", failed.error)
+    }
+
+    @Test fun contactVerificationWithNoMembershipLeavesNoScopedDataOrCapabilities() = runTest {
+        val clock = TestClock()
+        val demo = DemoRepository(MemoryStorage(), MemorySecure(), Brands.smartLocker, clock, 0)
+        demo.signIn()
+        var revoked = false
+        var parcelReadsAfterRevocation = 0
+        val repository = object : LockerRepository by demo {
+            override suspend fun verifyContactChange(challengeId: String, code: String): Profile =
+                demo.verifyContactChange(challengeId, code).copy(memberships = emptyList()).also { revoked = true }
+            override suspend fun parcels(locationId: String, filter: ParcelFilter, cursor: String?): ParcelPage {
+                if (revoked) parcelReadsAfterRevocation++
+                return demo.parcels(locationId, filter, cursor)
+            }
+        }
+        val controller = start(repository, clock)
+        controller.contact("new@example.test", LoginChannel.EMAIL)
+        controller.state.first { !it.busy && it.contactChallenge != null }
