@@ -78,3 +78,23 @@ class ApiLockerRepository(private val session: ApiSessionClient) : LockerReposit
     }
 
     override suspend fun statistics(locationId: String): Statistics {
+        val user = currentUser()
+        membership(locationId, user)
+        // Omitting both dates requests the server's complete rolling 30-day window.
+        return request<ApiParcelMetrics>(user, "${membershipPath(locationId)}/parcel-metrics").toDomain()
+    }
+
+    override suspend fun credential(locationId: String, parcelId: String): PickupCredential {
+        val user = currentUser()
+        membership(locationId, user)
+        val response = request<ApiPickupCredential>(user, "${parcelPath(locationId, parcelId)}/pickup-credential")
+        requireResponse(response.membershipId == locationId && response.parcelId == parcelId)
+        return response.toDomain()
+    }
+
+    override suspend fun markCollected(locationId: String, parcelId: String): Parcel =
+        manualPickup(locationId, parcelId, undo = false)
+
+    override suspend fun undoManual(locationId: String, parcelId: String): Parcel =
+        manualPickup(locationId, parcelId, undo = true)
+
