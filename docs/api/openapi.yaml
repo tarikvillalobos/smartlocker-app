@@ -1298,3 +1298,23 @@ components:
       required: true
       schema:
         type: "string"
+        format: "uuid"
+      description: "UUID aleatória por instalação; não usar identificador de hardware ou publicidade."
+    InstallationKey:
+      name: "X-Installation-Key"
+      in: "header"
+      required: true
+      schema:
+        type: "string"
+        pattern: "^[A-Za-z0-9_-]{43}$"
+      description: |-
+        Segredo aleatório de 32 bytes (base64url sem padding) por instalação/marca, gerado por CSPRNG e guardado no
+        cofre. Primeiro registro vincula seu hash à instalação; todo PUT/DELETE posterior exige a mesma prova de
+        posse. Logout remove destinatário/token push, mas não permite sobrescrever essa prova só por conhecer
+        installationId. Nunca registrar esta chave em logs ou utilizá-la como autenticação da conta.
+    IdempotencyKey:
+      name: "Idempotency-Key"
+      in: "header"
+      required: true
+      schema:
+        type: "string"
