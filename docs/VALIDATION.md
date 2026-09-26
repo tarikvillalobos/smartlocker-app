@@ -58,3 +58,23 @@ nem ensaios de dobradiça física ou de foco por teclado em cada sistema.
 | --- | --- | --- |
 | Desktop macOS | Compilação e testes Compose/JVM aprovados | DMG e assinatura não ensaiados |
 | Android | APK debug e lint aprovados | Distribuição e aparelho físico pendentes |
+| iOS | Host SwiftUI/Compose compilado; login aberto em iPhone 17 Pro simulado | Assinatura e aparelho físico pendentes |
+| Windows/Linux | Entrypoints, cofres e CI configurados | Estado dos jobs indicado abaixo; cofres nativos não ensaiados |
+
+Android: `:androidApp:assembleDebug :androidApp:lintDebug`, com **0 erros e
+2 avisos** sobre atualização do SDK 35. APK em
+`androidApp/build/outputs/apk/debug/androidApp-debug.apk`.
+
+O lint do AGP utilizado falhou ao enumerar a plataforma global Android 37.0.
+A validação passou com cópia isolada dos componentes Android 35, sem modificar
+o SDK global. `scripts/prepare_android_sdk.py` reproduz essa preparação; a CI
+também usa essa cópia. Não foram ocultadas regras de lint.
+
+O build iOS usa `CODE_SIGNING_ALLOWED=NO`. O plist final contém a chave booleana
+`CADisableMinimumFrameDurationOnPhone=true`, exigida pelo Compose. O app abriu
+e renderizou o login no iOS 26.2. O target `SmartLockerUITests` verifica teclado
+e rotação; o resultado dessa execução nativa é registrado ao concluir o ensaio.
+Artefatos Xcode ficam em `artifacts/`, ignorados pelo Git.
+
+## Integração contínua e histórico
+
