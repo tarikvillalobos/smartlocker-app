@@ -116,7 +116,6 @@ class AppController(
         var credential: PickupCredential? = null
         var credentialMessage: String? = null
         if (selected?.status == ParcelStatus.WAITING) {
-            try { credential = repository.credential(location, selected.id) }
             catch (error: AppFailure) {
                 if (error.kind in setOf(FailureKind.EXPIRED_CODE, FailureKind.UNAVAILABLE)) credentialMessage = error.message
                 else throw error
