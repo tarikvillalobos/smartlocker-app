@@ -69,3 +69,23 @@ xcodegen generate --spec iosApp/project.yml
 open iosApp/SmartLocker.xcodeproj
 ```
 
+Selecione o scheme SmartLocker e um simulador. O build phase compila e incorpora
+o framework Compose. Configure uma equipe Apple e o bundle ID para um aparelho
+físico. O projeto Xcode é gerado e ignorado pelo Git; edite `project.yml`.
+
+## Fluxo demonstrativo
+
+1. Selecione a marca e “Experimentar demonstração”.
+2. Use “Preencher dados de demonstração”. São identificadores fictícios.
+3. Solicite o código por SMS ou e-mail e digite **123456**.
+4. Selecione uma encomenda pendente e veja seu código, QR, prazo e compartimento.
+5. Em Perfil → Cenários de demonstração, simule uma nova entrega.
+6. Abra o aviso correspondente e selecione “Simular retirada física”.
+7. Confira o status e os indicadores no histórico.
+8. Em outra encomenda, experimente a marcação manual e sua confirmação.
+   “Desfazer” remove apenas a marcação; o código revogado permanece inválido.
+9. Altere preferências, verifique um novo contato e registre um relato.
+
+O código de login demonstrativo expira em cinco minutos, permite cinco tentativas
+e tem intervalo de reenvio de 30 segundos. Esses valores não definem o contrato
+externo. O logout limpa a sessão e os dados fictícios sensíveis daquele contexto.
