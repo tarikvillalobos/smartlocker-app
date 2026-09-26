@@ -98,3 +98,23 @@ class ChunkedSecureStoreTest {
     @Test fun cancellationLeavesTrackedChunksAndNeverCommitsPartialData() = runTest {
         val memory = MemorySecure()
         val storage = object : SecureStorage by memory {
+            var cancel = false
+            override suspend fun write(key: String, value: String?) {
+                if (cancel && ".chunk." in key && key.endsWith(".1") && value != null) throw CancellationException()
+                memory.write(key, value)
+            }
+        }
+        val store = ChunkedSecureStore(storage, KEY)
+        store.write("previous")
+        storage.cancel = true
+        assertFailsWith<CancellationException> { store.write("replacement".repeat(1000)) }
+        storage.cancel = false
+        assertTrue(ChunkedSecureStore(storage, KEY).read() == "previous")
+        assertEquals(2, memory.values.size)
+    }
+
+    @Test fun missingTruncatedOrModifiedChunksFailWithoutRevealingPayloads() = runTest {
+        for (corruption in 0..2) {
+            val memory = MemorySecure()
+            val store = ChunkedSecureStore(memory, KEY)
+            store.write("private-session".repeat(1000))
