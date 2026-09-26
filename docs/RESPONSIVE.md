@@ -5,6 +5,7 @@ A UI mede as restrições da janela. Não utiliza uma tela fixa de 390 × 844.
 - Abaixo de 600 dp: navegação inferior, coluna única e detalhe em rota própria.
 - A partir de 600 dp, se largura/escala de fonte ≥ 440: navigation rail.
 - A partir de 1000 dp, se largura/escala ≥ 800: histórico e detalhe lado a lado.
+- Fonte a partir de 150%: ações da navegação inferior quebram em linhas completas.
 - Formulários de login: máximo 480 dp. Páginas comuns: máximo 600 dp.
 - Todos os conteúdos extensos rolam; não há altura fixa de card ou campo de texto.
 - Chips, indicadores e grupos numéricos usam quebra de linha.
