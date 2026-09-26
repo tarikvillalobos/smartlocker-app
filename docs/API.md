@@ -25,6 +25,8 @@ Consulte [OPENAPI.md](OPENAPI.md) e os registros datados de [VALIDATION.md](VALI
 - Testes MockEngine do transporte, autenticação e operações de negócio; testes
   controlados usam dados sintéticos, sem criar um servidor para o aplicativo.
 
+A seleção de demonstração é explícita. Falhas de configuração, autenticação ou
+rede em produção nunca trocam o repositório para dados demonstrativos.
 
 1. Aprovação ou revisão da minuta pelo fornecedor que implementará a API.
 2. URLs de homologação e produção por cliente/ambiente.
