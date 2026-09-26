@@ -1018,3 +1018,23 @@ paths:
           $ref: "#/components/responses/Problem"
         "429":
           $ref: "#/components/responses/Problem"
+        "503":
+          $ref: "#/components/responses/Problem"
+        default:
+          $ref: "#/components/responses/Problem"
+  "/memberships/{membershipId}/issues":
+    parameters:
+      -
+        $ref: "#/components/parameters/MembershipId"
+    get:
+      operationId: "listSupportIssues"
+      tags:
+        - "Support"
+      summary: "Listar solicitações autorizadas do vínculo"
+      description: "Ordenar por createdAt descendente e id ascendente; cursor usa snapshot estável."
+      x-required-permission: "support:read"
+      parameters:
+        -
+          $ref: "#/components/parameters/BrandId"
+        -
+          $ref: "#/components/parameters/Cursor"
