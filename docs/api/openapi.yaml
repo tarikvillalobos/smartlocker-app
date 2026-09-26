@@ -638,3 +638,23 @@ paths:
         default:
           $ref: "#/components/responses/Problem"
   "/memberships/{membershipId}/parcels":
+    parameters:
+      -
+        $ref: "#/components/parameters/MembershipId"
+    get:
+      operationId: "listParcels"
+      tags:
+        - "Parcels"
+      summary: "Listar encomendas autorizadas com paginação"
+      description: |-
+        Ordenação fixa depositedAt descendente, id ascendente como desempate; todas as páginas seguem um snapshot
+        estável. Novas entregas exigem atualização da primeira página. Nunca incluir encomendas de coabitantes sem
+        concessão explícita.
+      x-required-permission: "parcels:read"
+      parameters:
+        -
+          $ref: "#/components/parameters/BrandId"
+        -
+          $ref: "#/components/parameters/Cursor"
+        -
+          $ref: "#/components/parameters/Limit"
