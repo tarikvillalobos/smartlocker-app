@@ -138,3 +138,23 @@ paths:
                 $ref: "#/components/schemas/Challenge"
         "400":
           $ref: "#/components/responses/Problem"
+        "409":
+          $ref: "#/components/responses/Problem"
+        "422":
+          $ref: "#/components/responses/Problem"
+        "429":
+          $ref: "#/components/responses/Problem"
+        "503":
+          $ref: "#/components/responses/Problem"
+        default:
+          $ref: "#/components/responses/Problem"
+  "/auth/challenges/{challengeId}/resend":
+    parameters:
+      -
+        $ref: "#/components/parameters/ChallengeId"
+    post:
+      operationId: "resendLoginChallenge"
+      tags:
+        - "Authentication"
+      summary: "Reenviar código de login"
+      description: |-
