@@ -1938,3 +1938,23 @@ components:
           minLength: 1
           maxLength: 100
         size:
+          type:
+            - "string"
+            - "null"
+          maxLength: 50
+        depositedAt:
+          $ref: "#/components/schemas/Instant"
+        notifiedAt:
+          anyOf:
+            -
+              $ref: "#/components/schemas/Instant"
+            -
+              type: "null"
+        deadline:
+          $ref: "#/components/schemas/Instant"
+        manualAt:
+          anyOf:
+            -
+              $ref: "#/components/schemas/Instant"
+            -
+              type: "null"
