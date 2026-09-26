@@ -98,3 +98,23 @@ fun ScrollPage(maxWidth: Int = 600, content: @Composable ColumnScope.() -> Unit)
     Column(Modifier.widthIn(max = maxWidth.dp).fillMaxWidth().fillMaxHeight()
         .verticalScroll(rememberScrollState()).padding(Tokens.gutter),
         verticalArrangement = Arrangement.spacedBy(Tokens.gap), content = content)
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun EnvironmentHeader(runtime: AppRuntime, holder: RuntimeState, state: AppState) {
+    val demo = holder.configuration.environment == Environment.DEMO
+    Surface(color = if (demo) Tokens.success else Tokens.background) {
+        FlowRow(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 2.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.Center) {
+            Text(if (demo) "Demonstração · dados fictícios" else "API externa · não configurada",
+                Modifier.padding(vertical = 12.dp), style = MaterialTheme.typography.bodySmall,
+                color = if (demo) Tokens.successText else Tokens.secondary)
+            if (state.session == null) {
+                var menu by remember { mutableStateOf(false) }
+                Box {
+                    TextButton({ menu = true }) { Text(holder.configuration.brand.name, style = MaterialTheme.typography.labelSmall) }
+                    DropdownMenu(menu, { menu = false }) {
+                        Brands.all.forEach { brand -> DropdownMenuItem(text = { Text(brand.name) },
+                            onClick = { menu = false; runtime.configure(brand = brand) }) }
+                    }
