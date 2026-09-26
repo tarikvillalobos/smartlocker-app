@@ -28,7 +28,6 @@ class AppController(
                 mutable.update { it.copy(now = clock.now()) }
             }
         }
-        execute {
             val session = repository.restoreSession()
             mutable.update { it.copy(session = session, initialized = true) }
             if (session != null) load()
