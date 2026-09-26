@@ -216,6 +216,20 @@ class AppController(
         val generation = epoch
         val message = action(context)
         if (generation == epoch) {
+            mutable.update { it.copy(feedback = message, credential = null, stale = true) }
+            refreshAfterMutation(generation)
+        }
+    }
+    private suspend fun refreshAfterMutation(generation: Int) {
+        try { load(generation) }
+        catch (error: CancellationException) { throw error }
+        catch (error: Exception) {
+            if (generation == epoch) {
+                handle(error)
+                if (state.value.session != null) mutable.update {
+                    it.copy(error = "A operação foi concluída, mas a atualização falhou. Atualize para conferir.")
+                }
+            }
         }
     }
     fun preferences(value: CommunicationPreferences) = execute {
