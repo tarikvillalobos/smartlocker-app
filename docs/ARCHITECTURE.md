@@ -25,6 +25,8 @@ operação e informa separadamente que os dados precisam ser atualizados.
   reutilizados após login do mesmo usuário e revalidação dos vínculos retornados.
 - Erros preservam os metadados visíveis como desatualizados e removem códigos.
 - Credenciais só são exibidas enquanto ativas, não expiradas e verificadas
+  recentemente. Em produção, `revalidateAfter` define quando ocultá-las até nova
+  consulta. A demonstração mantém sua janela local de 60 segundos.
 - Não existe fila offline de confirmação com sucesso otimista.
 
 ## Ciclo de vida Android
