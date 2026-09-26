@@ -58,3 +58,11 @@ seleciona outro. `--output artifacts/nova-execucao` preserva resultados anterior
 
 O ZIP de CI contém `SmartLocker.app` para simulador arm64. Não é um IPA para iPhone.
 Distribuição em aparelho exige equipe Apple, provisioning e exportação assinada.
+O projeto inclui ícones; selecione `AuroraIcon` e ajuste nome/bundle ID para outra marca,
+além de configurar a identidade inicial do runtime. Veja [BRANDING.md](BRANDING.md).
+
+## Evidências
+
+Consulte [VALIDATION.md](VALIDATION.md) para distinguir build, teste nativo,
+inspeção visual e integração real. Binários, catálogos de ícones e relatórios são
+gerados em diretórios ignorados; apenas suas fontes textuais são versionadas.
