@@ -43,10 +43,6 @@ fragmento. Endpoint e identificador público de marca não são segredos.
 - Testes ou composição programática: `AppConfiguration.apiBaseUrl` permite
   injetar o endpoint e `AppRuntime.engineFactory` permite usar MockEngine.
 
-Adicionar testes de contrato para payloads desconhecidos, expiração, paginação,
-autorização, respostas atrasadas e retirada concorrente. Implementar registro de
-push somente quando a API determinar fornecedor e protocolo. A central local
-não representa push integrado.
 
 O servidor externo deverá emitir, consumir, revogar e autorizar credenciais;
 nenhuma validação no app prova a segurança interna desse servidor. Os QR Codes
