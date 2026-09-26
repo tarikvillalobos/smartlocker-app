@@ -25,6 +25,11 @@ class AppController(
         scope.launch {
             while (isActive) {
                 delay(1_000)
+                val now = clock.now()
+                mutable.update { it.copy(now = now) }
+                if (state.value.session?.expiresAt?.let { now >= it } == true) {
+                    handle(AppFailure(FailureKind.EXPIRED_SESSION, "Sua sessão expirou. Entre novamente."))
+                }
             }
         }
         execute { generation ->
