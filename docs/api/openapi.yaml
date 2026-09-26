@@ -1158,3 +1158,23 @@ paths:
         "503":
           $ref: "#/components/responses/Problem"
         default:
+          $ref: "#/components/responses/Problem"
+  "/devices/{installationId}/push-registration":
+    parameters:
+      -
+        $ref: "#/components/parameters/InstallationId"
+      -
+        $ref: "#/components/parameters/InstallationKey"
+    put:
+      operationId: "registerPushDevice"
+      tags:
+        - "Devices"
+      summary: "Registrar ou substituir o token push desta instalação"
+      description: |-
+        Opcional, condicionado a pushRegistration e canal push disponíveis. Vincular à sessão e marca atuais. Cada
+        instalação/marca tem um único destinatário ativo; troca de conta só substitui o vínculo com a mesma prova de
+        posse. PUT é idempotente. Chave de instalação divergente retorna 403 sem alterar o registro. O servidor não
+        devolve token ou chave.
+      x-required-permission: "devices:write"
+      parameters:
+        -
