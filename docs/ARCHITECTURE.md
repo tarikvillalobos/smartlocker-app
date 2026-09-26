@@ -105,3 +105,7 @@ Registro e recebimento nativo de push ainda não fazem parte dessa integração.
 
 ## Extensão
 
+Novas integrações devem implementar portas existentes. Evoluções do protocolo
+devem ser alinhadas com o projeto externo e registradas no OpenAPI antes de
+alterar o cliente. A lista de moradores não concede acesso às encomendas de outra
+pessoa. Flags escondem e bloqueiam rotas, mas não substituem autorização.
