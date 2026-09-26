@@ -1638,3 +1638,23 @@ components:
             - "sms"
             - "email"
             - "whatsapp"
+            - "push"
+      required:
+        - "features"
+        - "channels"
+    BrandConfiguration:
+      type: "object"
+      properties:
+        brandId:
+          $ref: "#/components/schemas/Identifier"
+        appName:
+          type: "string"
+          minLength: 1
+          maxLength: 100
+        capabilities:
+          $ref: "#/components/schemas/Capabilities"
+        supportEmail:
+          type:
+            - "string"
+            - "null"
+          format: "email"
