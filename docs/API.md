@@ -34,11 +34,6 @@ Use a URL base HTTPS disponibilizada pelo projeto do backend, incluindo o prefix
 de versão, como `/v1`. A configuração não aceita credenciais na URL, query ou
 fragmento. Endpoint e identificador público de marca não são segredos.
 
-Criar DTOs em `data` e mapeamentos validados para os modelos de domínio. Implementar
-`LockerRepository` com o transporte e a autenticação documentados. Injetar esse
-adaptador no ramo PRODUCTION de `AppRuntime`; nunca delegar para `DemoRepository`.
-Configurar o endpoint em `AppConfiguration.apiBaseUrl` a partir do ambiente da
-marca, sem segredos embutidos. Validar os fluxos em homologação com contas de teste.
 
 Adicionar testes de contrato para payloads desconhecidos, expiração, paginação,
 autorização, respostas atrasadas e retirada concorrente. Implementar registro de
