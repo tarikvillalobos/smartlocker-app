@@ -17,7 +17,6 @@ O modo de produção informa essa indisponibilidade e nunca usa demonstração
 como fallback. Nenhum SMS, e-mail, WhatsApp, push ou comando de hardware é enviado.
 O produto ainda não está pronto para produção.
 
-## White Label
 
 This project is designed to support multiple brands and clients.
 
