@@ -78,3 +78,23 @@ class HttpTransportLimitTest {
             channel.cancel(CancellationException("Test finished"))
             transport.close()
         }
+    }
+
+    @Test fun cancellationWhileWaitingForBodyBytesRemainsCancellation() = runTest {
+        val channel = ByteChannel(autoFlush = true)
+        val started = CompletableDeferred<Unit>()
+        val transport = HttpTransport(MockEngine {
+            started.complete(Unit)
+            respond(channel)
+        }, "https://api.example.test")
+        try {
+            val request = async { transport.execute("/fixture", HttpMethod.Get) }
+            started.await()
+            request.cancel()
+            assertFailsWith<CancellationException> { request.await() }
+            request.join()
+        } finally {
+            channel.cancel(CancellationException("Test finished"))
+            transport.close()
+        }
+    }
