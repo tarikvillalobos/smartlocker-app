@@ -38,3 +38,10 @@ class DomainTest {
     @Test fun hidesStaleExpiredAndConsumedCredentials() {
         val code = PickupCredential("p", "123456", "DEMO", 100_000, 1000, CredentialStatus.ACTIVE)
         assertTrue(code.canDisplay(1001, true))
+        assertFalse(code.canDisplay(1001, false))
+        assertFalse(code.canDisplay(61_000, true))
+        assertFalse(code.canDisplay(100_000, true))
+        assertFalse(code.copy(status = CredentialStatus.CONSUMED).canDisplay(1001, true))
+        assertFalse(code.canDisplay(999, true))
+    }
+}
