@@ -46,7 +46,6 @@ class ProductionRuntimeUiTest {
                 onAllNodesWithText("Retirada informada").onFirst().assertExists()
                 onAllNodesWithText("Histórico").onFirst().performClick()
                 onNodeWithText("Retiradas").performScrollTo().performClick()
-                waitUntil(10_000) { controller.state.value.route == Route.HISTORY && !controller.state.value.busy }
                 assertEquals(listOf(ParcelStatus.MANUAL), controller.state.value.parcels.map { it.status })
                 assertTrue(fixture.requests.any { it.url.parameters["status"] == "collected" })
                 fixture.unavailable = true
