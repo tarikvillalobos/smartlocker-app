@@ -1178,3 +1178,23 @@ paths:
       x-required-permission: "devices:write"
       parameters:
         -
+          $ref: "#/components/parameters/BrandId"
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/PushRegistrationRequest"
+      responses:
+        "200":
+          description: "Resultado confirmado pelo servidor."
+          headers:
+            X-Request-Id:
+              $ref: "#/components/headers/RequestId"
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/PushRegistration"
+        "400":
