@@ -35,3 +35,6 @@ data class SupportIssue(
     val createdAt: Long,
     val status: String = "Recebida",
 )
+
+data class NoticePage(val items: List<DeliveryNotice>, val nextCursor: String?, val unreadCount: Int)
+data class IssuePage(val items: List<SupportIssue>, val nextCursor: String?)
