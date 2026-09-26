@@ -22,6 +22,7 @@ class ProductionRuntimeUiTest {
             val controller = runtime.state.value.controller
             try {
                 setContent { SmartLockerApp(runtime) }
+                waitUntil(timeoutMillis = 10_000) { controller.state.value.initialized && !controller.state.value.busy }
                 onNodeWithText("Preencher dados de demonstração").assertDoesNotExist()
                 onNodeWithText("Celular").performScrollTo().performTextInput("11987654321")
                 onNodeWithText("CPF").performScrollTo().performTextInput("52998224725")
