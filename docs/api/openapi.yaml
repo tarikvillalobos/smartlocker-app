@@ -2298,3 +2298,23 @@ components:
             $ref: "#/components/schemas/SupportIssue"
         pageInfo:
           $ref: "#/components/schemas/PageInfo"
+      required:
+        - "items"
+        - "pageInfo"
+    PushRegistrationRequest:
+      type: "object"
+      properties:
+        platform:
+          type: "string"
+          enum:
+            - "android"
+            - "ios"
+        provider:
+          type: "string"
+          enum:
+            - "fcm"
+            - "apns"
+        token:
+          $ref: "#/components/schemas/Secret"
+          writeOnly: true
+        permission:
