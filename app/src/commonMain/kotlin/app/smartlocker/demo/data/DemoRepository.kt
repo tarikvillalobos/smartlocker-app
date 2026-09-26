@@ -118,3 +118,23 @@ class DemoRepository(
     }
     override suspend fun reportIssue(locationId: String, parcelId: String, message: String): SupportIssue = mutex.withLock {
         check()
+        if (!brand.features.issues) throw AppFailure(FailureKind.DENIED, "Suporte não habilitado.")
+        parcels.get(locationId, parcelId)
+        if (message.trim().length !in 10..2000) throw AppFailure(FailureKind.VALIDATION, "Descreva o problema em 10 a 2.000 caracteres.")
+        val issue = IssueRecord("SL-${db.snapshot.sequence}", parcelId, message.trim(), clock.now())
+        db.update { it.copy(issues = it.issues + issue, sequence = it.sequence + 1) }
+        issue.toDomain()
+    }
+    override suspend fun issues(locationId: String): List<SupportIssue> {
+        check()
+        if (!brand.features.issues) throw AppFailure(FailureKind.DENIED, "Suporte não habilitado.")
+        val ids = parcels.all(locationId).map { it.id }.toSet()
+        return db.snapshot.issues.filter { it.parcel in ids }.map { it.toDomain() }
+    }
+    override suspend fun recipients(locationId: String): List<Recipient> {
+        check()
+        requireLocation(locationId)
+        if (!brand.features.residents) throw AppFailure(FailureKind.DENIED, "Destinatários não habilitados.")
+        return listOf(Recipient("ana", "Ana Souza", "Você"), Recipient("other", "Rafael Souza", "Destinatário"))
+    }
+    override suspend fun deposit(locationId: String) = mutex.withLock { check(); parcels.deposit(locationId) }
