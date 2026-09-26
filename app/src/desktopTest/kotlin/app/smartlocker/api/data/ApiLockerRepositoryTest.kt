@@ -118,3 +118,23 @@ class ApiLockerRepositoryTest {
             assertEquals(FailureKind.UNAVAILABLE, assertFailsWith<AppFailure> { it.repo.parcel("member-1", "parcel-1") }.kind)
             assertEquals(FailureKind.UNAVAILABLE, assertFailsWith<AppFailure> { it.repo.credential("member-1", "parcel-1") }.kind)
             assertEquals(FailureKind.UNAVAILABLE, assertFailsWith<AppFailure> { it.repo.parcels("member-1", ParcelFilter.ALL, "same-cursor") }.kind)
+            assertEquals(FailureKind.VALIDATION, assertFailsWith<AppFailure> { it.repo.parcel("../other", "parcel-1") }.kind)
+        }
+    }
+
+    @Test fun preferencesAndContactUseContractBodiesAndExplicitResend() = runTest {
+        withRepository { request ->
+            when (request.url.encodedPath) {
+                "/v1/me/preferences" -> {
+                    assertEquals(HttpMethod.Patch, request.method)
+                    assertEquals(ApiJson.encodeToString(ApiCommunicationPreferences(false, true, false)), request.bodyText())
+                    json(profile.copy(preferences = ApiCommunicationPreferences(false, true, false)))
+                }
+                "/v1/me/contact-challenges" -> {
+                    val body = ApiJson.parseToJsonElement(request.bodyText()).jsonObject
+                    assertEquals("+5511987654321", body.getValue("contact").jsonPrimitive.content)
+                    assertEquals("sms", body.getValue("channel").jsonPrimitive.content)
+                    json(challenge)
+                }
+                "/v1/me/contact-challenges/contact-1/resend" -> {
+                    assertEquals(HttpMethod.Post, request.method)
