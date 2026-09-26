@@ -78,3 +78,23 @@ class DemoRepositoryTest {
         assertTrue(second.profile().preferences.whatsapp)
         assertFalse(second.profile().preferences.inApp)
     }
+    @Test fun paginationDoesNotDetermineGlobalIndicators() = runTest {
+        val repo = repository()
+        repo.signIn()
+        repo.scenario(DemoScenario.MANY)
+        val first = repo.parcels("home", ParcelFilter.ALL, null)
+        assertEquals(20, first.items.size)
+        assertEquals(73, repo.statistics("home").total)
+        val second = repo.parcels("home", ParcelFilter.ALL, first.nextCursor)
+        assertTrue(first.items.map { it.id }.intersect(second.items.map { it.id }.toSet()).isEmpty())
+    }
+    @Test fun protectsOptionalFeaturesAndExpiresPickupCodes() = runTest {
+        val repo = repository(Brands.aurora)
+        repo.signIn()
+        assertFailsWith<AppFailure> { repo.recipients("home") }
+        repo.scenario(DemoScenario.EXPIRED_CODE)
+        assertFailsWith<AppFailure> { repo.credential("home", "demo-0") }
+        repo.scenario(DemoScenario.LOCKER_OFFLINE)
+        assertFailsWith<AppFailure> { repo.physicalPickup("home", "demo-0") }
+    }
+    @Test fun depositsCreateLinkedNotificationsAndSupportRequests() = runTest {
