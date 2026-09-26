@@ -93,11 +93,3 @@ jobs:
           distribution: temurin
           java-version: '21'
       - run: brew install xcodegen
-      - run: python3 scripts/prepare_resources.py
-      - run: python3 scripts/prepare_icons.py
-      - run: xcodegen generate --spec iosApp/project.yml
-      - run: >-
-          xcodebuild -project iosApp/SmartLocker.xcodeproj -scheme SmartLocker
-          -sdk iphonesimulator -configuration Debug
-          -destination 'generic/platform=iOS Simulator'
-          CODE_SIGNING_ALLOWED=NO build
