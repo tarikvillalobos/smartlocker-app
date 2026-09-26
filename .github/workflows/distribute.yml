@@ -18,3 +18,23 @@ jobs:
           distribution: temurin
           java-version: '21'
       - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: 'platform-tools platforms;android-35 build-tools;35.0.0'
+      - name: Isolate the supported Android SDK
+        shell: bash
+        run: |
+          python scripts/prepare_android_sdk.py --source "$ANDROID_HOME"
+          echo "ANDROID_HOME=$GITHUB_WORKSPACE/.tools/android-sdk" >> "$GITHUB_ENV"
+          echo "ANDROID_SDK_ROOT=$GITHUB_WORKSPACE/.tools/android-sdk" >> "$GITHUB_ENV"
+      - if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y fakeroot
+      - name: Locate WiX 3 from Windows runner image
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $candle = Get-ChildItem "${env:ProgramFiles(x86)}\WiX Toolset v3*\bin\candle.exe" | Select-Object -First 1
+          if (!$candle) { throw "WiX 3 candle.exe is required by JDK 21 jpackage" }
+          $candle.DirectoryName | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
