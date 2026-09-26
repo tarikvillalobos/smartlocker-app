@@ -98,3 +98,23 @@ class ApiMappingTest {
         assertFalse(dto.toString().contains(dto.code))
         failsSafely { dto.copy(status = "revoked").toDomain() }
         failsSafely { dto.copy(revalidateAfter = earlier).toDomain() }
+        failsSafely { dto.copy(code = "12AB34").toDomain() }
+    }
+
+    @Test fun partialMetricsRemainUnavailableAndCompleteMetricsConvertSecondsExactly() {
+        val dto = ApiParcelMetrics(start, end, end, false, null, null, null)
+        val missing = dto.toDomain()
+        assertFalse(missing.complete)
+        assertNull(missing.total)
+        assertNull(missing.averageMillis)
+        val complete = dto.copy(complete = true, totalReceived = 2, physicalPickupCount = 1,
+            averagePickupDurationSeconds = 1.125).toDomain()
+        assertEquals(1125L, complete.averageMillis)
+        assertEquals(Instant.parse(end).toEpochMilliseconds(), complete.until)
+        failsSafely { dto.copy(totalReceived = 0).toDomain() }
+        failsSafely { dto.copy(complete = true, totalReceived = 1, physicalPickupCount = 2).toDomain() }
+    }
+
+    @Test fun pagesRejectDuplicateIdentifiersAndPreserveAuthoritativeUnreadTotal() {
+        val notice = ApiDeliveryNotice("notice", "membership", "parcel", "Sua encomenda chegou", start, null)
+        val mapped = ApiNoticePage(listOf(notice), page, 25).toDomain()
