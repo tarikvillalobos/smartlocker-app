@@ -1,6 +1,8 @@
 package app.smartlocker
 
 import app.smartlocker.config.*
+import app.smartlocker.api.data.*
+import app.smartlocker.shared.data.HttpTransport
 import app.smartlocker.demo.data.DemoRepository
 import app.smartlocker.platform.PlatformServices
 import app.smartlocker.shared.data.UnconfiguredRepository
