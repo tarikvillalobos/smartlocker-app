@@ -221,7 +221,6 @@ class AppController(
         readJob?.cancel()
         mutable.update { it.copy(membershipId = id, selectedId = null, selected = null, credential = null,
             parcels = emptyList(), pending = emptyList(), recent = emptyList(), notices = emptyList(), issues = emptyList(),
-            statistics = null, nextCursor = null, residents = emptyList(), route = Route.HOME) }
         refresh()
     }
     fun more() = execute {
