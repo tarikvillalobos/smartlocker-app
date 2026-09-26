@@ -61,6 +61,12 @@ android {
     compileSdk = 35
     defaultConfig { minSdk = 26 }
 }
+val packageBrand = providers.gradleProperty("brand").getOrElse("smartlocker")
+require(packageBrand in setOf("smartlocker", "aurora")) { "Unknown brand: $packageBrand" }
+val auroraPackage = packageBrand == "aurora"
+val nativeName = if (auroraPackage) "AuroraLockers" else "SmartLocker"
+val nativeId = if (auroraPackage) "app.aurora.lockers.demo" else "app.smartlocker.demo"
+
 compose.desktop {
     application {
         mainClass = "app.smartlocker.MainKt"
