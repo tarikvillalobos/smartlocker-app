@@ -38,3 +38,23 @@ class DemoAuth(private val secure: SecureStorage, brandId: String, private val c
             throw AppFailure(FailureKind.EXPIRED_CODE, "O código expirou. Solicite outro.")
         }
         if (attempts >= 5) throw AppFailure(FailureKind.ATTEMPTS_EXCEEDED, "Limite de tentativas atingido.")
+        attempts++
+        if (code != "123456") throw AppFailure(FailureKind.INVALID_CODE, "Código incorreto. Tente novamente.")
+        challenge = null
+    }
+
+    suspend fun login(id: String, code: String): Session {
+        verify(id, code)
+        val value = Session("demo-session-${clock.now()}", "ana", clock.now() + 7 * 86_400_000L)
+        secure.write(key, Json.encodeToString(StoredSession(value.token, value.userId, value.expiresAt)))
+        session = value
+        return value
+    }
+
+    suspend fun restore(): Session? {
+        val raw = secure.read(key) ?: return null
+        val stored = runCatching { Json.decodeFromString<StoredSession>(raw) }.getOrNull()
+        if (stored == null || stored.expiresAt <= clock.now()) {
+            logout()
+            return null
+        }
