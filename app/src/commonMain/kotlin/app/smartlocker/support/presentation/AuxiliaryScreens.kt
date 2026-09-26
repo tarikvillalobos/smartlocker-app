@@ -14,6 +14,7 @@ import app.smartlocker.shared.presentation.*
 
 @Composable
 fun AuxiliaryScreen(state: AppState, controller: AppController, platform: PlatformServices) {
+    val brand = controller.brand
     when (state.route) {
         Route.NOTICES -> {
             PageTitle("Notificações", { controller.navigate(Route.HOME) })
