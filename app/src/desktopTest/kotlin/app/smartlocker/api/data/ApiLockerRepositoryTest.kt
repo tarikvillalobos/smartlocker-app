@@ -158,3 +158,23 @@ class ApiLockerRepositoryTest {
     @Test fun supportAndRecipientsHonorCapabilitiesAndParcelScope() = runTest {
         withRepository { request ->
             when {
+                request.url.encodedPath.endsWith("/parcels/parcel-1") -> json(parcel())
+                request.url.encodedPath.endsWith("/issues") && request.method == HttpMethod.Post -> {
+                    assertEquals("A porta não abriu.", ApiJson.parseToJsonElement(request.bodyText()).jsonObject.getValue("message").jsonPrimitive.content)
+                    json(issue)
+                }
+                request.url.encodedPath.endsWith("/issues") -> json(ApiIssuePage(listOf(issue), page(null)))
+                request.url.encodedPath.endsWith("/recipients") -> json(ApiRecipientList(listOf(ApiRecipient("recipient-1", "Ana", "Você"))))
+                else -> error("Unexpected path")
+            }
+        }.useSuspend {
+            assertEquals("parcel-1", it.repo.reportIssue("member-1", "parcel-1", "  A porta não abriu.  ").parcelId)
+            assertEquals(1, it.repo.issuePage("member-1").items.size)
+            assertEquals(1, it.repo.recipients("member-1").size)
+        }
+        val disabled = configuration.copy(capabilities = capabilities.copy(features = capabilities.features.copy(supportIssues = false, recipients = false)))
+        withRepository(disabled) { error("Disabled feature must not reach business endpoint") }.useSuspend {
+            assertEquals(FailureKind.DENIED, assertFailsWith<AppFailure> { it.repo.issuePage("member-1") }.kind)
+            assertEquals(FailureKind.DENIED, assertFailsWith<AppFailure> { it.repo.recipients("member-1") }.kind)
+        }
+    }
