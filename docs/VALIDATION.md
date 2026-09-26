@@ -66,9 +66,6 @@ mais layouts amplos, fonte ampliada, paisagem e conteúdo longo. A revisão levo
 a correções de paleta, QR imediato, colunas e navegação. Não há comparação de
 pixels automatizada nem aprovação manual de cada uma das 68 imagens.
 
-Os testes usam semântica de acessibilidade e verificam limites horizontais de
-ações visíveis. Não substituem uma auditoria integral com TalkBack/VoiceOver,
-nem ensaios de dobradiça física ou de foco por teclado em cada sistema.
 
 ## Builds e recursos nativos
 
