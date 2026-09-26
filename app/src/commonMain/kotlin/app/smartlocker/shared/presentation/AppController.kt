@@ -356,6 +356,7 @@ class AppController(
             finally {
                 previousUser = null
                 lastLogin = null
+                mutable.value = AppState(initialized = true, remoteBrand = state.value.remoteBrand, now = clock.now())
             }
         }
     }
