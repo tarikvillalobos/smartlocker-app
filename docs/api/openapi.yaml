@@ -1318,3 +1318,23 @@ components:
       required: true
       schema:
         type: "string"
+        format: "uuid"
+      description: "UUID por intenção, preservada somente ao repetir uma operação de resultado incerto. Ver regras gerais."
+    IfMatch:
+      name: "If-Match"
+      in: "header"
+      required: true
+      schema:
+        type: "string"
+        pattern: "^\"[0-9]+\"$"
+      description: "ETag forte da versão consultada, como \"3\". Previne aplicação sobre estado alterado; conflito retorna 412."
+    Cursor:
+      name: "cursor"
+      in: "query"
+      required: false
+      schema:
+        type: "string"
+        minLength: 1
+        maxLength: 2048
+      description: "Omitir na primeira página. Reutilizar os demais parâmetros do snapshot."
+    Limit:
