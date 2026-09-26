@@ -165,9 +165,4 @@ a implementação e está fora da contagem. Binários não são versionados.
 
 ## Pendências externas
 
-Documentação, credenciais e homologação da API não foram fornecidas. Não há
-integração real validada com autenticação, lockers, SMS, e-mail, WhatsApp ou push.
-A demonstração contém dados fictícios e nunca substitui a API após falha.
-Continuam pendentes aparelhos físicos, leitores de tela, cofres Windows/Linux,
-permissões/push reais, assinatura de pacotes e distribuição.
 O produto ainda não está pronto para produção.
