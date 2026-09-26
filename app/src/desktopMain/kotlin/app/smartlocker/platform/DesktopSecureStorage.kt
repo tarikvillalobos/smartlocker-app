@@ -63,6 +63,20 @@ class DesktopSecureStorage(private val directory: Path) : SecureStorage {
                         command(listOf("/usr/bin/security", "-i"), input)
                     }
                 }
+                isWindows -> {
+                    val path = directory.resolve(encoded(key) + ".protected")
+                    if (value == null) Files.deleteIfExists(path) else writeProtected(path, value)
+                }
+                "linux" in os -> {
+                    if (value == null) command(listOf("secret-tool", "clear", "service", service, "account", key),
+                        allowMissing = true)
+                    else {
+                        val input = encoded(value)
+                        requirePayload(input.length < 8192)
+                        command(listOf("secret-tool", "store", "--label=SmartLocker", "service", service, "account", key), input)
+                    }
+                }
+                else -> throw unavailable()
             }
             "win" in os -> {
                 val path = directory.resolve(encoded(key) + ".protected")
