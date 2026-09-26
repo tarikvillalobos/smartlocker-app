@@ -6,7 +6,6 @@ import subprocess
 import uuid
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--device", help="Existing simulator UUID; defaults to an available iPhone")
 parser.add_argument("--output", default="artifacts/ios-tests")
 args = parser.parse_args()
 root = Path(__file__).resolve().parents[1]
