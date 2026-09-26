@@ -38,3 +38,23 @@ class ApiSessionClient(
     private var publicConfiguration: ApiBrandConfiguration? = null
     private data class Intent(val method: String, val path: String, val body: String?, val headers: Map<String, String>)
     private val uncertain = mutableMapOf<Intent, String>()
+    private val verificationKeys = mutableMapOf<Pair<String, String>, String>()
+
+    fun currentSession(): Session? = stored?.tokens?.toDomain()
+
+    suspend fun configuration(): ApiBrandConfiguration {
+        publicConfiguration?.let { return it }
+        val value = decodeApi<ApiBrandConfiguration>(request("/configuration", authenticated = false))
+        value.toDomain(brand)
+        publicConfiguration = value
+        return value
+    }
+
+    suspend fun requestLogin(value: LoginRequest): Challenge {
+        if (!InputValidation.cpf(value.cpf)) invalidInput("Confira o CPF informado.")
+        val contact = normalizedApiContact(value.contact, value.channel)
+        val capabilities = configuration().capabilities.channels
+        if (!(if (value.channel == LoginChannel.SMS) capabilities.sms else capabilities.email).available) {
+            throw AppFailure(FailureKind.UNAVAILABLE, "Este canal de login está indisponível. Escolha outro canal.")
+        }
+        val body = ApiJson.encodeToString(ApiLoginRequest(contact, value.cpf.filter(Char::isDigit), value.channel.apiValue()))
