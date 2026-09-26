@@ -298,3 +298,23 @@ paths:
       tags:
         - "Authentication"
       summary: "Revogar a sessão atual"
+      description: |-
+        Revogar access/refresh tokens da sessão e seus registros push. Limpar dados locais mesmo se a rede falhar; a
+        confirmação da revogação remota só ocorre com resposta 204. Repetição com a mesma chave após revogação mantém
+        204.
+      x-required-permission: "session:revoke"
+      parameters:
+        -
+          $ref: "#/components/parameters/BrandId"
+        -
+          $ref: "#/components/parameters/IdempotencyKey"
+      responses:
+        "204":
+          description: "Resultado confirmado pelo servidor."
+          headers:
+            X-Request-Id:
+              $ref: "#/components/headers/RequestId"
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+        "400":
+          $ref: "#/components/responses/Problem"
