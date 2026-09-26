@@ -159,6 +159,24 @@ private fun AppNavigation(state: AppState, controller: AppController, rail: Bool
             NavigationRailItem(state.route == route || route == Route.HISTORY && state.route == Route.DETAIL,
                 { controller.navigate(route) }, icon = { AppIcon(symbol) }, label = { Text(title) })
         }
+    } else if (LocalDensity.current.fontScale >= 1.5f) {
+        Surface(color = MaterialTheme.colorScheme.surface) {
+            FlowRow(Modifier.fillMaxWidth().padding(4.dp).selectableGroup(),
+                horizontalArrangement = Arrangement.Center) {
+                items.forEach { (route, title, symbol) ->
+                    val active = state.route == route || route == Route.HISTORY && state.route == Route.DETAIL
+                    TextButton({ controller.navigate(route) }, Modifier.heightIn(min = Tokens.touch).semantics {
+                        selected = active
+                        role = Role.Tab
+                    }, colors = ButtonDefaults.textButtonColors(
+                        containerColor = if (active) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface)) {
+                        AppIcon(symbol)
+                        Spacer(Modifier.width(8.dp))
+                        Text(title, softWrap = false, style = MaterialTheme.typography.labelMedium)
+                    }
+                }
+            }
+        }
     } else NavigationBar(containerColor = MaterialTheme.colorScheme.surface) {
         items.forEach { (route, title, symbol) ->
             NavigationBarItem(state.route == route || route == Route.HISTORY && state.route == Route.DETAIL,
