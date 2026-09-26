@@ -1998,3 +1998,23 @@ components:
         - "collectedAt"
         - "credentialStatus"
         - "actions"
+        - "timeline"
+        - "version"
+      description: |-
+        collected exige collectedAt de evento físico confiável; manual exige manualAt e collectedAt nulo. waiting
+        possui ambos nulos. Credencial nunca aparece nesta representação. Prazo vencido não implica retirada.
+      allOf:
+        -
+          if:
+            properties:
+              status:
+                const: "waiting"
+          then:
+            properties:
+              manualAt:
+                type: "null"
+              collectedAt:
+                type: "null"
+        -
+          if:
+            properties:
