@@ -74,7 +74,6 @@ fun AuxiliaryScreen(state: AppState, controller: AppController, platform: Platfo
                 Text("No armário indicado, apresente o QR Code ao leitor ou digite o código no painel. Confira a porta informada.")
                 Text("Se o código estiver expirado ou o armário indisponível, abra os detalhes e relate o problema.")
             }
-            if (brand.features.issues) MenuRow("Acompanhar solicitações", Symbol.HELP) { controller.navigate(Route.ISSUES) }
             TextButton({
                 val email = brand.supportEmail
                 if (email == null || !platform.openLink("mailto:$email")) controller.feedback("Canal externo de suporte ainda não configurado.")
