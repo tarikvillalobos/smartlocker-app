@@ -58,3 +58,23 @@ class HttpTransportLimitTest {
                     produced += chunk.size
                 }
                 channel.flushAndClose()
+            } catch (_: Exception) {
+                // The bounded consumer cancels the response channel before its producer reaches EOF.
+            } finally { channel.close() }
+        }
+        val transport = HttpTransport(MockEngine {
+            calls++
+            respond(channel, headers = headersOf(HttpHeaders.ContentType, "application/json"))
+        }, "https://api.example.test")
+        try {
+            val failure = assertFailsWith<AppFailure> { transport.execute("/fixture", HttpMethod.Post, jsonBody = "{}") }
+            producer.join()
+            assertEquals(FailureKind.UNAVAILABLE, failure.kind)
+            assertTrue(produced < 512 * chunk.size, "The response must stop before reading the complete body")
+            assertTrue(channel.isClosedForRead)
+            assertEquals(1, calls)
+        } finally {
+            producer.cancel()
+            channel.cancel(CancellationException("Test finished"))
+            transport.close()
+        }
