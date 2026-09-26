@@ -38,6 +38,7 @@ object Brands {
         features = Features(residents = false),
         headline = "Sua entrega. Seu tempo.",
         applicationId = "app.aurora.lockers.demo",
+        mark = BrandMark.MONOGRAM,
     )
     val all = listOf(smartLocker, aurora)
 }
