@@ -218,3 +218,23 @@ class ApiLockerRepository(private val session: ApiSessionClient) : LockerReposit
         val mapped = values.map { membership ->
             val result = membership.toDomain()
             result.copy(features = intersect(result.features, global.features.toDomain()),
+                channels = membership.capabilities.channels.availableChannels().intersect(global.channels.availableChannels()))
+        }
+        requireResponse(mapped.map { it.id }.distinct().size == mapped.size)
+        val result = value.toDomain(mapped)
+        cache(user) {
+            memberships.clear()
+            values.forEach { memberships[it.id] = it }
+            val valid = memberships.keys
+            reviewedParcels.keys.filter { it.first !in valid }.forEach(reviewedParcels::remove)
+        }
+        return result
+    }
+
+    private suspend fun membership(id: String, user: String): ApiMembership {
+        identifier(id)
+        cache(user) { memberships[id] }?.let { return it }
+        val response = request<ApiMembershipList>(user, "/me/memberships")
+        val mapped = response.items.map { it.toDomain() }
+        requireResponse(mapped.map { it.id }.distinct().size == mapped.size)
+        cache(user) {
