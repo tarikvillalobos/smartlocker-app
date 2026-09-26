@@ -6,8 +6,6 @@ final class SmartLockerUITests: XCTestCase {
         let app = XCUIApplication()
         app.launchArguments = ["-smartlocker.environment", "DEMO"]
         app.launch()
-        print(app.debugDescription)
-        let phone = app.textFields["Celular"]
         XCTAssertTrue(phone.waitForExistence(timeout: 15))
         reveal(phone, in: app)
         phone.tap()
