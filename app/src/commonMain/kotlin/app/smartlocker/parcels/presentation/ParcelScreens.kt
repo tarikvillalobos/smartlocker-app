@@ -119,6 +119,7 @@ fun DetailScreen(state: AppState, controller: AppController, platform: PlatformS
         TextButton(controller::undo, Modifier.fillMaxWidth(), enabled = !state.busy && !state.stale) { Text("Desfazer marcação manual") }
     }
     if (parcel.status != ParcelStatus.WAITING) PrimaryButton("Ver histórico") { controller.navigate(Route.HISTORY) }
+    if (controller.features.issues && parcel.canReportIssue) {
         TextButton({ controller.navigate(Route.ISSUES) }, Modifier.fillMaxWidth()) { Text("Relatar um problema") }
     }
     if (controller.configuration.environment == Environment.DEMO && parcel.status == ParcelStatus.WAITING) {
