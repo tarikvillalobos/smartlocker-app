@@ -361,5 +361,4 @@ class AppController(
         }
     }
     fun feedback(message: String?) { mutable.update { it.copy(feedback = message) } }
-    fun close() = scope.cancel()
 }
