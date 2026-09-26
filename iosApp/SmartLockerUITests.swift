@@ -38,6 +38,16 @@ final class SmartLockerUITests: XCTestCase {
         app.terminate()
     }
 
+    private func waitForOrientation(portrait: Bool, in app: XCUIApplication) {
+        let rotated = NSPredicate { _, _ in
+            let frame = app.frame
+            return portrait ? frame.height > frame.width : frame.width > frame.height
+        }
+        let expectation = XCTNSPredicateExpectation(predicate: rotated, object: nil)
+        XCTAssertEqual(XCTWaiter.wait(for: [expectation], timeout: 8), .completed,
+                       "Application geometry did not finish rotating: \(app.frame)")
+    }
+
     private func waitUntilUncovered(_ field: XCUIElement, in app: XCUIApplication) {
         let visible = NSPredicate { _, _ in
             field.frame.maxY <= app.keyboards.firstMatch.frame.minY && field.frame.height > 0
