@@ -5,7 +5,6 @@ conteúdo, canais e funcionalidades. Vínculos pertencem ao usuário autenticado
 
 As configurações SmartLocker e Aurora Lockers estão em
 `core/src/commonMain/kotlin/app/smartlocker/config/Brand.kt`. Escolha a marca
-na tela de login. A Aurora muda nome, cores, texto institucional e remove a
 funcionalidade de moradores; a rota também é bloqueada no controller.
 
 ## Adicionar uma marca
