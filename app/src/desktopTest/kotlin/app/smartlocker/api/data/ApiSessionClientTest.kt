@@ -158,3 +158,23 @@ class ApiSessionClientTest {
         try {
             assertTrue(second.restoreSession()?.token == "access-rotated")
             assertEquals(keys[0], keys[2])
+        } finally { second.close() }
+    }
+
+    @Test fun localWriteFailureAfterOtpResponsePreservesTheVerificationKey() = runTest {
+        val clock = TestClock()
+        val memory = MemorySecure()
+        val secure = object : SecureStorage by memory {
+            var fail = true
+            override suspend fun write(key: String, value: String?) {
+                if (fail && key.endsWith(".head") && value != null) throw AppFailure(FailureKind.UNAVAILABLE, "Synthetic vault failure")
+                memory.write(key, value)
+            }
+        }
+        val keys = mutableListOf<String?>()
+        val client = client(clock, secure) { request ->
+            keys += request.headers["Idempotency-Key"]
+            respond(tokens(clock), headers = JSON)
+        }
+        try {
+            assertFailsWith<AppFailure> { client.verifyLogin("challenge-1", "123456") }
