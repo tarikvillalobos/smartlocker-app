@@ -2258,3 +2258,23 @@ components:
         membershipId:
           $ref: "#/components/schemas/Identifier"
         parcelId:
+          $ref: "#/components/schemas/Identifier"
+        message:
+          type: "string"
+          minLength: 10
+          maxLength: 2000
+        status:
+          type: "string"
+          enum:
+            - "received"
+            - "in_progress"
+            - "resolved"
+            - "closed"
+        createdAt:
+          $ref: "#/components/schemas/Instant"
+        updatedAt:
+          $ref: "#/components/schemas/Instant"
+        resolution:
+          type:
+            - "string"
+            - "null"
