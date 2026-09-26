@@ -55,6 +55,10 @@ em 100% e 200%: 60 imagens. Mais oito capturas verificam conteúdo longo, vazio,
 incluindo janelas de 840 × 390 e 390 × 400 dp. Total: **68 capturas** em
 `app/build/reports/screenshots/`.
 
+Redimensionar mantém contato digitado, filtro e encomenda selecionada. Ações de
+retirada e cópia continuam alcançáveis por rolagem. A navegação inferior quebra
+em linhas completas com fonte ampliada, sem comprimir o texto. A redução de
+altura em testes Compose simula área disponível; sozinha não testa um IME nativo.
 
 Os cinco templates HTML foram renderizados no navegador. Uma seleção das capturas
 Compose foi comparada visualmente: login, início, histórico, detalhe e perfil,
