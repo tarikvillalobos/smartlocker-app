@@ -18,3 +18,23 @@ import kotlinx.datetime.*
 fun Panel(modifier: Modifier = Modifier, dark: Boolean = false, content: @Composable ColumnScope.() -> Unit) {
     Surface(modifier.fillMaxWidth(), shape = if (dark) Tokens.hero else Tokens.card,
         color = if (dark) MaterialTheme.colorScheme.secondary else Color.White,
+        contentColor = if (dark) Color.White else Tokens.text,
+        border = if (dark) null else BorderStroke(1.dp, Tokens.border)) {
+        Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp), content = content)
+    }
+}
+
+@Composable
+fun PrimaryButton(label: String, enabled: Boolean = true, onClick: () -> Unit) {
+    Button(onClick, Modifier.fillMaxWidth().heightIn(min = Tokens.fieldHeight), enabled = enabled,
+        shape = Tokens.control, contentPadding = PaddingValues(14.dp)) { Text(label) }
+}
+
+@Composable
+fun PageTitle(title: String, back: (() -> Unit)? = null, action: (@Composable () -> Unit)? = null) {
+    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        if (back != null) IconButton(back) { AppIcon(Symbol.BACK, "Voltar") }
+        Text(title, Modifier.weight(1f), style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.secondary)
+        action?.invoke()
