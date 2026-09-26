@@ -18,3 +18,23 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.UUID
 
+@RunWith(AndroidJUnit4::class)
+class AndroidSecureStorageTest {
+    private val context = InstrumentationRegistry.getInstrumentation().targetContext
+    private val preferences = context.getSharedPreferences("smartlocker.secure", Context.MODE_PRIVATE)
+    private val prefix = "instrumented.${UUID.randomUUID()}"
+    private val storage = AndroidSecureStorage(context)
+
+    @After fun removeOnlyTestRecords() {
+        preferences.edit().also { editor ->
+            preferences.all.keys.filter { it.contains(prefix) }.forEach(editor::remove)
+        }.commit()
+    }
+
+    @Test fun ciphertextIsRandomizedAndNewStorageInstanceRestoresTheSession() = runBlocking {
+        val key = "$prefix.session"
+        val secret = "isolated-session-token-with-utf8-á"
+        storage.write(key, secret)
+        val first = preferences.getString(key, null)!!
+        assertFalse(first.contains(secret))
+        assertFalse(String(Base64.decode(first, Base64.NO_WRAP)).contains(secret))
