@@ -31,7 +31,6 @@ compilação, testes e integração real.
 - Windows 10 ou posterior, macOS compatível com a JVM ou Linux com bibliotecas
   gráficas suportadas pelo Compose Desktop.
 
-## Status
 
 🚧 This project is currently under development.
 
