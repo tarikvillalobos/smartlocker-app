@@ -58,3 +58,23 @@ fun AuxiliaryScreen(state: AppState, controller: AppController, platform: Platfo
                 DemoScenario.DENIED to "Acesso negado",
                 DemoScenario.EXPIRED_SESSION to "Sessão expirada",
                 DemoScenario.EXPIRED_CODE to "Código e prazo expirados",
+                DemoScenario.LOCKER_OFFLINE to "Armário indisponível",
+            )
+            scenarios.forEach { (scenario, title) ->
+                OutlinedButton({ controller.demoScenario(scenario) }, Modifier.fillMaxWidth(), enabled = !state.busy) { Text(title) }
+            }
+        }
+        Route.LEGAL -> LegalScreen(controller, platform)
+        Route.SUPPORT -> {
+            PageTitle("Ajuda e suporte", { controller.navigate(Route.PROFILE) })
+            Panel {
+                Text("Como retirar sua encomenda", style = MaterialTheme.typography.titleMedium)
+                Text("No armário indicado, apresente o QR Code ao leitor ou digite o código no painel. Confira a porta informada.")
+                Text("Se o código estiver expirado ou o armário indisponível, abra os detalhes e relate o problema.")
+            }
+            if (brand.features.issues) MenuRow("Acompanhar solicitações", Symbol.HELP) { controller.navigate(Route.ISSUES) }
+            TextButton({
+                val email = brand.supportEmail
+                if (email == null || !platform.openLink("mailto:$email")) controller.feedback("Canal externo de suporte ainda não configurado.")
+            }) { Text("Contato do suporte") }
+        }
