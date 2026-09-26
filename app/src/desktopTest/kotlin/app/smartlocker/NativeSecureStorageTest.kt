@@ -52,6 +52,26 @@ class NativeSecureStorageTest {
             assertNoPlaintext(directory, prior, longValue)
         }
 
+    @Test(timeout = 180_000) fun chunkedApiSessionRoundTripsLargePayloadInTheNativeVault() =
+        fixture { storage, directory, namespace, _ ->
+            val touched = linkedSetOf<String>()
+            val tracked = object : SecureStorage by storage {
+                override suspend fun write(key: String, value: String?) {
+                    touched += key
+                    storage.write(key, value)
+                }
+            }
+            val chunks = ChunkedSecureStore(tracked, namespace)
+            val marker = UUID.randomUUID().toString()
+            val original = """{"accessToken":"$marker-${"A".repeat(8100)}","refreshToken":"${"R".repeat(8100)}","metadata":"${"ação-🔒".repeat(160)}","version":1}"""
+            val replacement = original.replace("\"version\":1", "\"version\":2")
+            assertTrue(original.toByteArray(Charsets.UTF_8).size in 18_000..20_000)
+            var failure: Throwable? = null
+            try {
+                chunks.write(original)
+                assertSecret(original, ChunkedSecureStore(DesktopSecureStorage(directory), namespace).read())
+                chunks.write(replacement)
+                assertSecret(replacement, ChunkedSecureStore(DesktopSecureStorage(directory), namespace).read())
     private fun fixture(test: suspend (DesktopSecureStorage, Path, String, String) -> Unit) {
         assumeTrue("Native vault tests require explicit opt-in", System.getenv("SMARTLOCKER_NATIVE_SECURE_TESTS") == "1")
         val directory = Files.createTempDirectory("smartlocker-vault-test-")
