@@ -144,12 +144,6 @@ python3 scripts/audit_commits.py
 Testes desktop geram capturas em `app/build/reports/screenshots/` e relatórios
 em `app/build/reports/tests/desktopTest/`. Use `xvfb-run` em Linux sem display.
 A CI valida OpenAPI, histórico, Android, iOS e desktop em Linux, Windows e macOS.
-O registro histórico de 26/09/2026, anterior ao cliente HTTP, teve 35 testes
-compartilhados/desktop aprovados e testes separados dos cofres nos três sistemas.
-As suítes posteriores acrescentam contrato HTTP, sessão rotativa, armazenamento
-em partes, paginação e percurso de produção com respostas controladas. Consulte
-a matriz para resultados e revisões efetivamente executados; a existência de
-um teste não comprova sua aprovação, e repetições não são novos casos.
 
 Para verificar os cofres nativos com entradas sintéticas isoladas, execute
 `python3 scripts/run_native_secure_tests.py`. Para Keychain e UI no simulador iOS,
