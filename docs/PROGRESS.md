@@ -20,8 +20,6 @@ Atualizado em 26/09/2026. Consulte [VALIDATION.md](VALIDATION.md) para as evidê
 - [x] Documentação de arquitetura, API, marcas, execução e distribuição.
 - [ ] API real: implementação externa, credenciais e homologação indisponíveis.
 - [ ] Integrações reais com locker, push, SMS, e-mail e WhatsApp.
-- [ ] Ensaios em aparelhos físicos, TalkBack/VoiceOver e cofres Windows/Linux.
-- [ ] Assinatura, notarização e distribuição para lojas.
 
 Não há backend próprio nem fallback automático para demo. Os endpoints do OpenAPI
 são uma proposta autorizada, não uma integração com serviço existente.
