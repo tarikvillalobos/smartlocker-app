@@ -36,7 +36,6 @@ class AppController(
         }
     }
 
-    private fun execute(block: suspend () -> Unit) {
         val generation = epoch
         scope.launch {
             mutable.update { it.copy(busy = true, error = null) }
