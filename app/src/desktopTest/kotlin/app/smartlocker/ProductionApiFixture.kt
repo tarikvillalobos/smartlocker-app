@@ -38,3 +38,23 @@ internal class ProductionApiFixture {
         if (unavailable && path == "/me") {
             respond("""{"type":"about:blank","title":"Indisponível","status":503,"code":"SERVICE_UNAVAILABLE","requestId":"test-1"}""",
                 HttpStatusCode.ServiceUnavailable, headersOf(HttpHeaders.ContentType, "application/problem+json"))
+        } else when (path) {
+            "/configuration" -> json(ApiBrandConfiguration("smartlocker", "SmartLocker", capabilities, null, null, null))
+            "/auth/challenges" -> json(ApiChallenge("login-api", at(600_000), at(30_000), "sms", "+55 ** *****-4321", 6, "login"), HttpStatusCode.Accepted)
+            "/auth/challenges/login-api/verify" -> json(ApiSessionTokens("Bearer", "access-api", at(3_600_000),
+                "refresh-api", at(86_400_000), "user-api", "smartlocker", "session-api", listOf("parcels:read", "parcels:manual")))
+            "/me" -> json(profile)
+            "/me/memberships" -> json(ApiMembershipList(listOf(membership)))
+            "/memberships/member-api/parcels" -> {
+                val status = request.url.parameters["status"]
+                val show = status == "all" || (status == "waiting" && !manual) || (status == "collected" && manual)
+                json(ApiParcelPage(if (show) listOf(parcel()) else emptyList(), page()))
+            }
+            "/memberships/member-api/parcel-metrics" -> json(ApiParcelMetrics(at(-86_400_000), at(0), at(0), true, 1, 0, null))
+            "/memberships/member-api/notifications" -> json(ApiNoticePage(emptyList(), page(), 0))
+            "/memberships/member-api/parcels/parcel-api" -> json(parcel())
+            "/memberships/member-api/parcels/parcel-api/pickup-credential" -> json(ApiPickupCredential("parcel-api",
+                "member-api", "004321", "opaque-server-credential", "active", at(0), at(600_000), at(300_000)))
+            "/memberships/member-api/parcels/parcel-api/manual-pickup" -> {
+                check(request.method == HttpMethod.Post && request.headers["If-Match"] == "\"3\"")
+                check(request.headers["Idempotency-Key"] != null)
