@@ -38,3 +38,23 @@ jobs:
           $candle = Get-ChildItem "${env:ProgramFiles(x86)}\WiX Toolset v3*\bin\candle.exe" | Select-Object -First 1
           if (!$candle) { throw "WiX 3 candle.exe is required by JDK 21 jpackage" }
           $candle.DirectoryName | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+      - run: python scripts/prepare_resources.py
+      - run: python scripts/prepare_icons.py
+      - name: Build native installer with bundled Java runtime
+        run: python scripts/gradle.py :app:packageDistributionForCurrentOS -Pbrand=${{ matrix.brand }} --console=plain
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.brand }}-${{ runner.os }}-${{ runner.arch }}-unsigned
+          if-no-files-found: error
+          retention-days: 14
+          path: |
+            app/build/compose/binaries/main/dmg/*.dmg
+            app/build/compose/binaries/main/msi/*.msi
+            app/build/compose/binaries/main/deb/*.deb
+  ios-simulator:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
