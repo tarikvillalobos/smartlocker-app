@@ -28,5 +28,4 @@ fun Modifier.keepAboveKeyboard(): Modifier {
             requester.bringIntoView()
         }
     }
-    return bringIntoViewRequester(requester).onFocusChanged { focused = it.hasFocus }
 }
