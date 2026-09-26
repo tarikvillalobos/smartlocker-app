@@ -149,6 +149,11 @@ class AppController(
                 else throw error
             }
         }
+        return Detail(selected, credential, message)
+    }
+    private suspend fun loadDetail(generation: Int) {
+        val context = state.value
+        val detail = readDetail(context.membershipId, context.selectedId)
         if (generation != epoch) return
         mutable.update { it.copy(profile = profile, membershipId = location, parcels = page.items,
             pending = pending, nextCursor = page.nextCursor, statistics = statistics, notices = notices,
