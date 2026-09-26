@@ -50,6 +50,18 @@ class DesktopSecureStorage(private val directory: Path) : SecureStorage {
     }
 
     override suspend fun write(key: String, value: String?) = withContext(Dispatchers.IO) {
+        validateKey(key)
+        nativeOperation {
+            when {
+                isMac -> {
+                    if (value == null) command(listOf("/usr/bin/security", "delete-generic-password", "-a", key, "-s", service),
+                        allowMissing = true)
+                    else {
+                        // Quoting preserves empty values. Base64 contains no shell/parser metacharacters.
+                        val input = "add-generic-password -U -a $key -s $service -w \"${encoded(value)}\"\n"
+                        requirePayload(input.toByteArray(Charsets.UTF_8).size < 4096)
+                        command(listOf("/usr/bin/security", "-i"), input)
+                    }
                 }
             }
             "win" in os -> {
