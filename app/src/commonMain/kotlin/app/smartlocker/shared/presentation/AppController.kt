@@ -126,6 +126,16 @@ class AppController(
         val notices = repository.notifications(location)
         val issues = if (configuration.brand.features.issues) repository.issues(location) else emptyList()
         val selectedId = context.selectedId ?: pending.firstOrNull()?.id
+        val detail = readDetail(location, selectedId)
+        if (generation != epoch) return
+        mutable.update { it.copy(profile = profile, membershipId = location, parcels = page.items,
+            pending = pending, recent = recent, nextCursor = page.nextCursor, statistics = statistics, notices = notices,
+            issues = issues, selectedId = detail.parcel?.id, selected = detail.parcel, credential = detail.credential,
+            credentialMessage = detail.message, stale = false, now = clock.now(), lastUpdated = clock.now()) }
+    }
+
+    private data class Detail(val parcel: Parcel?, val credential: PickupCredential?, val message: String?)
+    private suspend fun readDetail(location: String, selectedId: String?): Detail {
         val selected = selectedId?.let { id ->
             try { repository.parcel(location, id) }
             catch (error: AppFailure) { if (error.kind == FailureKind.DENIED) null else throw error }
