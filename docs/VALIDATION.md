@@ -16,6 +16,8 @@ sua execução separada e os sistemas verificados estão registrados abaixo.
 | DomainTest | 4 | CPF, telefone, e-mail, métricas e validade de credenciais |
 | DemoRepositoryTest | 8 | OTP, sessão, retirada, persistência, isolamento e paginação |
 | ControllerTest | 5 | Consistência, rotas e respostas atrasadas após mudança de contexto |
+| ControllerRecoveryTest | 6 | Recuperação de sessão/local, páginas, recentes, contatos e falha posterior |
+| ControllerActionTest | 3 | Confirmação de ações, avisos e concorrência |
 | UseCaseTest | 1 | Credencial rejeitada quando pertence a outra encomenda |
 | HttpAndQrTest | 4 | HTTP controlado, erros, cancelamento e decodificação do QR |
 | ResponsiveUiTest | 2 | Matriz visual e percurso de login, cópia e retirada manual |
