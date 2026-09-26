@@ -1,6 +1,7 @@
 package app.smartlocker.shared.data
 
 import app.smartlocker.shared.domain.*
+import app.smartlocker.api.data.apiFailure
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.plugins.HttpTimeout
