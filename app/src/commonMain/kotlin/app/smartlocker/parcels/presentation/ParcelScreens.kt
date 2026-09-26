@@ -58,3 +58,23 @@ fun HistoryScreen(state: AppState, controller: AppController) {
         listOf(ParcelFilter.ALL to "Todas", ParcelFilter.WAITING to "Aguardando", ParcelFilter.COLLECTED to "Retiradas")
             .forEach { (filter, title) ->
                 FilterChip(state.filter == filter, { controller.filter(filter) }, label = { Text(title) }, enabled = !state.busy)
+            }
+    }
+    Panel {
+        Text("Últimos 30 dias · neste local", style = MaterialTheme.typography.bodySmall, color = Tokens.secondary)
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(24.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Metadata("Total recebido", state.statistics?.let { "${it.total} encomendas" } ?: "Sem dados")
+            Metadata("Tempo médio para retirar", durationLabel(state.statistics?.averageMillis))
+        }
+        Text("Média de retiradas físicas confirmadas. Marcações manuais não entram na média.",
+            style = MaterialTheme.typography.bodySmall, color = Tokens.secondary)
+    }
+    if (state.parcels.isEmpty() && !state.busy) EmptyState("Nenhuma encomenda", "Não há entregas neste filtro.")
+    state.parcels.forEach { item -> ParcelRow(item) { controller.select(item.id) } }
+    if (state.nextCursor != null) PrimaryButton("Carregar mais", !state.busy, controller::more)
+}
+
+@Composable
+fun DetailScreen(state: AppState, controller: AppController, platform: PlatformServices) {
+    var confirmation by remember { mutableStateOf(false) }
+    val parcel = state.selected
