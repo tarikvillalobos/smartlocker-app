@@ -78,3 +78,23 @@ class ControllerMembershipRevocationTest {
         assertTrue(current.stale)
         assertTrue(current.error!!.contains("operação foi concluída"))
         assertEquals("Preferências salvas.", current.feedback)
+    }
+
+    @Test fun refreshClearsRevokedMembershipBeforeAReplacementReadFails() = runTest {
+        val clock = TestClock()
+        val demo = DemoRepository(MemoryStorage(), MemorySecure(), Brands.smartLocker, clock, 0)
+        demo.signIn()
+        var revoked = false
+        val started = CompletableDeferred<Unit>()
+        val allowFailure = CompletableDeferred<Unit>()
+        val repository = object : LockerRepository by demo {
+            override suspend fun profile(): Profile = demo.profile().let { profile ->
+                if (revoked) profile.copy(memberships = profile.memberships.filter { it.id == "office" }) else profile
+            }
+            override suspend fun parcels(locationId: String, filter: ParcelFilter, cursor: String?): ParcelPage {
+                if (revoked) {
+                    assertEquals("office", locationId)
+                    started.complete(Unit)
+                    allowFailure.await()
+                    throw AppFailure(FailureKind.NETWORK, "Sem rede")
+                }
