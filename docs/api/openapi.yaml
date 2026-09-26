@@ -2398,3 +2398,23 @@ components:
     Problem:
       type: "object"
       properties:
+        type:
+          type: "string"
+          format: "uri-reference"
+          default: "about:blank"
+        title:
+          type: "string"
+          maxLength: 200
+        status:
+          type: "integer"
+          minimum: 400
+          maximum: 599
+        code:
+          type: "string"
+          enum:
+            - "VALIDATION_ERROR"
+            - "INVALID_OTP"
+            - "OTP_EXPIRED"
+            - "OTP_ATTEMPTS_EXCEEDED"
+            - "RESEND_TOO_EARLY"
+            - "SESSION_EXPIRED"
