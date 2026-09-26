@@ -38,3 +38,23 @@ class ControllerProductionStateTest {
         val clock = TestClock()
         val demo = DemoRepository(MemoryStorage(), MemorySecure(), Brands.smartLocker, clock, 0)
         demo.signIn()
+        var revoked = false
+        val repository = object : LockerRepository by demo {
+            override suspend fun profile(): Profile = demo.profile().let { profile ->
+                if (!revoked) profile else profile.copy(memberships = profile.memberships.map {
+                    it.copy(features = Features(residents = false, issues = false, contactEditing = false))
+                })
+            }
+        }
+        val controller = AppController(AppConfiguration(Brands.smartLocker, Environment.PRODUCTION), repository, clock, backgroundScope)
+        controller.state.first { it.profile != null && !it.busy }
+        controller.navigate(Route.RESIDENTS)
+        controller.state.first { it.residents.isNotEmpty() && !it.busy }
+        revoked = true
+        controller.refresh()
+        val current = controller.state.first { !it.busy && it.profile != null && !it.membership!!.features.residents }
+        assertTrue(current.residents.isEmpty())
+        assertNotEquals(Route.RESIDENTS, current.route)
+        for (route in listOf(Route.RESIDENTS, Route.ISSUES, Route.CONTACT, Route.DEMO)) {
+            controller.navigate(route)
+            assertNotEquals(route, controller.state.value.route)
