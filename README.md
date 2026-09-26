@@ -21,7 +21,6 @@ Consulte [o registro de progresso](docs/PROGRESS.md) e
 [a matriz de validação](docs/VALIDATION.md) para distinguir configuração,
 compilação, testes e integração real.
 
-This project is designed to support multiple brands and clients.
 
 Branding, visual identity, content, and specific features may vary depending on the deployment.
 
