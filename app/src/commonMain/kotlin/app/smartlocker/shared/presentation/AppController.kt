@@ -225,7 +225,6 @@ class AppController(
         if (generation != epoch) return@execute
         select(value.parcelId)
     }
-    fun demoScenario(value: DemoScenario) = execute {
         (repository as? DemoControls)?.scenario(value)
         mutable.update { it.copy(selectedId = null, selected = null, credential = null) }
         load()
