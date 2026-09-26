@@ -1378,3 +1378,23 @@ components:
     NoStore:
       description: "Proíbe armazenamento HTTP de dados pessoais ou credenciais."
       schema:
+        type: "string"
+        const: "no-store"
+    RetryAfter:
+      description: "Segundos mínimos até a próxima tentativa; presente em 429 e operações em andamento."
+      schema:
+        type: "integer"
+        minimum: 0
+    ETag:
+      description: "Versão forte da encomenda para If-Match."
+      schema:
+        type: "string"
+        pattern: "^\"[0-9]+\"$"
+  responses:
+    Problem:
+      description: "Erro estruturado seguro; status HTTP e code determinam a ação permitida."
+      headers:
+        X-Request-Id:
+          $ref: "#/components/headers/RequestId"
+        Cache-Control:
+          $ref: "#/components/headers/NoStore"
