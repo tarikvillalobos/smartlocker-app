@@ -82,6 +82,7 @@ física nem verificação completa de foco por teclado em cada sistema.
 
 ## Cofres nativos desktop
 
+`python3 scripts/run_native_secure_tests.py` executa **três testes nativos** com
 chaves sintéticas exclusivas, cobrindo gravação, leitura por outra instância,
 atualização, isolamento, remoção e tratamento de valores longos sem truncamento.
 Esses testes passaram no macOS local e nos três runners da CI: Keychain no macOS,
