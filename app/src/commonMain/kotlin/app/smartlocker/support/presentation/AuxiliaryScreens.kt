@@ -118,9 +118,6 @@ fun LegalScreen(controller: AppController, platform: PlatformServices) {
     PageTitle("Termos e privacidade", { controller.navigate(Route.PROFILE) })
     Panel {
         Text("SmartLocker App · software privado e proprietário", style = MaterialTheme.typography.titleMedium)
-        Text("Esta demonstração usa dados fictícios. Documentos legais de cada marca deverão ser configurados antes da distribuição.")
-        listOf("Termos de uso" to controller.configuration.brand.termsUrl,
-            "Política de privacidade" to controller.configuration.brand.privacyUrl).forEach { (label, url) ->
             TextButton({
                 if (url == null || !platform.openLink(url)) controller.feedback("Documento desta marca ainda não configurado.")
             }) { Text(label) }
