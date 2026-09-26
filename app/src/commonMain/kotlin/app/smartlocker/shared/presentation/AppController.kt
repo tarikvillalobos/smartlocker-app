@@ -134,6 +134,11 @@ class AppController(
         }
     }
 
+    private suspend fun load(generation: Int = epoch, confirmedProfile: Profile? = null) {
+        val profile = confirmedProfile ?: repository.profile()
+        if (generation != epoch) return
+        // Apply confirmed revocation before any scoped read can fail or suspend.
+        if (state.value.profile != null) acceptProfile(profile)
         val context = state.value
         val profile = repository.profile()
         val location = profile.memberships.find { it.id == context.membershipId }?.id
