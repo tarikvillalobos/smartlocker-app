@@ -78,3 +78,23 @@ class ApiLockerRepositoryTest {
         }.useSuspend {
             assertEquals(ParcelStatus.MANUAL, it.repo.markCollected("member-1", "parcel-1").status)
             val undone = it.repo.undoManual("member-1", "parcel-1")
+            assertEquals(ParcelStatus.WAITING, undone.status)
+            assertEquals(CredentialStatus.REVOKED, undone.credentialStatus)
+            assertEquals(1, it.requests.count { request -> request.method == HttpMethod.Get && request.url.encodedPath.contains("/parcels/") })
+        }
+    }
+
+    @Test fun noticePagesPreserveGlobalUnreadCountAndOpaqueCursor() = runTest {
+        val cursor = "opaque /&+=?é"
+        withRepository { request ->
+            assertEquals("/v1/memberships/member-1/notifications", request.url.encodedPath)
+            assertEquals("20", request.url.parameters["limit"])
+            val next = request.url.parameters["cursor"]
+            if (next == null) json(ApiNoticePage(listOf(notice), page(cursor), 74))
+            else {
+                assertEquals(cursor, next)
+                json(ApiNoticePage(listOf(notice.copy(id = "notice-2", readAt = NOW)), page(null), 74))
+            }
+        }.useSuspend {
+            val first = it.repo.noticePage("member-1")
+            assertEquals(74, first.unreadCount)
