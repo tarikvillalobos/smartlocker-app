@@ -49,3 +49,23 @@ No Windows, substitua `./gradlew` por `gradlew.bat` e `python3` por `python`.
 
 ## Android
 
+```sh
+python3 scripts/prepare_resources.py
+./gradlew :androidApp:assembleDebug
+./gradlew :androidApp:installDebug
+```
+
+Abra SmartLocker no dispositivo ou emulador. Na primeira tela, selecione
+“Experimentar demonstração”. O APK está em
+`androidApp/build/outputs/apk/debug/androidApp-debug.apk`.
+Há suporte a rotação, teclado, insets e janelas com dobradiça separadora.
+
+## iPhone e iPad
+
+```sh
+brew install xcodegen
+python3 scripts/prepare_resources.py
+xcodegen generate --spec iosApp/project.yml
+open iosApp/SmartLocker.xcodeproj
+```
+
