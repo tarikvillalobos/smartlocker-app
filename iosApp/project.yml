@@ -18,6 +18,7 @@ targets:
     platform: iOS
     sources:
       - SmartLockerApp.swift
+      - GeneratedAssets.xcassets
     settings:
       base:
         TARGETED_DEVICE_FAMILY: "1,2"
