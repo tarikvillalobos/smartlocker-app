@@ -77,3 +77,7 @@ compose.resources {
     packageOfResClass = "app.smartlocker.resources"
     publicResClass = true
 }
+
+tasks.withType<org.gradle.api.tasks.testing.Test>().configureEach {
+    inputs.property("nativeVaultTests", providers.environmentVariable("SMARTLOCKER_NATIVE_SECURE_TESTS").getOrElse("0"))
+}
