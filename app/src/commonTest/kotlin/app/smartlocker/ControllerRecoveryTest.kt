@@ -98,3 +98,23 @@ class ControllerRecoveryTest {
         assertEquals("home", current.membershipId)
         assertNotEquals("demo-8", current.selectedId)
     }
+
+    @Test fun contactCanBeReopenedResentAndCorrected() = runTest {
+        val clock = TestClock()
+        val demo = DemoRepository(MemoryStorage(), MemorySecure(), Brands.smartLocker, clock, 0)
+        demo.signIn()
+        val controller = AppController(AppConfiguration(Brands.smartLocker, Environment.DEMO), demo, clock, backgroundScope)
+        controller.state.first { it.profile != null }
+        controller.navigate(Route.CONTACT)
+        controller.contact("11912345678", LoginChannel.SMS)
+        val first = controller.state.first { it.contactChallenge != null }.contactChallenge!!
+        controller.navigate(Route.PROFILE)
+        controller.navigate(Route.CONTACT)
+        assertEquals("11912345678", controller.state.value.contactValue)
+        assertEquals(LoginChannel.SMS, controller.state.value.contactChannel)
+        clock.time = first.resendAt
+        controller.resendContact()
+        controller.state.first { it.contactChallenge?.id != first.id }
+        assertNull(controller.state.value.error)
+        controller.correctProfileContact()
+        assertNull(controller.state.value.contactChallenge)
