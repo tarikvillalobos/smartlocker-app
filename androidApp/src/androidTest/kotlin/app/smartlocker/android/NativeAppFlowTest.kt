@@ -52,6 +52,8 @@ class NativeAppFlowTest {
         assertFieldAboveVisibleIme("CPF")
         ui.onNodeWithText("11987654321").assertExists()
         ui.onNodeWithText("52998224725").assertExists()
+        focusWithVisibleIme("Celular")
+        focusWithVisibleIme("CPF")
         ui.onNodeWithText("Receber código por SMS").performScrollTo().performClick()
         waitForText("Código de 6 dígitos")
         ui.onNodeWithText("Código de 6 dígitos").performScrollTo().performTextInput("123")
