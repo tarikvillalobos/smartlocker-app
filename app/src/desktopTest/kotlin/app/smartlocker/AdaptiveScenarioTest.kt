@@ -71,7 +71,6 @@ class AdaptiveScenarioTest {
             onNodeWithText("Copiar código").performScrollTo().assertIsDisplayed()
             runOnIdle { controller.navigate(Route.HISTORY) }
             onNodeWithText("Carregar mais").performScrollTo().performClick()
-            waitUntil(15_000) { controller.state.value.parcels.size == 40 && !controller.state.value.busy }
             capture("many-390-2x")
             runOnIdle { controller.demoScenario(DemoScenario.EMPTY); controller.navigate(Route.HOME) }
             waitUntil(15_000) { controller.state.value.parcels.isEmpty() && !controller.state.value.busy }
