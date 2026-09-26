@@ -258,3 +258,23 @@ class ApiLockerRepository(private val session: ApiSessionClient) : LockerReposit
     private fun restrictActions(value: Parcel, membership: ApiCapabilities, global: ApiCapabilities): Parcel = value.copy(
         canMarkManually = value.canMarkManually && membership.features.manualPickup && global.features.manualPickup,
         canUndo = value.canUndo && membership.features.undoManualPickup && global.features.undoManualPickup,
+        canReportIssue = value.canReportIssue && membership.features.supportIssues && global.features.supportIssues,
+    )
+
+    private suspend inline fun <reified T> request(
+        user: String, path: String, method: HttpMethod = HttpMethod.Get, body: String? = null,
+        headers: Map<String, String> = emptyMap(),
+    ): T {
+        checkUser(user)
+        val bodyText = session.request(path, method, body, headers)
+        checkUser(user)
+        return decodeApi(bodyText)
+    }
+
+    private suspend fun <T> cache(user: String, block: () -> T): T = cacheMutex.withLock {
+        checkUser(user)
+        if (cacheUser != user) { memberships.clear(); reviewedParcels.clear(); cacheUser = user }
+        block()
+    }
+    private suspend fun clearCache() = cacheMutex.withLock {
+        memberships.clear(); reviewedParcels.clear(); cacheUser = null
