@@ -78,3 +78,23 @@ para esse papel; esta minuta define apenas o cliente de usuários finais.
   o app atual usa frescor fixo de 60 segundos. A integração deverá adequar isso.
 - Notifications/issues hoje retornam listas; o contrato as pagina e inclui
   contagem global explícita para avisos. O adaptador deve preservar esses dados.
+- Secret aceita até 8192 caracteres; isso excede limites operacionais atuais de
+  alguns cofres desktop (sessão codificada em base64). Confirmar limites com o
+  fornecedor e adequar o armazenamento antes de integrar; não truncar segredos.
+
+## Lacunas e escolhas que exigem homologação
+
+URLs e credenciais de ambientes; valores de TTL e rate limit; cadastro e recuperação
+de identidade; validade do OTP; política de canais; política de undo; emissão e
+renovação de credenciais; permissões exatas; limites/retencão de idempotência;
+protocolo confiável dos eventos físicos; processos de suporte; fornecedor push e
+seus certificados/chaves de backend. Nem este documento nem sua validação provam
+implementação ou segurança do servidor futuro.
+
+## Validação realizada
+
+- openapi-spec-validator 0.7.2: OpenAPI 3.1.1 válido.
+- YAML com chaves únicas; 453 referências locais resolvidas, sem referências remotas.
+- JSON Schema: schemas válidos e oito exemplos válidos.
+- 21 casos positivos/negativos de schema: CPF, telefone, canal, e-mail, OTP,
+  preferências, métricas incompletas, UTC e combinação plataforma/provedor push.
