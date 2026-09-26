@@ -18,3 +18,14 @@ internal fun apiFailure(status: Int, body: String): AppFailure {
         code == "RESEND_TOO_EARLY" -> FailureKind.VALIDATION to "Aguarde o intervalo antes de reenviar o código."
         code in setOf("CREDENTIAL_EXPIRED", "CREDENTIAL_REVOKED", "CREDENTIAL_CONSUMED") ->
             FailureKind.EXPIRED_CODE to "Este código não está mais disponível. Atualize a encomenda."
+        code == "LOCKER_UNAVAILABLE" -> FailureKind.UNAVAILABLE to "O armário está indisponível. Tente novamente mais tarde."
+        code == "CURSOR_EXPIRED" -> FailureKind.CONFLICT to "A consulta expirou. Atualize a lista para continuar."
+        code == "FEATURE_UNAVAILABLE" -> FailureKind.DENIED to "Este recurso não está disponível neste local."
+        status in setOf(403, 404) -> FailureKind.DENIED to "Recurso indisponível ou sem autorização de acesso."
+        status in setOf(409, 412) -> FailureKind.CONFLICT to "Os dados foram alterados. Atualize antes de tentar novamente."
+        status == 429 -> FailureKind.UNAVAILABLE to "Muitas solicitações. Aguarde antes de tentar novamente."
+        status in 400..499 -> FailureKind.VALIDATION to "A solicitação não foi aceita. Confira os dados informados."
+        else -> FailureKind.UNAVAILABLE to "Serviço indisponível. Tente novamente mais tarde."
+    }
+    return AppFailure(kind, message, retryAt)
+}
