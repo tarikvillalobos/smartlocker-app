@@ -58,3 +58,23 @@ fun ApiParcelMetrics.toDomain(): Statistics {
     if (!complete) {
         apiRequire(totalReceived == null && physicalPickupCount == null && averagePickupDurationSeconds == null)
         return Statistics(null, null, start, endExclusive, complete = false)
+    }
+    val total = totalReceived ?: invalidApiResponse()
+    val physical = physicalPickupCount ?: invalidApiResponse()
+    apiRequire(total >= 0 && physical in 0..total)
+    apiRequire((physical == 0) == (averagePickupDurationSeconds == null))
+    val average = averagePickupDurationSeconds?.let { seconds ->
+        apiRequire(seconds.isFinite() && seconds >= 0 && seconds <= (endExclusive - start).toDouble() / 1000)
+        val millis = seconds * 1000
+        apiRequire(millis <= Long.MAX_VALUE.toDouble())
+        millis.toLong()
+    }
+    return Statistics(total, average, start, endExclusive, complete = true)
+}
+
+fun ApiPickupCredential.toDomain(): PickupCredential {
+    apiId(membershipId)
+    apiRequire(status == "active" && Regex("^[0-9]{4,12}$").matches(code))
+    apiText(qrPayload, 2048)
+    val verified = apiInstant(verifiedAt)
+    val expires = apiInstant(expiresAt)
