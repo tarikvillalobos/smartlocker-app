@@ -12,9 +12,6 @@ Consulte [OPENAPI.md](OPENAPI.md) e os registros datados de [VALIDATION.md](VALI
 
 ## Implementado no aplicativo
 
-O transporte não presume Bearer, cookies ou renovação automática. Cabe ao futuro
-adaptador fornecer exatamente o método, caminho e autenticação documentados.
-Nenhum corpo de resposta de erro é exibido diretamente nem registrado em logs.
 
 ## Informações necessárias para integrar
 
