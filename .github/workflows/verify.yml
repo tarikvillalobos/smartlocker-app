@@ -69,6 +69,7 @@ jobs:
           echo "ANDROID_HOME=$GITHUB_WORKSPACE/.tools/android-sdk" >> "$GITHUB_ENV"
           echo "ANDROID_SDK_ROOT=$GITHUB_WORKSPACE/.tools/android-sdk" >> "$GITHUB_ENV"
       - run: python3 scripts/prepare_resources.py
+      - run: ./gradlew :androidApp:assembleDebug :androidApp:assembleDebugAndroidTest :androidApp:lintDebug
       - uses: actions/upload-artifact@v4
         with:
           name: android-debug
