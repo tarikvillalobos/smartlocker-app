@@ -58,3 +58,23 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
+          java-version: '21'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: 'platform-tools platforms;android-35 build-tools;35.0.0'
+      - name: Isolate the supported Android SDK
+        shell: bash
+        run: |
+          python scripts/prepare_android_sdk.py --source "$ANDROID_HOME"
+          echo "ANDROID_HOME=$GITHUB_WORKSPACE/.tools/android-sdk" >> "$GITHUB_ENV"
+          echo "ANDROID_SDK_ROOT=$GITHUB_WORKSPACE/.tools/android-sdk" >> "$GITHUB_ENV"
+      - run: brew install xcodegen
+      - run: python scripts/prepare_resources.py
+      - run: python scripts/prepare_icons.py
+      - run: xcodegen generate --spec iosApp/project.yml
+      - name: Build unsigned simulator application
+        run: >-
+          xcodebuild -project iosApp/SmartLocker.xcodeproj -scheme SmartLocker
