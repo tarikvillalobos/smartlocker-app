@@ -27,4 +27,9 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.window)
     implementation(libs.compose.foundation)
+    androidTestImplementation(libs.android.test.runner)
+    androidTestImplementation(libs.android.test.core)
+    androidTestImplementation(libs.android.test.junit)
+    androidTestImplementation(libs.android.compose.test)
+    androidTestImplementation(libs.coroutines)
 }
