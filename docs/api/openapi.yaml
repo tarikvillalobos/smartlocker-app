@@ -1758,3 +1758,23 @@ components:
             - "string"
             - "null"
           pattern: "^\\+[1-9][0-9]{7,14}$"
+        phoneVerifiedAt:
+          anyOf:
+            -
+              $ref: "#/components/schemas/Instant"
+            -
+              type: "null"
+        email:
+          type:
+            - "string"
+            - "null"
+          format: "email"
+          maxLength: 254
+        emailVerifiedAt:
+          anyOf:
+            -
+              $ref: "#/components/schemas/Instant"
+            -
+              type: "null"
+        preferences:
+          $ref: "#/components/schemas/CommunicationPreferences"
