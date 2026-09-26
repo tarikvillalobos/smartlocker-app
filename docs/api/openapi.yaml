@@ -2338,3 +2338,23 @@ components:
         aceitar credenciais de fornecedor do aplicativo. Desativação ou troca de conta exige remoção do registro.
       oneOf:
         -
+          properties:
+            platform:
+              const: "android"
+            provider:
+              const: "fcm"
+        -
+          properties:
+            platform:
+              const: "ios"
+            provider:
+              const: "apns"
+    PushRegistration:
+      type: "object"
+      properties:
+        installationId:
+          type: "string"
+          format: "uuid"
+        registeredAt:
+          $ref: "#/components/schemas/Instant"
+      required:
