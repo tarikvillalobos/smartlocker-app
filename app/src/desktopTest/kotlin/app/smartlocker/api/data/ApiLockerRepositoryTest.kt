@@ -258,3 +258,14 @@ class ApiLockerRepositoryTest {
             "user-1", "smartlocker", "session-1", listOf("profile:read", "parcels:read", "parcels:manual"))
         private val notice = ApiDeliveryNotice("notice-1", "member-1", "parcel-1", "Encomenda disponível", EARLIER, null)
         private val challenge = ApiChallenge("contact-1", LATER, SOON, "sms", "+55 ** *****-4321", 6, "contact_change")
+        private val issue = ApiSupportIssue("issue-1", "SL-1", "member-1", "parcel-1", "A porta não abriu.", "received", NOW, NOW, null)
+        private fun page(cursor: String?) = ApiPageInfo(cursor, NOW, LATER)
+        private fun parcel(status: String = "waiting", version: Long = 3) = ApiParcel(
+            "parcel-1", "recipient-1", "member-1", "Correios", null, status,
+            ApiLocker("locker-1", "Portaria", "Rua das Flores, 120", true), "4", null,
+            EARLIER, EARLIER, LATER, if (status == "manual") NOW else null, null,
+            if (status == "manual") "revoked" else "active",
+            ApiParcelActions(status == "waiting", status == "manual", if (status == "manual") LATER else null, true),
+            listOf(ApiTimelineEvent("deposited", EARLIER)), version)
+    }
+}
