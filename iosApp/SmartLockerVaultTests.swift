@@ -18,3 +18,14 @@ final class SmartLockerVaultTests: XCTestCase {
     func testDeletingOneScopePreservesAnother() {
         let first = "test.smartlocker.\(UUID().uuidString)"
         let second = "\(first).another-brand"
+        defer {
+            XCTAssertTrue(Keychain.write(first, nil))
+            XCTAssertTrue(Keychain.write(second, nil))
+        }
+        XCTAssertTrue(Keychain.write(first, "first-synthetic-session"))
+        XCTAssertTrue(Keychain.write(second, "second-synthetic-session"))
+        XCTAssertTrue(Keychain.write(first, nil))
+        XCTAssertNil(Keychain.read(first))
+        XCTAssertTrue(Keychain.read(second) == "second-synthetic-session")
+    }
+}
