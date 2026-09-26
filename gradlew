@@ -1,5 +1,4 @@
 #!/bin/sh
-# Source-only bootstrap: avoids committing an indivisible binary wrapper jar.
 set -eu
 cd "$(dirname "$0")"
 version=8.14.3
