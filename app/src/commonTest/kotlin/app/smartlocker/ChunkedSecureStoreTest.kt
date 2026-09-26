@@ -138,3 +138,23 @@ class ChunkedSecureStoreTest {
         assertFailsWith<AppFailure> { store.write("é".repeat(256 * 1024)) }
         assertEquals(snapshot, vault.memory.values)
         val manifest = vault.memory.values.getValue("$KEY.head")
+        vault.memory.values["$KEY.head"] = manifest.split('|').toMutableList().apply { this[4] = "2147483647" }.joinToString("|")
+        vault.reads = 0
+        assertFailsWith<AppFailure> { store.read() }
+        assertEquals(1, vault.reads)
+    }
+
+    @Test fun clearAndReplacementPreserveAnotherBrandAndSupportEmptyValues() = runTest {
+        val memory = MemorySecure()
+        val first = ChunkedSecureStore(memory, KEY)
+        val second = ChunkedSecureStore(memory, "api.session.another")
+        first.write("first")
+        second.write("second")
+        first.write("")
+        assertTrue(first.read() == "")
+        first.write(null)
+        assertNull(first.read())
+        assertTrue(second.read() == "second")
+        assertTrue(memory.values.keys.all { it.startsWith("api.session.another.") })
+    }
+
