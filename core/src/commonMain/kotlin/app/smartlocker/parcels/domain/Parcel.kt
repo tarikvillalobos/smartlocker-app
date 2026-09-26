@@ -18,3 +18,23 @@ data class Parcel(
     val deadline: Long,
     val manualAt: Long? = null,
     val collectedAt: Long? = null,
+    val credentialStatus: CredentialStatus = CredentialStatus.ACTIVE,
+    val lockerAvailable: Boolean = true,
+    val canMarkManually: Boolean = true,
+    val canUndo: Boolean = false,
+) {
+    val status: ParcelStatus get() = when {
+        collectedAt != null -> ParcelStatus.COLLECTED
+        manualAt != null -> ParcelStatus.MANUAL
+        else -> ParcelStatus.WAITING
+    }
+}
+
+data class PickupCredential(
+    val parcelId: String,
+    val code: String,
+    val payload: String,
+    val expiresAt: Long,
+    val verifiedAt: Long,
+    val status: CredentialStatus,
+) {
