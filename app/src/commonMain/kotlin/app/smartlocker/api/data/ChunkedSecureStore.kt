@@ -78,3 +78,23 @@ class ChunkedSecureStore(private val storage: SecureStorage, private val key: St
                 } else repeat(entry.chunks) { storage.write(chunkKey(entry, it), null) }
             }
             storage.write(journalKey, null)
+        } catch (cancelled: CancellationException) {
+            throw cancelled
+        } catch (error: Exception) {
+            if (required) throw failure()
+            // Keep the journal for a later read/write. Never infer keys from an invalid manifest.
+        }
+    }
+
+    private fun parse(raw: String): Manifest {
+        if (raw.length > 160) throw failure()
+        val fields = raw.split('|')
+        if (fields.size != 6 || fields[0] != "1" || !UUID.matches(fields[1])) throw failure()
+        val bytes = fields[2].toIntOrNull() ?: throw failure()
+        val encodedLength = fields[3].toIntOrNull() ?: throw failure()
+        val chunks = fields[4].toIntOrNull() ?: throw failure()
+        if (bytes !in 0..MAX_BYTES || encodedLength != ((bytes + 2) / 3) * 4 ||
+            chunks != (encodedLength + CHUNK_SIZE - 1) / CHUNK_SIZE || !CHECKSUM.matches(fields[5])) throw failure()
+        val value = Manifest(fields[1], bytes, encodedLength, chunks, fields[5])
+        if (value.encode() != raw) throw failure()
+        return value
