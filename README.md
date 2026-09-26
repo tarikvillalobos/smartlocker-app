@@ -160,8 +160,6 @@ Os testes Android usam um identificador separado:
 ./gradlew :androidApp:connectedDebugAndroidTest -PapplicationId=app.smartlocker.validation
 ```
 
-Execute esse comando em emulador dedicado. Os sete casos nativos passaram,
-incluindo Keystore, teclado visível, rotação e recriação explícita da Activity.
 A validação do contrato proposto é descrita em [OPENAPI.md](docs/OPENAPI.md).
 
 ## Organização
