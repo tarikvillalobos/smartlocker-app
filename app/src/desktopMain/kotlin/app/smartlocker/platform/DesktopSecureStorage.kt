@@ -16,6 +16,8 @@ import java.nio.file.NoSuchFileException
 import java.nio.file.StandardCopyOption.ATOMIC_MOVE
 import java.nio.file.StandardCopyOption.REPLACE_EXISTING
 import java.util.Base64
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 /** Keychain on macOS, DPAPI on Windows, Secret Service on Linux. Never plaintext fallback. */
 class DesktopSecureStorage(private val directory: Path) : SecureStorage {
