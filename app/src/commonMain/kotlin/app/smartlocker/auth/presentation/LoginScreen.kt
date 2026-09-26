@@ -58,3 +58,23 @@ fun LoginScreen(controller: AppController, state: AppState, legal: () -> Unit) {
                 if (demo) Panel {
                     Text("Experimente com dados fictícios", style = MaterialTheme.typography.labelLarge)
                     Text("Nenhum SMS ou e-mail será enviado.", color = Tokens.secondary)
+                    TextButton({ contact = if (email) "ana@example.test" else "11987654321"; cpf = "52998224725" }) {
+                        Text("Preencher dados de demonstração")
+                    }
+                }
+            } else {
+                Text("Confira seu código", style = MaterialTheme.typography.headlineSmall)
+                Text("Enviado para $contact. Válido por até 5 minutos.", color = Tokens.secondary)
+                if (demo) Text("Código demonstrativo: 123456", color = MaterialTheme.colorScheme.primary)
+                OutlinedTextField(code, { code = it.filter(Char::isDigit).take(6) },
+                    label = { Text("Código de 6 dígitos") }, singleLine = true, shape = Tokens.control,
+                    modifier = Modifier.fillMaxWidth(), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword))
+                PrimaryButton("Confirmar código", !state.busy && code.length == 6) { controller.verify(code) }
+                val seconds = ((state.challenge.resendAt - state.now + 999) / 1000).coerceAtLeast(0)
+                TextButton({ code = ""; controller.resend() }, Modifier.fillMaxWidth(), enabled = !state.busy && seconds == 0L) {
+                    Text(if (seconds > 0) "Reenviar em ${seconds}s" else "Reenviar código")
+                }
+                TextButton({ code = ""; controller.correctContact() }, Modifier.fillMaxWidth()) { Text("Corrigir contato") }
+            }
+            TextButton(legal, Modifier.fillMaxWidth()) { Text("Termos de uso e privacidade") }
+        }
