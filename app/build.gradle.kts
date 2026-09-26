@@ -93,6 +93,11 @@ compose.desktop {
             }
             linux {
                 packageName = if (auroraPackage) "aurora-lockers" else "smartlocker"
+                debMaintainer = "tarik.villalobos@gmail.com"
+                appCategory = "Utility"
+                shortcut = true
+                iconFile.set(rootProject.file(".tools/packaging/icons/$packageBrand.png"))
+            }
         }
     }
 }
