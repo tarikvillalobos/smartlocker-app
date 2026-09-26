@@ -37,6 +37,14 @@ final class SmartLockerUITests: XCTestCase {
         app.terminate()
     }
 
+    private func waitUntilUncovered(_ field: XCUIElement, in app: XCUIApplication) {
+        let visible = NSPredicate { _, _ in
+            field.frame.maxY <= app.keyboards.firstMatch.frame.minY && field.frame.height > 0
+        }
+        let expectation = XCTNSPredicateExpectation(predicate: visible, object: nil)
+        XCTAssertEqual(XCTWaiter.wait(for: [expectation], timeout: 8), .completed)
+    }
+
     private func reveal(_ element: XCUIElement, in app: XCUIApplication) {
         for _ in 0..<6 {
             if element.isHittable { return }
