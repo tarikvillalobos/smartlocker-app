@@ -1918,3 +1918,23 @@ components:
           $ref: "#/components/schemas/Identifier"
         carrier:
           type: "string"
+          minLength: 1
+          maxLength: 200
+        tracking:
+          type:
+            - "string"
+            - "null"
+          maxLength: 200
+        status:
+          type: "string"
+          enum:
+            - "waiting"
+            - "manual"
+            - "collected"
+        locker:
+          $ref: "#/components/schemas/Locker"
+        compartment:
+          type: "string"
+          minLength: 1
+          maxLength: 100
+        size:
