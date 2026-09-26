@@ -45,8 +45,6 @@ class NativeAppFlowTest {
     }
 
     @Test fun enteredLoginAndOtpSurviveRotationAndManualPickupWorks() {
-        ui.onNodeWithText("Celular").performScrollTo().performTextInput("11987654321")
-        ui.onNodeWithText("CPF").performScrollTo().performTextInput("52998224725")
         rotate(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE, Configuration.ORIENTATION_LANDSCAPE)
         ui.onNodeWithText("11987654321").assertExists()
         ui.onNodeWithText("52998224725").assertExists()
