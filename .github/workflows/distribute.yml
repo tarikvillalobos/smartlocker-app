@@ -1,0 +1,20 @@
+name: Build installable artifacts
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  desktop-packages:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-15, windows-2022]
+        brand: [smartlocker, aurora]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: actions/setup-python@v5
