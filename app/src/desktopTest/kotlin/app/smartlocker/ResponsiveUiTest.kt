@@ -69,6 +69,7 @@ class ResponsiveUiTest {
             waitUntil(timeoutMillis = 10_000) { runtime.state.value.controller.state.value.initialized }
             onNodeWithText("Preencher dados de demonstração").performScrollTo().performClick()
             onNodeWithText("Receber código por SMS").performScrollTo().performClick()
+            waitUntil(timeoutMillis = 10_000) { runtime.state.value.controller.state.value.challenge != null }
             onNodeWithText("Código de 6 dígitos").performScrollTo().performTextInput("123456")
             onNodeWithText("Confirmar código").performScrollTo().performClick()
             waitUntil(15_000) { runtime.state.value.controller.state.value.profile != null }
