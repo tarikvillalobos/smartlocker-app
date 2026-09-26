@@ -58,3 +58,7 @@ for name, schema in spec['components']['schemas'].items():
     root = {'$ref': '#/components/schemas/' + name, 'components': spec['components']}
     validator = Draft202012Validator(root, format_checker=FormatChecker())
     for example in schema.get('examples', []):
+        validator.validate(example)
+        examples += 1
+print(f'Valid OpenAPI: {len(operations)} operations, {len(spec["components"]["schemas"])} schemas, '
+      f'{len(refs)} resolved references, {examples} valid schema examples.')
