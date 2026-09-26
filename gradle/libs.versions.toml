@@ -1,0 +1,20 @@
+[versions]
+kotlin = "2.3.21"
+compose = "1.10.3"
+agp = "8.11.1"
+ktor = "3.4.3"
+coroutines = "1.10.2"
+serialization = "1.9.0"
+datetime = "0.6.2"
+sqlite = "3.49.1.0"
+zxing = "3.5.3"
+activity = "1.10.1"
+jna = "5.17.0"
+
+[libraries]
+coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
+serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
+datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime" }
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
