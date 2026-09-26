@@ -60,7 +60,6 @@ data class ApiSupportIssue(
         val created = apiInstant(createdAt)
         apiRequire(apiInstant(updatedAt) >= created && message.length in 10..2000)
         resolution?.let { apiText(it, 2000, true) }
-        return SupportIssue(apiId(id), apiId(parcelId), message, created, label)
     }
 }
 
