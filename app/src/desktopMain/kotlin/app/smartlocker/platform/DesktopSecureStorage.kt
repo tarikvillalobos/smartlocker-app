@@ -38,3 +38,23 @@ class DesktopSecureStorage(private val directory: Path) : SecureStorage {
                     val input = "add-generic-password -U -a $key -s $service -w ${encoded(value)}\n"
                     command(listOf("/usr/bin/security", "-i"), input)
                 }
+            }
+            "win" in os -> {
+                val path = directory.resolve(encoded(key) + ".protected")
+                if (value == null) Files.deleteIfExists(path)
+                else Files.write(path, Crypt32Util.cryptProtectData(value.toByteArray()))
+            }
+            else -> {
+                if (value == null) command(listOf("secret-tool", "clear", "service", service, "account", key), allowMissing = true)
+                else command(listOf("secret-tool", "store", "--label=SmartLocker", "service", service, "account", key), encoded(value))
+            }
+        }
+        Unit
+    }
+
+    private fun command(args: List<String>, input: String? = null, allowMissing: Boolean = false): String? {
+        val process = try { ProcessBuilder(args).start() }
+        catch (_: Exception) { throw unavailable() }
+        process.outputStream.use { stream -> input?.let { stream.write(it.toByteArray()) } }
+        val output = process.inputStream.bufferedReader().readText()
+        process.errorStream.bufferedReader().readText() // Never log secret-service output.
