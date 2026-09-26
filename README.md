@@ -76,6 +76,7 @@ Há suporte a rotação, teclado, insets e janelas com dobradiça separadora.
 ```sh
 brew install xcodegen
 python3 scripts/prepare_resources.py
+python3 scripts/prepare_icons.py
 xcodegen generate --spec iosApp/project.yml
 open iosApp/SmartLocker.xcodeproj
 ```
