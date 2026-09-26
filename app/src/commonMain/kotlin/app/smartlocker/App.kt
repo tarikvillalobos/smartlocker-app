@@ -111,6 +111,7 @@ fun SmartLockerApp(runtime: AppRuntime, modifier: Modifier = Modifier) {
             }
         }
     }
+    }
 }
 
 @Composable
