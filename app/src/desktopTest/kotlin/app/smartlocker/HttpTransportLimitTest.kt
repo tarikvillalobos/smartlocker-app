@@ -98,3 +98,4 @@ class HttpTransportLimitTest {
             transport.close()
         }
     }
+}
