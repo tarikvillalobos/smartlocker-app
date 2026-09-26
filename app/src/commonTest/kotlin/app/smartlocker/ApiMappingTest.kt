@@ -138,3 +138,6 @@ class ApiMappingTest {
     }
 
     private fun failsSafely(block: () -> Unit) {
+        assertEquals(FailureKind.UNAVAILABLE, assertFailsWith<AppFailure>(block = block).kind)
+    }
+}
