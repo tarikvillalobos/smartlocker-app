@@ -80,7 +80,6 @@ class DesktopSecureStorage(private val directory: Path) : SecureStorage {
             }
             Unit
         }
-        Unit
     }
 
     private fun command(args: List<String>, input: String? = null, allowMissing: Boolean = false): String? {
