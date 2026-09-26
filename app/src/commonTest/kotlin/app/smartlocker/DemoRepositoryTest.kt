@@ -98,3 +98,15 @@ class DemoRepositoryTest {
         assertFailsWith<AppFailure> { repo.physicalPickup("home", "demo-0") }
     }
     @Test fun depositsCreateLinkedNotificationsAndSupportRequests() = runTest {
+        val repo = repository()
+        repo.signIn()
+        repo.deposit("home")
+        val notice = repo.notifications("home").first()
+        val parcel = repo.parcel("home", notice.parcelId)
+        assertTrue(repo.credential("home", parcel.id).payload.startsWith("SMARTLOCKER-DEMO|"))
+        repo.markNoticeRead("home", notice.id)
+        assertTrue(repo.notifications("home").first().read)
+        val issue = repo.reportIssue("home", parcel.id, "A porta indicada não abriu.")
+        assertEquals(issue, repo.issues("home").single())
+    }
+}
