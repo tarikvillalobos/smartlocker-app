@@ -32,6 +32,13 @@ fun qrMatrixOrNull(payload: String): List<List<Boolean>>? = try {
 
 @Composable
 fun PickupQr(payload: String, modifier: Modifier = Modifier) {
+    val matrix = remember(payload) { qrMatrixOrNull(payload) }
+    if (matrix == null) {
+        Text("QR Code indisponível. Use o código numérico abaixo.",
+            modifier.widthIn(max = 232.dp).fillMaxWidth(), style = MaterialTheme.typography.bodyMedium,
+            color = Tokens.secondary, textAlign = TextAlign.Center)
+        return
+    }
     Canvas(modifier.widthIn(max = 232.dp).fillMaxWidth().aspectRatio(1f)
         .background(Color.White).semantics { contentDescription = "QR Code de retirada; código numérico disponível abaixo" }) {
         val cells = matrix.size + 8 // Four white modules on every edge.
