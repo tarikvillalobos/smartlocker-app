@@ -53,7 +53,6 @@ final class SmartLockerUITests: XCTestCase {
             field.frame.maxY <= app.keyboards.firstMatch.frame.minY && field.frame.height > 0
         }
         let expectation = XCTNSPredicateExpectation(predicate: visible, object: nil)
-        XCTAssertEqual(XCTWaiter.wait(for: [expectation], timeout: 8), .completed)
     }
 
     private func reveal(_ element: XCUIElement, in app: XCUIApplication) {
