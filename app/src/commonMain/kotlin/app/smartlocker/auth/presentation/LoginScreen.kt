@@ -64,7 +64,6 @@ fun LoginScreen(controller: AppController, state: AppState, legal: () -> Unit) {
                 }
             } else {
                 Text("Confira seu código", style = MaterialTheme.typography.headlineSmall)
-                Text("Enviado para $contact. Válido por até 5 minutos.", color = Tokens.secondary)
                 if (demo) Text("Código demonstrativo: 123456", color = MaterialTheme.colorScheme.primary)
                 OutlinedTextField(code, { code = it.filter(Char::isDigit).take(6) },
                     label = { Text("Código de 6 dígitos") }, singleLine = true, shape = Tokens.control,
