@@ -138,3 +138,11 @@ private fun AppNavigation(state: AppState, controller: AppController, rail: Bool
         items.forEach { (route, title, symbol) ->
             NavigationRailItem(state.route == route || route == Route.HISTORY && state.route == Route.DETAIL,
                 { controller.navigate(route) }, icon = { AppIcon(symbol) }, label = { Text(title) })
+        }
+    } else NavigationBar(containerColor = MaterialTheme.colorScheme.surface) {
+        items.forEach { (route, title, symbol) ->
+            NavigationBarItem(state.route == route || route == Route.HISTORY && state.route == Route.DETAIL,
+                { controller.navigate(route) }, icon = { AppIcon(symbol) }, label = { Text(title) })
+        }
+    }
+}
