@@ -78,3 +78,17 @@ class ControllerProductionStateTest {
         controller.refresh()
         val unavailable = controller.state.first { it.error != null && !it.busy }
         assertEquals(signedIn.session?.userId, unavailable.session?.userId)
+        assertNotNull(unavailable.profile)
+        assertTrue(unavailable.stale)
+        assertNull(unavailable.credential)
+        failure = FailureKind.EXPIRED_SESSION
+        controller.refresh()
+        val expired = controller.state.first { it.session == null && it.error != null }
+        assertNull(expired.profile)
+        assertNull(expired.credential)
+        assertTrue(expired.parcels.isEmpty())
+        assertTrue(expired.notices.isEmpty())
+        assertTrue(expired.issues.isEmpty())
+        assertTrue(expired.residents.isEmpty())
+    }
+}
