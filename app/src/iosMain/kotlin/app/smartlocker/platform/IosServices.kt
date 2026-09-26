@@ -38,3 +38,9 @@ class IosServices(
     }
     override suspend fun notificationPermission(): String = suspendCancellableCoroutine { continuation ->
         UNUserNotificationCenter.currentNotificationCenter().getNotificationSettingsWithCompletionHandler { settings ->
+            if (continuation.isActive) continuation.resume(
+                if (settings?.authorizationStatus == UNAuthorizationStatusAuthorized) "Sistema permite avisos; push não integrado."
+                else "Avisos não autorizados; a central continua disponível.")
+        }
+    }
+}
