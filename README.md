@@ -85,6 +85,14 @@ Abra SmartLocker no dispositivo ou emulador. Na primeira tela, selecione
 “Experimentar demonstração”. O APK está em
 `androidApp/build/outputs/apk/debug/androidApp-debug.apk`.
 Há suporte a rotação, teclado, insets e janelas com dobradiça separadora.
+Para apontar um build para o backend, use `-PapiBaseUrl`:
+
+```sh
+./gradlew :androidApp:assembleDebug -PapiBaseUrl="$SMARTLOCKER_API_BASE_URL"
+```
+
+A variável deve conter uma URL HTTPS real. O endpoint é configuração pública,
+sem credenciais de usuário ou chaves de fornecedor.
 
 ## iPhone e iPad
 
