@@ -7,6 +7,7 @@ import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.*
+import io.ktor.client.statement.bodyAsChannel
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.CancellationException
