@@ -78,3 +78,23 @@ class ControllerActionTest {
         val demo = DemoRepository(MemoryStorage(), MemorySecure(), Brands.smartLocker, clock, 0)
         demo.signIn()
         val response = CompletableDeferred<Parcel>()
+        val late = demo.parcel("home", "demo-0").copy(manualAt = clock.now(), credentialStatus = CredentialStatus.REVOKED)
+        var cancelled = false
+        val repository = object : LockerRepository by demo {
+            override suspend fun markCollected(locationId: String, parcelId: String): Parcel = try {
+                response.await()
+            } catch (_: CancellationException) {
+                cancelled = true
+                withContext(NonCancellable) { response.await() }
+            }
+        }
+        val controller = start(repository, clock)
+        controller.markCollected()
+        runCurrent()
+        controller.logout()
+        runCurrent()
+        assertTrue(cancelled)
+        response.complete(late)
+        runCurrent()
+        val loggedOut = controller.state.value
+        assertNull(loggedOut.session)
