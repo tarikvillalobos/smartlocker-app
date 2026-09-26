@@ -10,6 +10,12 @@ verde da marca padrão. Aurora Lockers demonstra uma segunda personalização.
 
 ## Status real
 
+Em desenvolvimento. A experiência demonstrativa funciona localmente dentro do
+aplicativo, com persistência e fluxos interativos. Não existe servidor próprio.
+A API externa, suas credenciais e documentação ainda não foram fornecidas.
+O modo de produção informa essa indisponibilidade e nunca usa demonstração
+como fallback. Nenhum SMS, e-mail, WhatsApp, push ou comando de hardware é enviado.
+O produto ainda não está pronto para produção.
 
 ## White Label
 
