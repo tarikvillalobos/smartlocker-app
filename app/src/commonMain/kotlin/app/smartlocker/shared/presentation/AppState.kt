@@ -49,5 +49,4 @@ data class AppState(
         return Features(brand.features.residents && allowed.residents, brand.features.issues && allowed.issues,
             brand.features.manualPickup && allowed.manualPickup, brand.features.contactEditing && allowed.contactEditing)
     }
-    fun channels(brand: Brand): Set<String> = membership?.channels?.intersect(brand.channels) ?: brand.channels
 }
