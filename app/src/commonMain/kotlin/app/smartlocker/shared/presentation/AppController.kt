@@ -118,3 +118,23 @@ class AppController(
             }
         }
         if (generation != epoch) return
+        mutable.update { it.copy(profile = profile, membershipId = location, parcels = page.items,
+            pending = pending, nextCursor = page.nextCursor, statistics = statistics, notices = notices,
+            issues = issues, selectedId = selected?.id, selected = selected, credential = credential,
+            credentialMessage = credentialMessage, stale = false, lastUpdated = clock.now()) }
+    }
+
+    fun select(id: String, openDetail: Boolean = true) {
+        mutable.update { it.copy(selectedId = id, selected = null, credential = null,
+            route = if (openDetail) Route.DETAIL else it.route) }
+        refresh()
+    }
+    fun navigate(route: Route) {
+        val features = configuration.brand.features
+        if ((route == Route.RESIDENTS && !features.residents) ||
+            (route == Route.ISSUES && !features.issues) ||
+            (route == Route.CONTACT && !features.contactEditing) ||
+            (route == Route.DEMO && configuration.environment != Environment.DEMO)) {
+            feedback("Recurso não habilitado para esta marca.")
+            return
+        }
