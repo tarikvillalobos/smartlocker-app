@@ -193,6 +193,11 @@ class AppController(
         val context = state.value
         if (context.selectedId == null) return@execute
         val generation = epoch
+        val message = action(context)
+        if (generation == epoch) {
+            load(generation)
+            if (generation == epoch) feedback(message)
+        }
     }
     fun preferences(value: CommunicationPreferences) = execute {
         val generation = epoch
