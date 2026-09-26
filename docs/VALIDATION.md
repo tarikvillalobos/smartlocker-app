@@ -168,6 +168,16 @@ macOS/Windows/Linux. Os jobs desktop incluem os três testes de cofre nativo.
 A revisão verificada foi `d5ecef3`, com o cliente HTTP completo. Commits posteriores
 que apenas atualizam documentação não alteram o código dos artefatos verificados.
 
+O [workflow de instaladores 36245457712](https://github.com/tarikvillalobos/smartlocker-app/actions/runs/36245457712)
+passou em **todos os sete jobs** na mesma revisão: DMG, MSI e DEB das duas marcas
+e aplicativo de simulador iOS. A versão dos pacotes é `1.1.0`.
+Os pacotes locais estão em `artifacts/delivery/1.1.0/`, com instruções, OpenAPI,
+`manifest.json` e `SHA256SUMS.txt`. O manifesto diferencia a origem local da CI.
+
+O launcher macOS 1.1.0 foi aberto com o Java incluído e diretório de dados temporário,
+sem erro de inicialização. Os dois DMGs passaram em `hdiutil verify`; o APK registra
+versão 1.1.0/código 2, e a assinatura local do app iOS passou em `codesign --verify`.
+Isso não substitui instalação em máquinas limpas nem assinatura de distribuição.
 
 A auditoria exige um arquivo textual e até 20 linhas alteradas por commit de
 implementação, com autoria `tarik.villalobos@gmail.com`. O README inicial precede
