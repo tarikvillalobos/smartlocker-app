@@ -59,6 +59,7 @@ class AdaptiveScenarioTest {
             setContent { CompositionLocalProvider(LocalDensity provides Density(1f, 2f)) { SmartLockerApp(runtime) } }
             waitUntil(timeoutMillis = 10_000) { controller.state.value.initialized }
             runOnIdle { controller.login(demoLogin) }
+            waitUntil(timeoutMillis = 10_000) { controller.state.value.challenge != null }
             runOnIdle { controller.verify("123456") }
             waitUntil(15_000) { controller.state.value.profile != null && !controller.state.value.busy }
             runOnIdle { controller.demoScenario(DemoScenario.LONG_TEXT) }
