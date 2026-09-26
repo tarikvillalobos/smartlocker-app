@@ -1,6 +1,5 @@
 # SmartLocker App
 
-White-label mobile application for smart locker users.
 
 The app allows users to manage packages delivered to smart lockers, check package status, and access the information required to collect their deliveries.
 
