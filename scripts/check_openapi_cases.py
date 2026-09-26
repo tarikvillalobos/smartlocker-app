@@ -15,6 +15,10 @@ capabilities = {
 standalone = {'id': 'membership', 'locationId': 'station', 'locationName': 'Estação Central',
               'unitId': None, 'unitLabel': None, 'timeZone': 'America/Sao_Paulo', 'capabilities': capabilities}
 cases = [
+ ('Membership', standalone, True),
+ ('Membership', dict(standalone, unitId='unit', unitLabel='Sala 204'), True),
+ ('Membership', dict(standalone, unitId='unit'), False),
+ ('Membership', dict(standalone, unitLabel='Sala 204'), False),
  ('LoginRequest', login, True),
  ('LoginRequest', dict(login, contact='ana@example.test', channel='email'), True),
  ('LoginRequest', dict(login, cpf='11111111111'), False),
