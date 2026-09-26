@@ -38,3 +38,23 @@ data class PickupCredential(
     val verifiedAt: Long,
     val status: CredentialStatus,
 ) {
+    fun canDisplay(now: Long, fresh: Boolean): Boolean =
+        fresh && status == CredentialStatus.ACTIVE && now < expiresAt &&
+            now >= verifiedAt && now - verifiedAt < 60_000
+}
+
+data class ParcelPage(val items: List<Parcel>, val nextCursor: String?)
+data class Statistics(val total: Int, val averageMillis: Long?, val since: Long, val until: Long)
+
+fun List<Parcel>.filtered(filter: ParcelFilter): List<Parcel> = filter {
+    when (filter) {
+        ParcelFilter.ALL -> true
+        ParcelFilter.WAITING -> it.status == ParcelStatus.WAITING
+        ParcelFilter.COLLECTED -> it.status != ParcelStatus.WAITING
+    }
+}
+
+fun calculateStatistics(completeData: List<Parcel>, since: Long, until: Long): Statistics {
+    val period = completeData.filter { it.depositedAt in since..until }
+    val durations = period.mapNotNull { parcel ->
+        parcel.collectedAt?.takeIf { it in parcel.depositedAt..until }
