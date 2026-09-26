@@ -58,3 +58,16 @@ class DemoParcels(private val db: DemoDatabase, private val clock: AppClock) {
         val now = clock.now()
         val item = ParcelRecord("demo-$index", "ana", location, "Nova entrega demonstrativa",
             null, "Portaria principal", "Residencial Jardim · Rua das Flores, 120",
+            "${index + 1}", "M", now, now, now + 3 * 86_400_000L)
+        db.update { it.copy(parcels = listOf(item) + it.parcels, sequence = index + 1,
+            notices = listOf(NoticeRecord("notice-${item.id}", item.id, "Sua encomenda chegou", now)) + it.notices) }
+    }
+
+    private fun change(id: String, change: (ParcelRecord) -> ParcelRecord) {
+        db.update { it.copy(parcels = it.parcels.map { item -> if (item.id == id) change(item) else item }) }
+    }
+}
+
+fun requireLocation(id: String) {
+    if (id !in setOf("home", "office")) throw AppFailure(FailureKind.DENIED, "Local não autorizado.")
+}
