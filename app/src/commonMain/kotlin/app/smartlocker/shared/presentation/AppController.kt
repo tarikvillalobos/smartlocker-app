@@ -194,6 +194,7 @@ class AppController(
         refresh()
     }
     fun membership(id: String) {
+        if (actionJob?.isActive == true) return
         if (state.value.profile?.memberships?.none { it.id == id } != false) return
         epoch++
         readJob?.cancel()
