@@ -158,3 +158,16 @@ class ChunkedSecureStoreTest {
         assertTrue(memory.values.keys.all { it.startsWith("api.session.another.") })
     }
 
+    private class FaultVault : SecureStorage {
+        val memory = MemorySecure()
+        var fail: (String, String?) -> Boolean = { _, _ -> false }
+        var reads = 0
+        override suspend fun read(key: String): String? { reads++; return memory.read(key) }
+        override suspend fun write(key: String, value: String?) {
+            if (fail(key, value)) error("Synthetic vault failure")
+            memory.write(key, value)
+        }
+    }
+
+    private companion object { const val KEY = "api.session.smartlocker" }
+}
