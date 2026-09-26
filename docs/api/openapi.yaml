@@ -58,3 +58,23 @@ tags:
   -
     name: "Profile"
     description: "Identidade, vínculos, preferências e contatos verificados."
+  -
+    name: "Parcels"
+    description: "Consulta, credencial autorizada e marcação manual de retirada."
+  -
+    name: "Notifications"
+    description: "Avisos de entrega e leitura autenticada."
+  -
+    name: "Support"
+    description: "Relatos vinculados às encomendas autorizadas."
+  -
+    name: "Devices"
+    description: "Registro opcional do dispositivo para notificações push."
+paths:
+  "/configuration":
+    get:
+      operationId: "getBrandConfiguration"
+      tags:
+        - "Configuration"
+      summary: "Consultar capacidades públicas da marca"
+      security: []
