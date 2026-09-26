@@ -1238,3 +1238,23 @@ paths:
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
+          $ref: "#/components/responses/Problem"
+        "404":
+          $ref: "#/components/responses/Problem"
+        "429":
+          $ref: "#/components/responses/Problem"
+        "503":
+          $ref: "#/components/responses/Problem"
+        default:
+          $ref: "#/components/responses/Problem"
+components:
+  securitySchemes:
+    SessionBearer:
+      type: "http"
+      scheme: "bearer"
+      bearerFormat: "opaque"
+      description: "Access token opaco retornado por login/refresh; transportar somente por HTTPS."
+  parameters:
+    BrandId:
+      name: "X-Brand-Id"
+      in: "header"
