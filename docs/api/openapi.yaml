@@ -178,3 +178,23 @@ paths:
             "application/json":
               schema:
                 $ref: "#/components/schemas/Challenge"
+        "400":
+          $ref: "#/components/responses/Problem"
+        "404":
+          $ref: "#/components/responses/Problem"
+        "409":
+          $ref: "#/components/responses/Problem"
+        "410":
+          $ref: "#/components/responses/Problem"
+        "429":
+          $ref: "#/components/responses/Problem"
+        "503":
+          $ref: "#/components/responses/Problem"
+        default:
+          $ref: "#/components/responses/Problem"
+  "/auth/challenges/{challengeId}/verify":
+    parameters:
+      -
+        $ref: "#/components/parameters/ChallengeId"
+    post:
+      operationId: "verifyLoginChallenge"
