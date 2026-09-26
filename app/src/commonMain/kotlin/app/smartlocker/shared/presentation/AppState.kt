@@ -43,4 +43,11 @@ data class AppState(
     val lastUpdated: Long? = null,
 ) {
     val membership: Membership? get() = profile?.memberships?.find { it.id == membershipId }
+    val unreadCount: Int get() = serverUnreadCount ?: notices.count { !it.read }
+    fun features(brand: Brand): Features {
+        val allowed = membership?.features ?: brand.features
+        return Features(brand.features.residents && allowed.residents, brand.features.issues && allowed.issues,
+            brand.features.manualPickup && allowed.manualPickup, brand.features.contactEditing && allowed.contactEditing)
+    }
+    fun channels(brand: Brand): Set<String> = membership?.channels?.intersect(brand.channels) ?: brand.channels
 }
