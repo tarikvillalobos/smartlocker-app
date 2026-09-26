@@ -21,6 +21,8 @@ class AppController(
     private var actionJob: Job? = null
     private var previousUser: String? = null
     private var lastLogin: LoginRequest? = null
+    val brand: Brand get() = state.value.remoteBrand ?: configuration.brand
+    val features: Features get() = state.value.features(brand)
 
     init {
         scope.launch {
