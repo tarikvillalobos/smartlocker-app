@@ -93,7 +93,6 @@ private fun IssueScreen(state: AppState, controller: AppController) {
         observedSubmission = state.issueSubmission
     }
     PageTitle("Solicitações", { controller.navigate(if (state.selectedId != null) Route.DETAIL else Route.PROFILE) })
-    if (state.selectedId != null) Panel {
         Text("Problema com ${state.selected?.carrier ?: "a encomenda selecionada"}", style = MaterialTheme.typography.titleMedium)
         OutlinedTextField(message, { message = it.take(2000) }, Modifier.fillMaxWidth().keepAboveKeyboard(),
             label = { Text("Descreva o problema") }, minLines = 3, shape = Tokens.control)
