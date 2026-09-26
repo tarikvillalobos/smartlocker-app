@@ -378,3 +378,23 @@ class ApiSessionClientTest {
     }
 
     private fun HttpRequestData.path() = url.encodedPath.removePrefix("/v1")
+    private suspend fun HttpRequestData.jsonBody() = ApiJson.parseToJsonElement(body.toByteArray().decodeToString()).jsonObject
+    private fun instant(value: Long) = Instant.fromEpochMilliseconds(value).toString()
+    private fun tokens(
+        clock: TestClock, access: String = "access-old", refresh: String = "refresh-old", accessIn: Long = 60_000,
+        user: String = "ana", brand: String = "smartlocker", session: String = "session-1",
+    ) = ApiJson.encodeToString(ApiSessionTokens("Bearer", access, instant(clock.time + accessIn), refresh,
+        instant(clock.time + 3_600_000), user, brand, session, listOf("profile:read")))
+
+    private fun challenge(clock: TestClock) = ApiJson.encodeToString(ApiChallenge("challenge-1",
+        instant(clock.time + 300_000), instant(clock.time + 30_000), "sms", "+55 ** *****-4321", 6, "login"))
+
+    private fun configuration(): String {
+        val channel = ApiChannelCapability(true)
+        val capabilities = ApiCapabilities(ApiFeatures(true, true, true, true, true, true),
+            ApiChannels(channel, channel, channel, channel, channel))
+        return ApiJson.encodeToString(ApiBrandConfiguration("smartlocker", "SmartLocker", capabilities, null, null, null))
+    }
+
+    private companion object {
+        const val BASE = "https://api.example.test/v1"
