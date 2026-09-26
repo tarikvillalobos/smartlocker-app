@@ -112,6 +112,26 @@ O app foi aberto no emulador Google APIs Android 34 arm64, aproximadamente
 411 × 731 dp. Para repetir testes nativos, use um emulador dedicado e
 `./gradlew :androidApp:connectedDebugAndroidTest -PapplicationId=app.smartlocker.validation`.
 O identificador separado evita alterar dados de outra instalação.
+
+O lint apresentou incompatibilidade ao enumerar Android 37.0 no SDK global.
+`scripts/prepare_android_sdk.py` prepara a cópia isolada de Android 35 usada na
+validação e na CI, sem modificar o SDK global nem ocultar regras do lint.
+
+## iOS
+
+O app foi compilado, aberto e testado em simulador. A suíte mais recente passou
+em um simulador isolado: **três testes**, sendo dois de Keychain e um de UI.
+O fluxo de UI também foi repetido com sucesso; repetições não contam como novos
+testes. Keychain verifica persistência, atualização, exclusão repetida e isolamento.
+
+O teste de UI digita com o teclado aberto, gira retrato/paisagem/retrato e exige
+que o contato permaneça preenchido e inteiramente acima do teclado. Essa prova
+complementa as simulações de altura do desktop. Ensaios em iPhone/iPad físicos
+continuam pendentes.
+
+`python3 scripts/test_ios.py` cria e remove apenas seu simulador temporário.
+`--device UUID` usa um simulador existente e o preserva; `--output` permite guardar
+cada resultado `.xcresult` sem sobrescrever o anterior. A execução isolada
 | --- | --- | --- |
 | Desktop macOS | Compilação e testes Compose/JVM aprovados | DMG e assinatura não ensaiados |
 | Android | APK, lint e abertura no emulador API 34 aprovados | Distribuição e aparelho físico pendentes |
