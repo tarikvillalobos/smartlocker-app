@@ -8,6 +8,7 @@ perfil, contatos, preferências de comunicação e solicitações de suporte.
 A identidade visual segue o HTML fornecido: Sora, Plus Jakarta Sans e a paleta
 verde da marca padrão. Aurora Lockers demonstra uma segunda personalização.
 
+## Status real
 
 - View received packages
 - Check package details and status
