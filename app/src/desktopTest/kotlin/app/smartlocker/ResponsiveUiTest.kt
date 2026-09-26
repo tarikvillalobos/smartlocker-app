@@ -35,6 +35,7 @@ class ResponsiveUiTest {
                         setContent {
                             CompositionLocalProvider(LocalDensity provides Density(1f, fontScale)) { SmartLockerApp(runtime) }
                         }
+                        waitUntil(timeoutMillis = 10_000) { controller.state.value.initialized }
                         capture("login", width, fontScale)
                         runOnIdle { controller.login(demoLogin) }
                         waitUntil(10_000) { controller.state.value.challenge != null && !controller.state.value.busy }
