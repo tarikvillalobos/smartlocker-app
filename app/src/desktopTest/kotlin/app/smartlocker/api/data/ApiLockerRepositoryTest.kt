@@ -38,3 +38,23 @@ class ApiLockerRepositoryTest {
         withRepository { json(profile.copy(id = "another-user")) }.useSuspend {
             assertEquals(FailureKind.UNAVAILABLE, assertFailsWith<AppFailure> { it.repo.profile() }.kind)
             assertFalse(it.requests.any { request -> request.url.encodedPath == "/v1/me/memberships" })
+        }
+    }
+
+    @Test fun manualMutationUsesReviewedVersionAndDoesNotRetryConflict() = runTest {
+        withRepository { request ->
+            if (request.method == HttpMethod.Get) json(parcel()) else {
+                assertEquals(HttpMethod.Post, request.method)
+                assertEquals("/v1/memberships/member-1/parcels/parcel-1/manual-pickup", request.url.encodedPath)
+                assertEquals("\"3\"", request.headers["If-Match"])
+                assertNotNull(request.headers["Idempotency-Key"])
+                respond("""{"type":"about:blank","title":"Versão alterada","status":412,"code":"VERSION_CONFLICT","requestId":"request-1"}""",
+                    HttpStatusCode.PreconditionFailed, headersOf(HttpHeaders.ContentType, "application/problem+json"))
+            }
+        }.useSuspend {
+            it.repo.parcel("member-1", "parcel-1")
+            assertEquals(FailureKind.CONFLICT, assertFailsWith<AppFailure> { it.repo.markCollected("member-1", "parcel-1") }.kind)
+            val requests = it.requests.filter { request -> request.url.encodedPath.contains("/parcels/") }
+            assertEquals(listOf(HttpMethod.Get, HttpMethod.Post), requests.map { request -> request.method })
+            assertTrue(requests.all { request -> request.headers["X-Brand-Id"] == "smartlocker" })
+            assertTrue(requests.all { request -> request.headers[HttpHeaders.Authorization] == "Bearer access-1" })
