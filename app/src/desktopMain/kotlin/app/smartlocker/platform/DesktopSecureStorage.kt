@@ -145,6 +145,19 @@ class DesktopSecureStorage(private val directory: Path) : SecureStorage {
             throw unavailable()
         } finally {
             if (process.isAlive) process.destroyForcibly()
+            runCatching { process.outputStream.close() }
+            runCatching { process.inputStream.close() }
+            runCatching { process.errorStream.close() }
+            workers.shutdownNow()
+        }
+    }
+
+    private fun readOutput(stream: InputStream): String = stream.use {
+        val bytes = it.readNBytes(65_537)
+        if (bytes.size > 65_536) throw unavailable()
+        bytes.toString(Charsets.UTF_8)
+    }
+
     private fun unavailable() = AppFailure(FailureKind.UNAVAILABLE,
         "Armazenamento seguro indisponível. Desbloqueie o cofre do sistema; no Linux instale secret-tool.")
 }
