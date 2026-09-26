@@ -125,6 +125,26 @@ class DesktopSecureStorage(private val directory: Path) : SecureStorage {
                 process.outputStream.use { stream -> input?.let { stream.write(it.toByteArray(Charsets.UTF_8)) } }
             }
             while (!process.waitFor(100, TimeUnit.MILLISECONDS)) {
+                currentCoroutineContext().ensureActive()
+                if (System.nanoTime() >= deadline) throw unavailable()
+            }
+            currentCoroutineContext().ensureActive()
+            while (!writing.isDone || !output.isDone || !errors.isDone) {
+                currentCoroutineContext().ensureActive()
+                if (System.nanoTime() >= deadline) throw unavailable()
+                delay(10)
+            }
+            currentCoroutineContext().ensureActive()
+            writing.get()
+            val text = output.get()
+            val errorText = errors.get()
+            val result = process.exitValue()
+            if (result == 0) return text
+            val missing = if (isMac) result == 44 else result == 1 && errorText.isBlank()
+            if (allowMissing && missing) return null
+            throw unavailable()
+        } finally {
+            if (process.isAlive) process.destroyForcibly()
     private fun unavailable() = AppFailure(FailureKind.UNAVAILABLE,
         "Armazenamento seguro indisponível. Desbloqueie o cofre do sistema; no Linux instale secret-tool.")
 }
