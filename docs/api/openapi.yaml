@@ -2218,3 +2218,23 @@ components:
       properties:
         items:
           type: "array"
+          items:
+            $ref: "#/components/schemas/DeliveryNotice"
+        pageInfo:
+          $ref: "#/components/schemas/PageInfo"
+        unreadCount:
+          type: "integer"
+          minimum: 0
+      required:
+        - "items"
+        - "pageInfo"
+        - "unreadCount"
+      description: "unreadCount é calculado sobre todos os avisos autorizados do vínculo, não sobre esta página."
+    IssueRequest:
+      type: "object"
+      properties:
+        parcelId:
+          $ref: "#/components/schemas/Identifier"
+        message:
+          type: "string"
+          minLength: 10
