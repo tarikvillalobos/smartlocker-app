@@ -70,7 +70,6 @@ class AppController(
         }
     }
 
-    fun login(request: LoginRequest) = execute {
         lastLogin = request
         val challenge = repository.requestLogin(request)
         mutable.update { it.copy(challenge = challenge) }
