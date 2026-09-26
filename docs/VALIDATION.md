@@ -141,6 +141,11 @@ O plist contém `CADisableMinimumFrameDurationOnPhone=true`, exigido pelo Compos
 
 | Entrega | Evidência | Limite |
 | --- | --- | --- |
+| Android APK | Compilado e executado em emulador | Chave de debug; aparelho físico e loja pendentes |
+| macOS DMG | Gerado localmente e em CI | Sem assinatura comercial/notarização |
+| Windows MSI | Duas marcas geradas em CI | Instalação e abertura do MSI não ensaiadas |
+| Linux DEB | Duas marcas geradas em CI | Instalação e abertura do DEB não ensaiadas |
+| iOS simulador | Build, UI e Keychain aprovados | Não é IPA para aparelho físico |
 
 Android: `:androidApp:assembleDebug :androidApp:lintDebug`, com **0 erros e
 2 avisos** sobre atualização do SDK 35. APK em
