@@ -189,6 +189,7 @@ class AppController(
         }
     }
     fun filter(value: ParcelFilter) {
+        if (actionJob?.isActive == true) return
         mutable.update { it.copy(filter = value, parcels = emptyList(), nextCursor = null) }
         refresh()
     }
