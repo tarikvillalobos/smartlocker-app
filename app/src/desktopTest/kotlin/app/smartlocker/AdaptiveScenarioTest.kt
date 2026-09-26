@@ -18,3 +18,23 @@ import javax.imageio.ImageIO
 import org.junit.Test
 import kotlin.test.*
 
+@OptIn(ExperimentalTestApi::class)
+class AdaptiveScenarioTest {
+    @Test fun resizingAndShortLandscapeKeepInputSelectionAndFilter() = runDesktopComposeUiTest(width = 1200, height = 960) {
+        val runtime = AppRuntime(TestPlatform(), AppConfiguration(Brands.smartLocker, Environment.DEMO))
+        val controller = runtime.state.value.controller
+        var width by mutableStateOf(390)
+        var height by mutableStateOf(900)
+        try {
+            setContent { Box(Modifier.size(width.dp, height.dp)) { SmartLockerApp(runtime) } }
+            waitUntil(10_000) { controller.state.value.initialized }
+            onNodeWithText("Celular").performScrollTo().performTextInput("11987654321")
+            onNodeWithText("CPF").performScrollTo().performTextInput("52998224725")
+            runOnIdle { width = 840; height = 390 }
+            onNodeWithText("11987654321").assertExists()
+            onNodeWithText("52998224725").assertExists()
+            onNodeWithText("Receber código por SMS").performScrollTo().assertIsDisplayed()
+            runOnIdle { controller.login(demoLogin) }
+            waitUntil(10_000) { controller.state.value.challenge != null }
+            runOnIdle { controller.verify("123456") }
+            waitUntil(15_000) { controller.state.value.profile != null && !controller.state.value.busy }
