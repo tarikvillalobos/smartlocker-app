@@ -18,3 +18,23 @@ class NativeSecureStorageTest {
         assertNull(storage.read(first), "Fresh test key must be absent")
         storage.write(first, null)
         val original = "fixture-${UUID.randomUUID()}-ação-🔒\nsecond line"
+        val replacement = "replacement-${UUID.randomUUID()}"
+        storage.write(first, original)
+        storage.write(second, replacement)
+        assertSecret(original, storage.read(first))
+        assertSecret(replacement, storage.read(second))
+        assertSecret(original, DesktopSecureStorage(directory).read(first))
+        storage.write(first, "")
+        assertSecret("", storage.read(first))
+        storage.write(first, replacement)
+        assertSecret(replacement, storage.read(first))
+        storage.write(first, null)
+        storage.write(first, null)
+        assertNull(storage.read(first), "Deleted test key must be absent")
+        assertSecret(replacement, storage.read(second))
+        assertNoPlaintext(directory, original, replacement)
+    }
+
+    @Test(timeout = 90_000) fun longValuesNeverSilentlyReplaceThePreviousSessionWithTruncatedData() =
+        fixture { storage, directory, first, _ ->
+            val prior = "prior-${UUID.randomUUID()}"
