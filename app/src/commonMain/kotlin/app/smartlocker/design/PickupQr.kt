@@ -23,6 +23,13 @@ fun qrMatrix(payload: String): List<List<Boolean>> {
     return QRCodeProcessor(payload).encode().map { row -> row.map { it.dark } }
 }
 
+/** Returns no symbol when the authorized content exceeds QR capacity; never truncates it. */
+fun qrMatrixOrNull(payload: String): List<List<Boolean>>? = try {
+    qrMatrix(payload)
+} catch (_: IllegalArgumentException) {
+    null
+}
+
 @Composable
 fun PickupQr(payload: String, modifier: Modifier = Modifier) {
     val matrix = remember(payload) { qrMatrix(payload) }
