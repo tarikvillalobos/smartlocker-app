@@ -54,7 +54,6 @@ CPF, contatos/canais, OTP, preferências, métricas, UTC e cadastro push.
 Execute `scripts/validate_openapi.py` e `scripts/check_openapi_cases.py` no ambiente
 Python descrito em [OPENAPI.md](OPENAPI.md). A CI executa as mesmas verificações.
 Isso valida a estrutura e exemplos da proposta; não testa um servidor nem indica
-que os endpoints foram implementados. O app continua sem adaptador dessa minuta.
 
 ## Layout e acessibilidade
 
