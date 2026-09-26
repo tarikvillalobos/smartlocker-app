@@ -2278,3 +2278,23 @@ components:
           type:
             - "string"
             - "null"
+          maxLength: 2000
+      required:
+        - "id"
+        - "reference"
+        - "membershipId"
+        - "parcelId"
+        - "message"
+        - "status"
+        - "createdAt"
+        - "updatedAt"
+        - "resolution"
+    IssuePage:
+      type: "object"
+      properties:
+        items:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/SupportIssue"
+        pageInfo:
+          $ref: "#/components/schemas/PageInfo"
