@@ -17,6 +17,7 @@ final class SmartLockerUITests: XCTestCase {
         reveal(phone, in: app)
         phone.tap()
         XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 5))
+        waitUntilUncovered(phone, in: app)
         XCTAssertEqual(phone.value as? String, "11987654321")
         XCTAssertGreaterThan(app.frame.width, app.frame.height)
         let landscape = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
