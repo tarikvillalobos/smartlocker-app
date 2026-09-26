@@ -350,6 +350,7 @@ class AppController(
         actionJob?.cancel()
         previousUser = null
         lastLogin = null
+        mutable.value = AppState(initialized = true, remoteBrand = state.value.remoteBrand, now = clock.now())
         execute {
             try { repository.logout() }
             finally {
