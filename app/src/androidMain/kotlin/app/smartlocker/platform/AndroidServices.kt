@@ -38,3 +38,4 @@ class AndroidServices(private val context: Context) : PlatformServices {
         return if (manager.areNotificationsEnabled()) "Sistema permite avisos; push ainda não integrado."
         else "Avisos do sistema desativados. A central continua disponível."
     }
+}
