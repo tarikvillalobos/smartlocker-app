@@ -100,6 +100,7 @@ fun ContactScreen(state: AppState, controller: AppController) {
             controller.contact(contact, if (email) LoginChannel.EMAIL else LoginChannel.SMS)
         }
     } else {
+        Text("Confira o código enviado para ${state.contactValue}.")
         if (controller.configuration.environment == Environment.DEMO) Text("Código demonstrativo: 123456")
         OutlinedTextField(code, { code = it.filter(Char::isDigit).take(6) }, Modifier.fillMaxWidth().keepAboveKeyboard(), label = { Text("Código recebido") })
         PrimaryButton("Confirmar alteração", !state.busy && code.length == 6) { controller.verifyContact(code) }
