@@ -178,3 +178,23 @@ class ApiSessionClient(
             if (intent != null) uncertain.remove(intent)
             return response
         } catch (error: AppFailure) {
+            ensureCurrent(epoch)
+            if (intent != null && error.kind !in setOf(FailureKind.NETWORK, FailureKind.UNAVAILABLE)) uncertain.remove(intent)
+            if (authenticated && error.kind == FailureKind.EXPIRED_SESSION) mutex.withLock { expired() }
+            throw error
+        }
+    }
+
+    suspend fun logout() {
+        generation++
+        val token = stored?.tokens?.accessToken
+        mutex.withLock {
+            stored = null
+            restored = true
+            uncertain.clear()
+            verificationKeys.clear()
+            withContext(NonCancellable) { store.write(null) }
+        }
+        if (token != null) {
+            try {
+                request("/auth/logout", HttpMethod.Post, headers = mapOf("Authorization" to "Bearer $token"), authenticated = false)
