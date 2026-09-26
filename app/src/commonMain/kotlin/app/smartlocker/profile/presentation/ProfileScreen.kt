@@ -105,7 +105,6 @@ fun ContactScreen(state: AppState, controller: AppController) {
         OutlinedTextField(code, { code = it.filter(Char::isDigit).take(6) }, Modifier.fillMaxWidth().keepAboveKeyboard(), label = { Text("Código recebido") })
         PrimaryButton("Confirmar alteração", !state.busy && code.length == 6) { controller.verifyContact(code) }
         val seconds = ((state.contactChallenge.resendAt - state.now + 999) / 1000).coerceAtLeast(0)
-        TextButton({ controller.contact(contact, if (email) LoginChannel.EMAIL else LoginChannel.SMS) }, enabled = !state.busy && seconds == 0L) {
             Text(if (seconds > 0) "Reenviar em ${seconds}s" else "Reenviar código")
         }
     }
