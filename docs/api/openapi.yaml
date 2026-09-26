@@ -898,3 +898,23 @@ paths:
       parameters:
         -
           $ref: "#/components/parameters/BrandId"
+        -
+          $ref: "#/components/parameters/IfMatch"
+        -
+          $ref: "#/components/parameters/IdempotencyKey"
+      responses:
+        "200":
+          description: "Resultado confirmado pelo servidor."
+          headers:
+            X-Request-Id:
+              $ref: "#/components/headers/RequestId"
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+            ETag:
+              $ref: "#/components/headers/ETag"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Parcel"
+        "400":
+          $ref: "#/components/responses/Problem"
