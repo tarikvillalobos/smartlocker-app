@@ -18,3 +18,23 @@ class ControllerActionTest {
         demo.signIn()
         val response = CompletableDeferred<Unit>()
         var calls = 0
+        val repository = object : LockerRepository by demo {
+            override suspend fun markCollected(locationId: String, parcelId: String): Parcel {
+                calls++
+                response.await()
+                return demo.markCollected(locationId, parcelId)
+            }
+        }
+        val controller = start(repository, clock)
+        val selected = controller.state.value.selectedId!!
+        controller.markCollected()
+        runCurrent()
+        assertTrue(controller.state.value.busy)
+        controller.markCollected()
+        controller.select("demo-1")
+        controller.membership("office")
+        controller.filter(ParcelFilter.COLLECTED)
+        controller.refresh()
+        assertEquals(selected, controller.state.value.selectedId)
+        assertEquals("home", controller.state.value.membershipId)
+        assertEquals(ParcelFilter.ALL, controller.state.value.filter)
