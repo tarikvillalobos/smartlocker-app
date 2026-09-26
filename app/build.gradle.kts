@@ -90,6 +90,7 @@ compose.desktop {
                 menu = true
                 shortcut = true
                 perUserInstall = true
+                upgradeUuid = UUID.nameUUIDFromBytes(nativeId.toByteArray()).toString()
             }
             linux {
                 packageName = if (auroraPackage) "aurora-lockers" else "smartlocker"
