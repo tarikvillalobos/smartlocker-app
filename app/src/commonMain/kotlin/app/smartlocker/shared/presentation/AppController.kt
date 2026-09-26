@@ -342,6 +342,8 @@ class AppController(
         loadDetail(generation)
     }
     fun demoScenario(value: DemoScenario) = execute { generation ->
+        val demo = repository as? DemoControls ?: return@execute
+        demo.scenario(value)
         if (generation != epoch) return@execute
         mutable.update { it.copy(selectedId = null, selected = null, credential = null) }
         load()
