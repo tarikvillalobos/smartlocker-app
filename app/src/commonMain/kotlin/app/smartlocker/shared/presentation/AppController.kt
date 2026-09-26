@@ -268,6 +268,9 @@ class AppController(
     fun notice(value: DeliveryNotice) = execute { generation ->
         repository.markNoticeRead(state.value.membershipId, value.id)
         if (generation != epoch) return@execute
+        mutable.update { it.copy(notices = it.notices.map { notice ->
+            if (notice.id == value.id) notice.copy(read = true) else notice
+        }) }
         select(value.parcelId)
     }
     fun demoScenario(value: DemoScenario) = execute { generation ->
