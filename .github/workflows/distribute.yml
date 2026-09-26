@@ -79,7 +79,6 @@ jobs:
         run: >-
           xcodebuild -project iosApp/SmartLocker.xcodeproj -scheme SmartLocker
           -sdk iphonesimulator -configuration Debug -derivedDataPath artifacts/ios
-          -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build
       - name: Archive simulator app preserving bundle metadata
         run: >-
           ditto -c -k --sequesterRsrc --keepParent
