@@ -838,3 +838,23 @@ paths:
         $ref: "#/components/parameters/ParcelId"
     post:
       operationId: "markManualPickup"
+      tags:
+        - "Parcels"
+      summary: "Registrar retirada informada pelo usuário"
+      description: |-
+        Exige confirmação explícita do usuário e canMarkManually. Revogar credencial atomicamente e registrar
+        manualAt. Não preencher collectedAt nem declarar confirmação física. Repetição idempotente não duplica
+        eventos.
+      x-required-permission: "parcels:manual"
+      parameters:
+        -
+          $ref: "#/components/parameters/BrandId"
+        -
+          $ref: "#/components/parameters/IfMatch"
+        -
+          $ref: "#/components/parameters/IdempotencyKey"
+      responses:
+        "200":
+          description: "Resultado confirmado pelo servidor."
+          headers:
+            X-Request-Id:
