@@ -1,0 +1,3 @@
+SmartLocker App é software privado e proprietário.
+Todos os direitos reservados. O produto não concede uma licença de código aberto.
+As licenças dos componentes de terceiros permanecem aplicáveis aos respectivos componentes.
