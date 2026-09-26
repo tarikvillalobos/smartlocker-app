@@ -322,6 +322,8 @@ class AppController(
         if (generation != epoch) return@execute
         mutable.update { it.copy(notices = it.notices.map { notice ->
             if (notice.id == value.id) notice.copy(read = true) else notice
+        }, serverUnreadCount = it.serverUnreadCount?.let { count ->
+            if (it.notices.any { notice -> notice.id == value.id && !notice.read }) (count - 1).coerceAtLeast(0) else count
         }) }
         mutable.update { it.copy(selectedId = value.parcelId, selected = null, credential = null, route = Route.DETAIL) }
         loadDetail(generation)
