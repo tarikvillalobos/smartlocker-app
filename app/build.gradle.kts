@@ -73,6 +73,26 @@ compose.desktop {
         args += "--brand=$packageBrand"
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            packageName = nativeName
+            packageVersion = providers.gradleProperty("appVersion").getOrElse("1.0.0")
+            description = "Aplicativo de encomendas e armários inteligentes"
+            vendor = "SmartLocker"
+            licenseFile.set(rootProject.file("docs/PROPRIETARY.txt"))
+            modules("java.sql", "java.net.http", "jdk.unsupported", "jdk.crypto.ec")
+            macOS {
+                bundleID = nativeId
+                appCategory = "public.app-category.utilities"
+                iconFile.set(rootProject.file(".tools/packaging/icons/$packageBrand.icns"))
+            }
+            windows {
+                iconFile.set(rootProject.file(".tools/packaging/icons/$packageBrand.ico"))
+                menu = true
+                shortcut = true
+                perUserInstall = true
+                upgradeUuid = java.util.UUID.nameUUIDFromBytes(nativeId.toByteArray()).toString()
+            }
+            linux {
+                packageName = if (auroraPackage) "aurora-lockers" else "smartlocker"
         }
     }
 }
