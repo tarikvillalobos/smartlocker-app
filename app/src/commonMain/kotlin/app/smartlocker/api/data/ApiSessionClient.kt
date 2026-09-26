@@ -180,7 +180,6 @@ class ApiSessionClient(
         } catch (error: AppFailure) {
             ensureCurrent(epoch)
             if (intent != null && error.kind !in setOf(FailureKind.NETWORK, FailureKind.UNAVAILABLE)) uncertain.remove(intent)
-            if (authenticated && error.kind == FailureKind.EXPIRED_SESSION) mutex.withLock { expired() }
             throw error
         }
     }
