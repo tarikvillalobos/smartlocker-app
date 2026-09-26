@@ -107,13 +107,6 @@ implementação ou segurança do backend mantido no outro projeto.
 
 ## Validação realizada
 
-- openapi-spec-validator 0.7.2: OpenAPI 3.1.1 válido.
-- YAML com chaves únicas; 453 referências locais resolvidas, sem referências remotas.
-- JSON Schema: schemas válidos e oito exemplos válidos.
-- 21 casos positivos/negativos de schema: CPF, telefone, canal, e-mail, OTP,
-  preferências, métricas incompletas, UTC e combinação plataforma/provedor push.
-- Máximo de 137 caracteres por linha; sem whitespace final.
-- Nenhuma chamada a backend/hardware, nenhum teste de homologação.
 
 ## Executar a validação
 
