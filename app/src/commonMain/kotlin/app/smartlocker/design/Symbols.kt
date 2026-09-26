@@ -38,3 +38,6 @@ fun AppIcon(symbol: Symbol, description: String? = null, modifier: Modifier = Mo
                 stroke = SolidColor(Color.Black), strokeLineWidth = 1.8f,
                 strokeLineCap = StrokeCap.Round, strokeLineJoin = StrokeJoin.Round)
         }.build()
+    }
+    Icon(vector, description, modifier, tint)
+}
