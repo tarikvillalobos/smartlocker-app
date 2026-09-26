@@ -38,3 +38,23 @@ data class ApiParcel(
     val version: Long,
 )
 
+@Serializable
+data class ApiPageInfo(val nextCursor: String?, val snapshotAt: String, val snapshotExpiresAt: String) {
+    fun validatedCursor(): String? {
+        apiRequire(nextCursor == null || nextCursor.length in 1..2048)
+        apiRequire(apiInstant(snapshotAt) <= apiInstant(snapshotExpiresAt))
+        return nextCursor
+    }
+}
+
+@Serializable
+data class ApiParcelPage(val items: List<ApiParcel>, val pageInfo: ApiPageInfo)
+
+@Serializable
+data class ApiParcelMetrics(
+    val since: String,
+    val until: String,
+    val generatedAt: String,
+    val complete: Boolean,
+    val totalReceived: Int?,
+    val physicalPickupCount: Int?,
