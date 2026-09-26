@@ -1678,3 +1678,23 @@ components:
         - "termsUrl"
         - "privacyUrl"
       description: "Complementa a marca embarcada. Não muda identificador nativo nem autoriza acesso a qualquer vínculo."
+    Membership:
+      type: "object"
+      properties:
+        id:
+          $ref: "#/components/schemas/Identifier"
+        locationId:
+          $ref: "#/components/schemas/Identifier"
+        locationName:
+          type: "string"
+          maxLength: 200
+        unitId:
+          $ref: "#/components/schemas/Identifier"
+        unitLabel:
+          type: "string"
+          maxLength: 200
+        timeZone:
+          type: "string"
+          examples:
+            - "America/Sao_Paulo"
+          maxLength: 100
