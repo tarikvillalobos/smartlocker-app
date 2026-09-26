@@ -34,6 +34,9 @@ data class SupportIssue(
     val message: String,
     val createdAt: Long,
     val status: String = "Recebida",
+    val reference: String = id,
+    val updatedAt: Long = createdAt,
+    val resolution: String? = null,
 )
 
 data class NoticePage(val items: List<DeliveryNotice>, val nextCursor: String?, val unreadCount: Int)
