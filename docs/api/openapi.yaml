@@ -1498,3 +1498,23 @@ components:
             - "email"
       required:
         - "contact"
+        - "cpf"
+        - "channel"
+      additionalProperties: false
+      allOf:
+        -
+          if:
+            properties:
+              channel:
+                const: "sms"
+          then:
+            properties:
+              contact:
+                pattern: "^\\+55[1-9][0-9]9[0-9]{8}$"
+          else:
+            properties:
+              contact:
+                format: "email"
+                pattern: "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$"
+      examples:
+        -
