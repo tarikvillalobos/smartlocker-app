@@ -15,6 +15,7 @@ data class AppState(
     val filter: ParcelFilter = ParcelFilter.ALL,
     val parcels: List<Parcel> = emptyList(),
     val pending: List<Parcel> = emptyList(),
+    val recent: List<Parcel> = emptyList(),
     val nextCursor: String? = null,
     val selectedId: String? = null,
     val selected: Parcel? = null,
