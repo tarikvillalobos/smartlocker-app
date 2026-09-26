@@ -58,3 +58,23 @@ para esse papel; esta minuta define apenas o cliente de usuários finais.
     Nenhum corpo contém logs internos ou eco de CPF, contatos, OTP ou credenciais.
 11. Preferência, permissão do sistema e disponibilidade de canal são independentes.
     Push leva apenas IDs para navegação; o app reautentica e consulta a API.
+12. FCM/APNs são propostas explícitas, sem integração implementada ou segredo de
+    fornecedor embarcado. Capacidades podem desabilitar o registro por completo.
+    X-Installation-Key propõe prova de posse local: 32 bytes CSPRNG no cofre, hash
+    vinculado no servidor. Trocar destinatário exige a mesma prova; conhecer apenas
+    installationId não autoriza reassociação. Logout não apaga essa proteção.
+
+## Diferenças que o futuro adaptador precisará mapear
+
+- Session atual tem apenas access token; storage/modelos precisarão representar
+  refresh, sessionId, brandId e os respectivos prazos.
+- Membership atual trata locationId como vínculo; o contrato distingue membership,
+  location e unit e adiciona fuso/capacidades efetivas.
+- Contatos no contrato podem ser null quando ainda ausentes; o domínio atual usa
+  strings não nulas. Não preencher ausência com dados fictícios.
+- O domínio usa milissegundos; a API propõe RFC 3339 e média em segundos.
+- O cálculo atual inclui o extremo final do período; a proposta usa fim exclusivo.
+- O contrato acrescenta versões para If-Match e revalidateAfter de credenciais;
+  o app atual usa frescor fixo de 60 segundos. A integração deverá adequar isso.
+- Notifications/issues hoje retornam listas; o contrato as pagina e inclui
+  contagem global explícita para avisos. O adaptador deve preservar esses dados.
