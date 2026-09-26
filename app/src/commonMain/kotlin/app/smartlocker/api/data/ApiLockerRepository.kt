@@ -118,3 +118,23 @@ class ApiLockerRepository(private val session: ApiSessionClient) : LockerReposit
 
     override suspend fun updatePreferences(value: CommunicationPreferences): Profile {
         val user = currentUser()
+        val body = buildJsonObject {
+            put("inApp", value.inApp)
+            put("sms", value.sms)
+            put("whatsapp", value.whatsapp)
+        }.toString()
+        val response = request<ApiProfile>(user, "/me/preferences", HttpMethod.Patch, body)
+        return profile(response, response.memberships, user)
+    }
+
+    override suspend fun requestContactChange(contact: String, channel: LoginChannel): Challenge {
+        val user = currentUser()
+        if (!configuration().capabilities.features.contactEditing) unavailableFeature()
+        val body = buildJsonObject {
+            put("contact", normalizedApiContact(contact, channel))
+            put("channel", channel.apiValue())
+        }.toString()
+        return request<ApiChallenge>(user, "/me/contact-challenges", HttpMethod.Post, body)
+            .toDomain(expectedPurpose = "contact_change")
+    }
+
