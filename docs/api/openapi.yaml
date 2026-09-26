@@ -1338,3 +1338,23 @@ components:
         maxLength: 2048
       description: "Omitir na primeira página. Reutilizar os demais parâmetros do snapshot."
     Limit:
+      name: "limit"
+      in: "query"
+      required: false
+      schema:
+        type: "integer"
+        minimum: 1
+        maximum: 100
+        default: 20
+    ParcelFilter:
+      name: "status"
+      in: "query"
+      schema:
+        type: "string"
+        enum:
+          - "all"
+          - "waiting"
+          - "collected"
+        default: "all"
+      description: "collected inclui manual e físico, sempre distinguíveis no status de cada item."
+    Since:
