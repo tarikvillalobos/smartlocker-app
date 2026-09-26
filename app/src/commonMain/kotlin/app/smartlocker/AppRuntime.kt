@@ -39,6 +39,7 @@ class AppRuntime(val platform: PlatformServices, initial: AppConfiguration? = nu
     }
 
     fun configure(brand: Brand = state.value.configuration.brand, environment: Environment = state.value.configuration.environment) {
+        if (state.value.controller.state.value.session != null || state.value.controller.state.value.busy) return
         state.value.controller.close()
         platform.local.write("brand", brand.id)
         platform.local.write("environment", environment.name)
