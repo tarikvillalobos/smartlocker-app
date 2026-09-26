@@ -50,15 +50,6 @@ class HttpTransport(engine: HttpClientEngine, private val baseUrl: String) : Aut
                     setBody(jsonBody)
                 }
             }
-            if (response.status.value in 200..299) return response.bodyAsText()
-            throw when (response.status.value) {
-                401 -> AppFailure(FailureKind.EXPIRED_SESSION, "Sua sessão expirou. Entre novamente.")
-                403 -> AppFailure(FailureKind.DENIED, "Você não tem acesso a este recurso.")
-                409 -> AppFailure(FailureKind.CONFLICT, "Os dados foram alterados. Atualize e tente novamente.")
-                429 -> AppFailure(FailureKind.UNAVAILABLE, "Muitas solicitações. Aguarde antes de tentar novamente.")
-                in 400..499 -> AppFailure(FailureKind.VALIDATION, "A solicitação não foi aceita pela API.")
-                else -> AppFailure(FailureKind.UNAVAILABLE, "Serviço indisponível. Tente novamente mais tarde.")
-            }
         } catch (error: CancellationException) {
             throw error
         } catch (error: AppFailure) {
