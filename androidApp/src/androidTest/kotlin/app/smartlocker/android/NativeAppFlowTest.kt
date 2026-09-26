@@ -47,7 +47,6 @@ class NativeAppFlowTest {
         ui.onNodeWithText("Código de 6 dígitos").performScrollTo().performTextInput("123")
         rotate(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT, Configuration.ORIENTATION_PORTRAIT)
         ui.onNodeWithText("123").assertExists()
-        ui.onNodeWithText("Código de 6 dígitos").performScrollTo().performTextInput("456")
         ui.onNodeWithText("Confirmar código").performScrollTo().performClick()
         waitForText("Copiar código")
         ui.onNodeWithContentDescription("Ver detalhes").performScrollTo().performClick()
