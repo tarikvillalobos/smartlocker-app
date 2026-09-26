@@ -118,3 +118,23 @@ class ApiSessionClient(
 
     private suspend fun accessLocked(): ApiSessionTokens {
         restoreLocked()
+        var value = stored ?: expired()
+        if (apiInstant(value.tokens.refreshExpiresAt) <= clock.now()) expired()
+        if (apiInstant(value.tokens.accessExpiresAt) > clock.now() + 15_000) return value.tokens
+        val epoch = generation
+        if (value.pendingRefreshKey == null) {
+            value = value.copy(pendingRefreshKey = Uuid.random().toString())
+            save(value, epoch)
+        }
+        try {
+            val response = request("/auth/refresh", HttpMethod.Post,
+                ApiJson.encodeToString(ApiRefreshRequest(value.tokens.refreshToken)),
+                mapOf("Idempotency-Key" to value.pendingRefreshKey!!), authenticated = false)
+            val tokens = decodeApi<ApiSessionTokens>(response)
+            validateTokens(tokens)
+            apiRequire(tokens.userId == value.tokens.userId && tokens.sessionId == value.tokens.sessionId)
+            apiRequire(apiInstant(tokens.accessExpiresAt) > clock.now())
+            save(StoredApiSession(baseUrl, tokens), epoch)
+            return tokens
+        } catch (error: AppFailure) {
+            if (error.kind == FailureKind.EXPIRED_SESSION) expired()
