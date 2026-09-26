@@ -98,3 +98,23 @@ class ControllerMembershipRevocationTest {
                     allowFailure.await()
                     throw AppFailure(FailureKind.NETWORK, "Sem rede")
                 }
+                return demo.parcels(locationId, filter, cursor)
+            }
+        }
+        val controller = start(repository, clock)
+        assertNotNull(controller.state.value.credential)
+        revoked = true
+        controller.refresh()
+        runCurrent()
+        assertTrue(started.isCompleted)
+        val waiting = controller.state.value
+        assertTrue(waiting.busy)
+        assertEquals("office", waiting.membershipId)
+        assertEquals(listOf("office"), waiting.profile!!.memberships.map { it.id })
+        assertCleared(waiting)
+        allowFailure.complete(Unit)
+        val failed = controller.state.first { !it.busy }
+        assertCleared(failed)
+        assertEquals("office", failed.membershipId)
+        assertEquals(listOf("office"), failed.profile!!.memberships.map { it.id })
+        assertTrue(failed.stale)
