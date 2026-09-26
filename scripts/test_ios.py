@@ -3,6 +3,7 @@ import argparse
 import json
 from pathlib import Path
 import subprocess
+import uuid
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--device", help="Existing simulator UUID; defaults to an available iPhone")
