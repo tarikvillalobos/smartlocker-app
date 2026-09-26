@@ -35,6 +35,8 @@ interface LockerRepository {
     suspend fun undoManual(locationId: String, parcelId: String): Parcel
     suspend fun updatePreferences(value: CommunicationPreferences): Profile
     suspend fun requestContactChange(contact: String, channel: LoginChannel): Challenge
+    suspend fun resendContactChange(challengeId: String, contact: String, channel: LoginChannel): Challenge =
+        requestContactChange(contact, channel)
     suspend fun verifyContactChange(challengeId: String, code: String): Profile
     suspend fun notifications(locationId: String): List<DeliveryNotice>
     suspend fun markNoticeRead(locationId: String, id: String)
