@@ -46,8 +46,6 @@ class DesktopSecureStorage(private val directory: Path) : SecureStorage {
                     allowMissing = true)?.let(::decoded)
                 else -> throw unavailable()
             }
-            else -> command(listOf("secret-tool", "lookup", "service", service, "account", key), allowMissing = true)
-                ?.takeIf { it.isNotBlank() }?.let(::decoded)
         }
     }
 
