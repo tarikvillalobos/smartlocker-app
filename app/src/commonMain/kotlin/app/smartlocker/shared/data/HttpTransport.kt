@@ -18,6 +18,7 @@ class HttpTransport(engine: HttpClientEngine, private val baseUrl: String) : Aut
     init {
         require(Url(baseUrl).protocol == URLProtocol.HTTPS) { "Production API must use HTTPS" }
         require(Url(baseUrl).user == null && Url(baseUrl).password == null)
+        require(Url(baseUrl).host.isNotBlank() && Url(baseUrl).parameters.isEmpty() && Url(baseUrl).fragment.isEmpty())
     }
     private val client = HttpClient(engine) {
         install(ContentNegotiation) { json(Json { ignoreUnknownKeys = true }) }
