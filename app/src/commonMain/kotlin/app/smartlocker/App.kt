@@ -128,6 +128,9 @@ private fun EnvironmentHeader(runtime: AppRuntime, holder: RuntimeState, state: 
     Surface(color = if (demo) Tokens.success else Tokens.background) {
         FlowRow(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 2.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.Center) {
+            Text(if (demo) "Demonstração · dados fictícios"
+                else if (app.smartlocker.api.data.configuredApiEndpoint(holder.configuration.apiBaseUrl) != null) "API externa"
+                else "API externa · não configurada",
                 Modifier.padding(vertical = 12.dp), style = MaterialTheme.typography.bodySmall,
                 color = if (demo) Tokens.successText else Tokens.secondary)
             if (state.session == null) {
