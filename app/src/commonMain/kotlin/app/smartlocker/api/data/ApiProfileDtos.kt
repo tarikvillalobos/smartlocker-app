@@ -89,6 +89,7 @@ data class ApiMembership(
     val unitLabel: String?,
     val timeZone: String,
     val capabilities: ApiCapabilities,
+    val condominiumId: String? = null,
 ) {
     fun toDomain(): Membership {
         apiId(locationId)
@@ -97,7 +98,8 @@ data class ApiMembership(
         apiText(timeZone, 100)
         try { TimeZone.of(timeZone) } catch (_: IllegalArgumentException) { invalidApiResponse() }
         return Membership(apiId(id), apiText(locationName, 200, true), apiText(unitLabel.orEmpty(), 200, true),
-            timeZone = timeZone, features = capabilities.features.toDomain(), channels = capabilities.channels.availableChannels())
+            timeZone = timeZone, features = capabilities.features.toDomain(), channels = capabilities.channels.availableChannels(),
+            condominiumId = condominiumId?.let(::apiId))
     }
 }
 
