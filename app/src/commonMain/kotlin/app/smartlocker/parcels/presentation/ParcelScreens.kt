@@ -1,5 +1,7 @@
 package app.smartlocker.parcels.presentation
 
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -149,4 +151,14 @@ private fun TimelineStep(title: String, time: String, done: Boolean) {
         AppIcon(if (done) Symbol.CHECK else Symbol.HISTORY, tint = if (done) Tokens.successText else Tokens.secondary)
         Column { Text(title, style = MaterialTheme.typography.labelMedium); Text(time, style = MaterialTheme.typography.bodySmall, color = Tokens.secondary) }
     }
+}
+
+@Composable
+private fun DelegateDialog(state: AppState, controller: AppController, close: () -> Unit) {
+    AlertDialog(onDismissRequest = close, title = { Text("Autorizar retirada") },
+        text = { Column(Modifier.heightIn(max = 360.dp).verticalScroll(rememberScrollState())) {
+            if (!state.delegateCandidatesLoaded) Text("Buscando moradores autorizáveis…")
+            else if (state.delegateCandidates.isEmpty()) Text("Nenhum morador disponível nesta unidade.")
+        } },
+        confirmButton = { TextButton(close) { Text("Fechar") } })
 }
