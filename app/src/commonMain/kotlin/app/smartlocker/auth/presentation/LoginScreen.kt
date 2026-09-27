@@ -72,16 +72,17 @@ fun LoginScreen(controller: AppController, state: AppState, legal: () -> Unit) {
                 OutlinedTextField(cpf, { cpf = it.take(14) }, label = { Text("CPF") },
                     modifier = Modifier.fillMaxWidth().keepAboveKeyboard(), singleLine = true, shape = Tokens.control,
                     placeholder = { Text("000.000.000-00") }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number))
-                PrimaryButton(if (email) "Receber código por e-mail" else "Receber código por SMS", !state.busy) {
-                    controller.login(LoginRequest(contact.trim(), cpf, if (email) LoginChannel.EMAIL else LoginChannel.SMS))
+                PrimaryButton(if (useEmail) "Receber código por e-mail" else "Receber código por SMS", !state.busy) {
+                    controller.login(LoginRequest(contact.trim(), cpf, if (useEmail) LoginChannel.EMAIL else LoginChannel.SMS))
                 }
-                TextButton({ email = !email; contact = "" }, Modifier.fillMaxWidth(), enabled = !state.busy) {
-                    Text(if (email) "Entrar com celular" else "Entrar com e-mail")
+                if (smsEnabled && emailEnabled) TextButton({ email = !email; contact = "" },
+                    Modifier.fillMaxWidth(), enabled = !state.busy) {
+                    Text(if (useEmail) "Entrar com celular" else "Entrar com e-mail")
                 }
                 if (demo) Panel {
                     Text("Experimente com dados fictícios", style = MaterialTheme.typography.labelLarge)
                     Text("Nenhum SMS ou e-mail será enviado.", color = Tokens.secondary)
-                    TextButton({ contact = if (email) "ana@example.test" else "11987654321"; cpf = "52998224725" }) {
+                    TextButton({ contact = if (useEmail) "ana@example.test" else "11987654321"; cpf = "52998224725" }) {
                         Text("Preencher dados de demonstração")
                     }
                 }
