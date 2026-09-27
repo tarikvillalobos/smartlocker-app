@@ -11,7 +11,7 @@ contrato e testar o cliente com respostas controladas não demonstra serviço
 publicado, entrega de mensagens ou integração com hardware. Configuração e
 limites da implementação atual estão em [API.md](API.md).
 
-## Cobertura
+## Cobertura SmartLocker no contrato unificado
 
 - Configuração pública da marca e capacidades efetivas por vínculo.
 - Login por OTP SMS/e-mail, reenvio, verificação, refresh rotativo e logout.
@@ -23,10 +23,10 @@ limites da implementação atual estão em [API.md](API.md).
 - Criação idempotente, lista e acompanhamento de solicitações de suporte.
 - Registro push opcional para Android/FCM e iOS/APNs, condicionado às capacidades.
 
-São 23 caminhos, 26 operações e 38 schemas. Não há endpoint de abertura de
-porta, depósito, envio direto a fornecedor nem ingestão de evento de hardware
-pelo usuário. Uma API operacional de hardware será outro contrato, autenticado
-para esse papel; esta minuta define apenas o cliente de usuários finais.
+O cliente usa os mesmos 23 caminhos e 26 operações do contrato SmartLocker
+anterior. O contrato unificado também descreve condomínio, administração e
+operações de hardware em `/ops`, com autenticação própria. O aplicativo do
+usuário não chama essas rotas operacionais.
 
 ## Decisões propostas
 
