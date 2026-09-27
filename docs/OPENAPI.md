@@ -1,9 +1,10 @@
-# Base OpenAPI proposta para SmartLocker
+# OpenAPI unificado da plataforma
 
-A especificação em [`api/openapi.yaml`](api/openapi.yaml) foi criada como base de
-integração do aplicativo. O cliente HTTP correspondente já está implementado;
-o backend está sendo finalizado em outro projeto. A versão segue `0.1.0-draft`,
-em OpenAPI 3.1.1/JSON Schema 2020-12, até homologação conjunta.
+A especificação usada pelo projeto está em
+[`api/condo-platform-openapi.yaml`](api/condo-platform-openapi.yaml), versão
+`1.1.0-draft` em OpenAPI 3.1.1/JSON Schema 2020-12. O arquivo
+[`api/openapi.yaml`](api/openapi.yaml) preserva o contrato SmartLocker anterior
+como referência de compatibilidade. O backend está em outro projeto.
 
 O host `.example.invalid` continua deliberadamente não operacional. Definir um
 contrato e testar o cliente com respostas controladas não demonstra serviço
