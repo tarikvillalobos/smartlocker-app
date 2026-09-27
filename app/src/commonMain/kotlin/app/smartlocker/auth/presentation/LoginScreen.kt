@@ -24,12 +24,15 @@ import app.smartlocker.shared.presentation.*
 fun LoginScreen(controller: AppController, state: AppState, legal: () -> Unit) {
     val brand = controller.brand
     val demo = controller.configuration.environment == Environment.DEMO
-    val otpEnabled = "otp" in brand.authMethods
+    val smsEnabled = "sms" in brand.loginChannels
+    val emailEnabled = "email" in brand.loginChannels
+    val otpEnabled = "otp" in brand.authMethods && (smsEnabled || emailEnabled)
     val passwordEnabled = !demo && "password" in brand.authMethods
     var contact by rememberSaveable { mutableStateOf("") }
     var cpf by rememberSaveable { mutableStateOf("") }
     var code by rememberSaveable { mutableStateOf("") }
     var email by rememberSaveable { mutableStateOf(false) }
+    val useEmail = emailEnabled && (email || !smsEnabled)
     var passwordMode by rememberSaveable { mutableStateOf(false) }
     var identifier by rememberSaveable { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -62,10 +65,10 @@ fun LoginScreen(controller: AppController, state: AppState, legal: () -> Unit) {
                     }
                     if (otpEnabled) TextButton({ passwordMode = false }, Modifier.fillMaxWidth()) { Text("Entrar com código") }
                 } else if (otpEnabled) {
-                OutlinedTextField(contact, { contact = it }, label = { Text(if (email) "E-mail" else "Celular") },
+                OutlinedTextField(contact, { contact = it }, label = { Text(if (useEmail) "E-mail" else "Celular") },
                     modifier = Modifier.fillMaxWidth().keepAboveKeyboard(), singleLine = true, shape = Tokens.control,
-                    placeholder = { Text(if (email) "voce@exemplo.com" else "(11) 90000-0000") },
-                    keyboardOptions = KeyboardOptions(keyboardType = if (email) KeyboardType.Email else KeyboardType.Phone))
+                    placeholder = { Text(if (useEmail) "voce@exemplo.com" else "(11) 90000-0000") },
+                    keyboardOptions = KeyboardOptions(keyboardType = if (useEmail) KeyboardType.Email else KeyboardType.Phone))
                 OutlinedTextField(cpf, { cpf = it.take(14) }, label = { Text("CPF") },
                     modifier = Modifier.fillMaxWidth().keepAboveKeyboard(), singleLine = true, shape = Tokens.control,
                     placeholder = { Text("000.000.000-00") }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number))
