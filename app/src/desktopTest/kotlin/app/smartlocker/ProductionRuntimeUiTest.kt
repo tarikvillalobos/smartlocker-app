@@ -12,6 +12,26 @@ import kotlin.test.*
 
 @OptIn(ExperimentalTestApi::class)
 class ProductionRuntimeUiTest {
+    @Test fun passwordOnlyBrandSignsInThroughDocumentedApi() =
+        runDesktopComposeUiTest(width = 390, height = 900) {
+            val fixture = ProductionApiFixture(listOf("password"))
+            val runtime = AppRuntime(TestPlatform(),
+                AppConfiguration(Brands.smartLocker, Environment.PRODUCTION, "https://api.example.test/v1"),
+                engineFactory = { fixture.engine })
+            val controller = runtime.state.value.controller
+            try {
+                setContent { SmartLockerApp(runtime) }
+                waitUntil(timeoutMillis = 10_000) { controller.state.value.initialized && !controller.state.value.busy }
+                onNodeWithText("Receber código por SMS").assertDoesNotExist()
+                onNodeWithText("E-mail, celular ou CPF").performScrollTo().performTextInput("ana@example.test")
+                onNodeWithText("Senha").performScrollTo().performTextInput("private-password")
+                onNodeWithText("Entrar").performScrollTo().performClick()
+                waitUntil(timeoutMillis = 15_000) { controller.state.value.profile != null && !controller.state.value.busy }
+                assertEquals("Ana API", controller.state.value.profile?.name)
+                assertTrue(fixture.requests.any { it.url.encodedPath.endsWith("/auth/password/login") })
+            } finally { runOnIdle { runtime.close() } }
+        }
+
     @Test fun productionLoginPickupAndHistoryUseHttpAndKeepProductionAfterFailure() =
         runDesktopComposeUiTest(width = 390, height = 1100) {
             val fixture = ProductionApiFixture()
