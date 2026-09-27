@@ -306,6 +306,19 @@ class AppController(
         repository.undoManual(it.membershipId, it.selectedId!!)
         "Marcação desfeita. O código anterior continua revogado."
     }
+    fun loadDelegateCandidates() = execute { generation ->
+        val context = state.value
+        val candidates = repository.delegateCandidates(context.membershipId)
+        if (generation == epoch) mutable.update { it.copy(delegateCandidates = candidates, delegateCandidatesLoaded = true) }
+    }
+    fun delegate(id: String) = mutateSelected {
+        repository.delegateParcel(it.membershipId, it.selectedId!!, id)
+        "Pessoa autorizada. A credencial anterior foi revogada."
+    }
+    fun removeDelegate(id: String) = mutateSelected {
+        repository.removeDelegate(it.membershipId, it.selectedId!!, id)
+        "Autorização removida. A credencial anterior foi revogada."
+    }
     private fun mutateSelected(action: suspend (AppState) -> String) = execute {
         val context = state.value
         if (context.selectedId == null) return@execute
