@@ -124,6 +124,13 @@ class AppController(
         load()
     }
 
+    fun loginWithPassword(identifier: String, password: String) = execute { generation ->
+        val session = repository.loginWithPassword(identifier, password)
+        if (generation != epoch) return@execute
+        acceptLogin(session)
+        load()
+    }
+
     fun refresh() { if (actionJob?.isActive != true) refreshData(detailOnly = false) }
     private fun refreshData(detailOnly: Boolean) {
         readJob?.cancel()
