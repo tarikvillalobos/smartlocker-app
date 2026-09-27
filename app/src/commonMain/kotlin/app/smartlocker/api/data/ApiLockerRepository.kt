@@ -24,6 +24,11 @@ class ApiLockerRepository(private val session: ApiSessionClient) : LockerReposit
     override suspend fun brandConfiguration(): Brand = configuration().toDomain(session.brand)
 
     override suspend fun requestLogin(request: LoginRequest): Challenge = session.requestLogin(request)
+    override suspend fun loginWithPassword(identifier: String, password: String): Session {
+        val result = session.loginWithPassword(identifier, password)
+        clearCache()
+        return result
+    }
     override suspend fun resendLogin(challengeId: String, request: LoginRequest): Challenge =
         session.resendLogin(identifier(challengeId))
     override suspend fun verifyLogin(challengeId: String, code: String): Session {
