@@ -50,10 +50,12 @@ data class ApiBrandConfiguration(
     val supportEmail: String?,
     val termsUrl: String?,
     val privacyUrl: String?,
+    val authMethods: List<String>? = null,
 ) {
     fun validate(expectedBrandId: String) {
         apiRequire(apiId(brandId) == expectedBrandId)
         apiText(appName, 100)
+        authMethods?.let { apiRequire(it.all { method -> method in setOf("otp", "password", "invitation") } && it.size == it.toSet().size) }
         supportEmail?.let(::validateApiEmail)
         listOfNotNull(termsUrl, privacyUrl).forEach { value ->
             val parsed = try { Url(value) } catch (_: IllegalArgumentException) { invalidApiResponse() }
@@ -71,7 +73,8 @@ data class ApiBrandConfiguration(
             contactEditing = base.features.contactEditing && supplied.contactEditing)
         return base.copy(name = appName, supportEmail = supportEmail, termsUrl = termsUrl,
             privacyUrl = privacyUrl, features = allowed,
-            channels = base.channels intersect capabilities.channels.availableChannels())
+            channels = base.channels intersect capabilities.channels.availableChannels(),
+            authMethods = authMethods?.toSet() ?: base.authMethods)
     }
 }
 
