@@ -37,13 +37,19 @@ fun ApiParcel.toDomain(): Parcel {
     apiId(locker.id)
     tracking?.let { apiText(it, 200, true) }
     size?.let { apiText(it, 50, true) }
+    apiRequire(recipientKind == null || recipientKind in setOf("membership", "node"))
+    node?.let { apiId(it.id) }
+    delegates.forEach { it.membershipId?.let(::apiId) }
+    collectedBy?.membershipId?.let(::apiId)
     return Parcel(id = apiId(id), recipientId = apiId(recipientId), locationId = apiId(membershipId),
         carrier = apiText(carrier, 200), tracking = tracking, locker = apiText(locker.name, 200, true),
         address = apiText(locker.address, 500, true), compartment = apiText(compartment, 100), size = size,
         depositedAt = deposited, notifiedAt = notified, deadline = expiration, manualAt = manual,
         collectedAt = collected, credentialStatus = credential, lockerAvailable = locker.available,
         canMarkManually = actions.canMarkManually, canUndo = actions.canUndoManual, version = version.toString(),
-        canReportIssue = actions.canReportIssue)
+        canReportIssue = actions.canReportIssue, recipientKind = recipientKind,
+        nodeLabel = node?.label, delegateNames = delegates.map { it.name },
+        collectedByName = collectedBy?.name)
 }
 
 fun ApiParcelPage.toDomain(): ParcelPage {
