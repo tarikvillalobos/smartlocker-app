@@ -16,7 +16,7 @@ data class ApiChallenge(
     val purpose: String,
 ) {
     fun toDomain(expectedPurpose: String? = null): Challenge {
-        apiRequire(codeLength == 6 && purpose in setOf("login", "contact_change"))
+        apiRequire(codeLength == 6 && purpose in setOf("login", "contact_change", "password_recovery"))
         apiRequire(expectedPurpose == null || purpose == expectedPurpose)
         val mappedChannel = when (channel) {
             "sms" -> LoginChannel.SMS
