@@ -22,4 +22,4 @@ for commit in commits:
         sys.exit(f"{commit}: unsupported binary or more than twenty changed lines in {path}")
     if git("show", "-s", "--format=%ae", commit) != "tarik.villalobos@gmail.com":
         sys.exit(f"{commit}: unexpected author email")
-print(f"Validated {len(commits)} implementation commits: one text file, at most 20 changed lines each.")
+print(f"Validated {len(commits)} commits: one text file each; 20-line limit except the unified OpenAPI.")
