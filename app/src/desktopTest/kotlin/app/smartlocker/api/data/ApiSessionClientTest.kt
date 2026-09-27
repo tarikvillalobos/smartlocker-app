@@ -22,6 +22,26 @@ import kotlin.time.Instant
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ApiSessionClientTest {
+    @Test fun passwordLoginUsesAdvertisedRouteAndStoresSession() = runTest {
+        val clock = TestClock()
+        val secure = MemorySecure()
+        val client = client(clock, secure) { request ->
+            when (request.path()) {
+                "/configuration" -> respond(configuration(listOf("otp", "password")), headers = JSON)
+                "/auth/password/login" -> {
+                    assertNull(request.headers[HttpHeaders.Authorization])
+                    assertNull(request.headers["Idempotency-Key"])
+                    assertEquals("ana@example.test", request.jsonBody().getValue("identifier").jsonPrimitive.content)
+                    assertEquals("private-password", request.jsonBody().getValue("password").jsonPrimitive.content)
+                    respond(tokens(clock), headers = JSON)
+                }
+                else -> error("Unexpected fixture path")
+            }
+        }
+        try { assertEquals("ana", client.loginWithPassword(" ana@example.test ", "private-password").userId)
+            assertTrue(secure.values.isNotEmpty()) } finally { client.close() }
+    }
+
     @Test fun loginNormalizesCpfAndBrazilianPhoneAndSuppliesBrandAndIdempotencyHeaders() = runTest {
         val clock = TestClock()
         var challenges = 0
