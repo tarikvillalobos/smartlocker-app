@@ -57,6 +57,25 @@ class ApiSessionClientTest {
         } finally { client.close() }
     }
 
+    @Test fun passwordRecoveryUsesChallengeAndReturnsNewSession() = runTest {
+        val clock = TestClock()
+        val client = client(clock) { request ->
+            when (request.path()) {
+                "/configuration" -> respond(configuration(listOf("password")), headers = JSON)
+                "/auth/password/recovery" -> respond(
+                    challenge(clock).replace("\"purpose\":\"login\"", "\"purpose\":\"password_recovery\""), HttpStatusCode.Accepted, JSON)
+                "/auth/password/recovery/challenge-1/verify" -> {
+                    assertEquals("new-secret", request.jsonBody().getValue("newPassword").jsonPrimitive.content)
+                    respond(tokens(clock), headers = JSON)
+                }
+                else -> error("Unexpected fixture path")
+            }
+        }
+        try { val challenge = client.requestPasswordRecovery("ana@example.test", LoginChannel.EMAIL)
+            assertEquals("ana", client.verifyPasswordRecovery(challenge.id, "123456", "new-secret").userId)
+        } finally { client.close() }
+    }
+
     @Test fun loginNormalizesCpfAndBrazilianPhoneAndSuppliesBrandAndIdempotencyHeaders() = runTest {
         val clock = TestClock()
         var challenges = 0
