@@ -69,7 +69,8 @@ class AppController(
     private fun handle(error: Exception) {
         (error as? AppFailure)?.retryAt?.let { retryAt ->
             mutable.update { it.copy(challenge = it.challenge?.copy(resendAt = maxOf(it.challenge.resendAt, retryAt)),
-                contactChallenge = it.contactChallenge?.copy(resendAt = maxOf(it.contactChallenge.resendAt, retryAt))) }
+                contactChallenge = it.contactChallenge?.copy(resendAt = maxOf(it.contactChallenge.resendAt, retryAt)),
+                recoveryChallenge = it.recoveryChallenge?.copy(resendAt = maxOf(it.recoveryChallenge.resendAt, retryAt))) }
         }
         if (error is AppFailure && error.kind == FailureKind.EXPIRED_SESSION) {
             previousUser = state.value.session?.userId
@@ -128,6 +129,23 @@ class AppController(
         val session = repository.loginWithPassword(identifier, password)
         if (generation != epoch) return@execute
         acceptLogin(session)
+        load()
+    }
+    fun requestPasswordRecovery(identifier: String, channel: LoginChannel) = execute { generation ->
+        val challenge = repository.requestPasswordRecovery(identifier, channel)
+        if (generation == epoch) mutable.update { it.copy(recoveryChallenge = challenge) }
+    }
+    fun cancelPasswordRecovery() {
+        epoch++
+        actionJob?.cancel()
+        mutable.update { it.copy(recoveryChallenge = null, busy = false, error = null) }
+    }
+    fun verifyPasswordRecovery(code: String, newPassword: String) = execute { generation ->
+        val challenge = state.value.recoveryChallenge ?: return@execute
+        val session = repository.verifyPasswordRecovery(challenge.id, code, newPassword)
+        if (generation != epoch) return@execute
+        acceptLogin(session)
+        mutable.update { it.copy(recoveryChallenge = null) }
         load()
     }
 
