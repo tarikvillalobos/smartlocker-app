@@ -53,7 +53,10 @@ class ApiSessionClient(
     suspend fun requestLogin(value: LoginRequest): Challenge {
         if (!InputValidation.cpf(value.cpf)) invalidInput("Confira o CPF informado.")
         val contact = normalizedApiContact(value.contact, value.channel)
-        val capabilities = configuration().capabilities.channels
+        val public = configuration()
+        if ("otp" !in (public.authMethods ?: listOf("otp")))
+            throw AppFailure(FailureKind.UNAVAILABLE, "Login por código indisponível para esta marca.")
+        val capabilities = public.capabilities.channels
         if (!(if (value.channel == LoginChannel.SMS) capabilities.sms else capabilities.email).available) {
             throw AppFailure(FailureKind.UNAVAILABLE, "Este canal de login está indisponível. Escolha outro canal.")
         }
