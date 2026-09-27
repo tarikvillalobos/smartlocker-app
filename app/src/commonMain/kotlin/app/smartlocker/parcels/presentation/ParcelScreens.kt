@@ -104,6 +104,9 @@ fun DetailScreen(state: AppState, controller: AppController, platform: PlatformS
     Panel {
         Metadata("Localização do armário", "${parcel.locker} · ${parcel.address}")
         Metadata("Compartimento", "Porta ${parcel.compartment} · ${parcel.size ?: "Tamanho não informado"}")
+        if (parcel.recipientKind == "node") Metadata("Destino", parcel.nodeLabel ?: "Unidade vinculada")
+        if (parcel.delegateNames.isNotEmpty()) Metadata("Pessoas autorizadas", parcel.delegateNames.joinToString(", "))
+        parcel.collectedByName?.let { Metadata("Retirada por", it) }
     }
     Panel {
         Text("Linha do tempo", style = MaterialTheme.typography.titleMedium)
