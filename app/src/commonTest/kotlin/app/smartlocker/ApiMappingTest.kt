@@ -87,6 +87,17 @@ class ApiMappingTest {
         failsSafely { parcel.copy(version = 0).toDomain() }
     }
 
+    @Test fun parcelMappingRetainsOptionalRecipientAndCollectorFromUnifiedApi() {
+        val api = parcel.copy(recipientKind = "node", node = ApiNodeRef("unit-1", "unit", "Sala 42"),
+            delegates = listOf(ApiPersonRef("member-2", "Bia")), collectedBy = ApiPersonRef(null, "Portaria"))
+        val mapped = api.toDomain()
+        assertEquals("node", mapped.recipientKind)
+        assertEquals("Sala 42", mapped.nodeLabel)
+        assertEquals(listOf("Bia"), mapped.delegateNames)
+        assertEquals("Portaria", mapped.collectedByName)
+        failsSafely { api.copy(recipientKind = "other").toDomain() }
+    }
+
     @Test fun pickupUsesServerRevalidationAndPreservesLeadingZeroes() {
         val revalidate = "2026-09-26T12:02:00.000Z"
         val dto = ApiPickupCredential("parcel", "membership", "001234", "AUTHORIZED-SYNTHETIC-PAYLOAD",
