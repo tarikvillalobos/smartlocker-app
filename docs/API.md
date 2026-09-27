@@ -16,12 +16,12 @@ Consulte [OPENAPI.md](OPENAPI.md) e os registros datados de [VALIDATION.md](VALI
   válido; `UnconfiguredRepository` quando a configuração está ausente ou inválida.
 - `HttpTransport`: Ktor, HTTPS, JSON, timeouts, cancelamento, bloqueio de redirects,
   mensagens locais de erro e limite para o corpo de resposta.
-- `ApiSessionClient`: configuração pública, OTP, reenvio explícito, verificação,
-  Bearer, restauração, refresh rotativo serializado e logout.
+- `ApiSessionClient`: configuração pública, OTP ou senha conforme `authMethods`,
+  reenvio e verificação de OTP, Bearer, refresh rotativo e logout.
 - `ApiLockerRepository`: perfil, vínculos, encomendas, indicadores, credenciais,
   marcação manual/desfazer, preferências, contatos, avisos, suporte e destinatários.
 - DTOs e mapeamentos validados: identidade e escopo, estados, versões, datas,
-  intervalos, campos opcionais, capacidades e cursores.
+  destinatário, unidade, delegados, pessoa que retirou, capacidades e cursores.
 - Testes MockEngine do transporte, autenticação e operações de negócio; testes
   controlados usam dados sintéticos, sem criar um servidor para o aplicativo.
 
