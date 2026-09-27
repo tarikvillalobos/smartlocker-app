@@ -17,6 +17,12 @@ data class ApiParcelActions(
 data class ApiTimelineEvent(val type: String, val at: String)
 
 @Serializable
+data class ApiNodeRef(val id: String, val type: String, val label: String)
+
+@Serializable
+data class ApiPersonRef(val membershipId: String?, val name: String)
+
+@Serializable
 data class ApiParcel(
     val id: String,
     val recipientId: String,
@@ -36,6 +42,10 @@ data class ApiParcel(
     val actions: ApiParcelActions,
     val timeline: List<ApiTimelineEvent>,
     val version: Long,
+    val recipientKind: String? = null,
+    val node: ApiNodeRef? = null,
+    val delegates: List<ApiPersonRef> = emptyList(),
+    val collectedBy: ApiPersonRef? = null,
 )
 
 @Serializable
