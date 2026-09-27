@@ -26,6 +26,7 @@ data class Brand(
     val applicationId: String = "app.smartlocker.demo",
     val mark: BrandMark = BrandMark.PARCEL,
     val authMethods: Set<String> = setOf("otp"),
+    val loginChannels: Set<String> = setOf("sms", "email"),
 )
 
 object Brands {
