@@ -460,11 +460,12 @@ class ApiSessionClientTest {
     private fun challenge(clock: TestClock) = ApiJson.encodeToString(ApiChallenge("challenge-1",
         instant(clock.time + 300_000), instant(clock.time + 30_000), "sms", "+55 ** *****-4321", 6, "login"))
 
-    private fun configuration(): String {
+    private fun configuration(authMethods: List<String>? = null): String {
         val channel = ApiChannelCapability(true)
         val capabilities = ApiCapabilities(ApiFeatures(true, true, true, true, true, true),
             ApiChannels(channel, channel, channel, channel, channel))
-        return ApiJson.encodeToString(ApiBrandConfiguration("smartlocker", "SmartLocker", capabilities, null, null, null))
+        return ApiJson.encodeToString(ApiBrandConfiguration("smartlocker", "SmartLocker", capabilities, null, null, null,
+            authMethods))
     }
 
     private companion object {
