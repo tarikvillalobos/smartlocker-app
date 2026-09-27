@@ -20,6 +20,16 @@ import kotlin.time.Instant
 
 /** Contract tests use the actual session client, headers, transport, DTOs and repository. */
 class ApiLockerRepositoryTest {
+    @Test fun delegateCandidatesComeOnlyFromScopedUnitResidents() = runTest {
+        withRepository { request ->
+            assertEquals("/v1/memberships/member-1/unit", request.url.encodedPath)
+            json(ApiUnitDetail("unit-1", "condo-1", listOf(
+                ApiUnitResident("member-1", "Ana", true), ApiUnitResident("member-2", "Bia", false))))
+        }.useSuspend { fixture ->
+            assertEquals(listOf("member-2"), fixture.repo.delegateCandidates("member-1").map { it.membershipId })
+        }
+    }
+
     @Test fun profileIntersectsCapabilitiesAndRejectsAnotherUser() = runTest {
         val public = configuration.copy(appName = "Marca da API",
             capabilities = capabilities.copy(features = capabilities.features.copy(recipients = false)))
