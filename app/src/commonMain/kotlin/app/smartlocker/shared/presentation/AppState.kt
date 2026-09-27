@@ -31,6 +31,7 @@ data class AppState(
     val issues: List<SupportIssue> = emptyList(),
     val residents: List<Recipient> = emptyList(),
     val challenge: Challenge? = null,
+    val recoveryChallenge: Challenge? = null,
     val contactChallenge: Challenge? = null,
     val contactValue: String = "",
     val contactChannel: LoginChannel = LoginChannel.EMAIL,
