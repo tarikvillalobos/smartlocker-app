@@ -74,6 +74,10 @@ caminhos são IDs de vínculo, distintos de IDs físicos de local ou unidade.
 Lockers avulsos podem retornar `unitId` e `unitLabel` nulos em conjunto.
 Capacidades públicas, capacidades do vínculo e configuração da marca limitam
 as opções da interface; o servidor continua responsável por autorizar cada chamada.
+O nome mostrado da marca vem de `/configuration.appName`; o nome da pessoa vem
+de `/me.name`. O contrato não oferece edição do nome da pessoa pelo próprio app.
+`authMethods` e a disponibilidade de SMS/e-mail controlam as opções de login.
+O nome do aplicativo instalado no sistema operacional continua definido no build.
 
 Listas de encomendas, avisos e solicitações preservam cursores opacos. Cada ação
 “Carregar mais” solicita uma página. O contador de avisos usa `unreadCount` global;
