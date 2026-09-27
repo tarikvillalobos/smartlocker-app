@@ -101,6 +101,22 @@ class ApiLockerRepository(private val session: ApiSessionClient) : LockerReposit
         }
     }
 
+    override suspend fun delegateParcel(locationId: String, parcelId: String, delegateMembershipId: String): Parcel =
+        changeDelegate(locationId, parcelId, delegateMembershipId, remove = false)
+    override suspend fun removeDelegate(locationId: String, parcelId: String, delegateMembershipId: String): Parcel =
+        changeDelegate(locationId, parcelId, delegateMembershipId, remove = true)
+
+    private suspend fun changeDelegate(locationId: String, parcelId: String, delegateId: String, remove: Boolean): Parcel {
+        val user = currentUser()
+        val scope = membership(locationId, user)
+        if (scope.condominiumId == null) unavailableFeature()
+        val path = "${parcelPath(locationId, parcelId)}/delegates"
+        val response = request<ApiParcel>(user, if (remove) "$path/${identifier(delegateId)}" else path,
+            if (remove) HttpMethod.Delete else HttpMethod.Post,
+            if (remove) null else ApiJson.encodeToString(ApiDelegateInput(identifier(delegateId))))
+        return parcel(response, locationId, parcelId, scope.capabilities, user)
+    }
+
     override suspend fun statistics(locationId: String): Statistics {
         val user = currentUser()
         membership(locationId, user)
