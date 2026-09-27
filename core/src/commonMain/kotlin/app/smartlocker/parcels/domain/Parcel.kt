@@ -24,6 +24,10 @@ data class Parcel(
     val canUndo: Boolean = false,
     val version: String? = null,
     val canReportIssue: Boolean = true,
+    val recipientKind: String? = null,
+    val nodeLabel: String? = null,
+    val delegateNames: List<String> = emptyList(),
+    val collectedByName: String? = null,
 ) {
     val status: ParcelStatus get() = when {
         collectedAt != null -> ParcelStatus.COLLECTED
