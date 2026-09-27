@@ -98,6 +98,24 @@ class ApiSessionClient(
             authenticated = false)).toDomain("password_recovery")
     }
 
+    suspend fun verifyPasswordRecovery(challengeId: String, code: String, newPassword: String): Session = mutex.withLock {
+        validateApiOtp(code)
+        if (newPassword.length !in 1..8192) invalidInput("Informe a nova senha.")
+        val epoch = generation
+        val verification = apiId(challengeId) to code
+        val key = verificationKeys.getOrPut(verification) { Uuid.random().toString() }
+        val response = request("/auth/password/recovery/${apiId(challengeId)}/verify", HttpMethod.Post,
+            ApiJson.encodeToString(ApiPasswordRecoveryVerify(code, newPassword)),
+            mapOf("Idempotency-Key" to key), authenticated = false)
+        val tokens = decodeApi<ApiSessionTokens>(response)
+        validateTokens(tokens)
+        ensureCurrent(epoch)
+        save(StoredApiSession(baseUrl, tokens), epoch)
+        restored = true
+        verificationKeys.clear()
+        tokens.toDomain()
+    }
+
     suspend fun resendLogin(challengeId: String): Challenge = decodeApi<ApiChallenge>(request(
         "/auth/challenges/${apiId(challengeId)}/resend", HttpMethod.Post, authenticated = false,
     )).toDomain("login")
