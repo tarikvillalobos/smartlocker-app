@@ -123,6 +123,8 @@ private fun RecoveryForm(controller: AppController, state: AppState, smsEnabled:
     emailEnabled: Boolean, onBack: () -> Unit) {
     var identifier by rememberSaveable { mutableStateOf("") }
     var email by rememberSaveable { mutableStateOf(!smsEnabled) }
+    var code by rememberSaveable { mutableStateOf("") }
+    var newPassword by remember { mutableStateOf("") }
     val useEmail = emailEnabled && (email || !smsEnabled)
     val challenge = state.recoveryChallenge
     Text("Recuperar senha", style = MaterialTheme.typography.headlineSmall)
@@ -135,6 +137,16 @@ private fun RecoveryForm(controller: AppController, state: AppState, smsEnabled:
         PrimaryButton("Receber código", !state.busy && identifier.trim().length >= 3) {
             controller.requestPasswordRecovery(identifier, if (useEmail) LoginChannel.EMAIL else LoginChannel.SMS)
         }
+    } else {
+        Text("Código enviado para ${challenge.maskedDestination.orEmpty()}.", color = Tokens.secondary)
+        OutlinedTextField(code, { code = it.filter(Char::isDigit).take(6) }, label = { Text("Código de recuperação") },
+            modifier = Modifier.fillMaxWidth().keepAboveKeyboard(), singleLine = true, shape = Tokens.control,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword))
+        OutlinedTextField(newPassword, { newPassword = it.take(8192) }, label = { Text("Nova senha") },
+            modifier = Modifier.fillMaxWidth().keepAboveKeyboard(), singleLine = true, shape = Tokens.control,
+            visualTransformation = PasswordVisualTransformation())
+        PrimaryButton("Redefinir senha", !state.busy && code.length == 6 && newPassword.isNotEmpty()
+            && state.now < challenge.expiresAt) { controller.verifyPasswordRecovery(code, newPassword); newPassword = "" }
     }
     TextButton(onBack, Modifier.fillMaxWidth()) { Text("Voltar ao login") }
 }
