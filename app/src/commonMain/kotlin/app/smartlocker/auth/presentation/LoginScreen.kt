@@ -23,10 +23,16 @@ import app.smartlocker.shared.presentation.*
 fun LoginScreen(controller: AppController, state: AppState, legal: () -> Unit) {
     val brand = controller.brand
     val demo = controller.configuration.environment == Environment.DEMO
+    val otpEnabled = "otp" in brand.authMethods
+    val passwordEnabled = !demo && "password" in brand.authMethods
     var contact by rememberSaveable { mutableStateOf("") }
     var cpf by rememberSaveable { mutableStateOf("") }
     var code by rememberSaveable { mutableStateOf("") }
     var email by rememberSaveable { mutableStateOf(false) }
+    var passwordMode by rememberSaveable { mutableStateOf(false) }
+    var identifier by rememberSaveable { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    val usePassword = passwordEnabled && (passwordMode || !otpEnabled)
     Column(Modifier.widthIn(max = Tokens.maxForm).fillMaxWidth().verticalScroll(rememberScrollState())) {
         Column(Modifier.fillMaxWidth().background(Color(brand.dark), RoundedCornerShape(bottomStart = 32.dp, bottomEnd = 32.dp))
             .padding(horizontal = 24.dp, vertical = 36.dp), verticalArrangement = Arrangement.spacedBy(24.dp)) {
