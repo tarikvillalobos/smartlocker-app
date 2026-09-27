@@ -253,7 +253,8 @@ class ApiLockerRepositoryTest {
         private val capabilities = ApiCapabilities(ApiFeatures(true, true, true, true, true, false),
             ApiChannels(available, available, available, unavailable, unavailable))
         private val configuration = ApiBrandConfiguration("smartlocker", "SmartLocker", capabilities, null, null, null)
-        private val membership = ApiMembership("member-1", "location-1", "Residencial", "unit-1", "42", "America/Sao_Paulo", capabilities)
+        private val membership = ApiMembership("member-1", "location-1", "Residencial", "unit-1", "42", "America/Sao_Paulo",
+            capabilities, condominiumId = "condo-1")
         private val profile = ApiProfile("user-1", "Ana", "+5511987654321", NOW, "ana@example.test", NOW,
             ApiCommunicationPreferences(true, true, false), listOf(membership))
         private val tokens = ApiSessionTokens("Bearer", "access-1", LATER, "refresh-1", "2026-09-27T12:00:00.000Z",
