@@ -89,6 +89,18 @@ class ApiLockerRepository(private val session: ApiSessionClient) : LockerReposit
         return parcel(response, locationId, id, membership.capabilities, user)
     }
 
+    override suspend fun delegateCandidates(locationId: String): List<DelegateCandidate> {
+        val user = currentUser()
+        val scope = membership(locationId, user).condominiumId ?: unavailableFeature()
+        val response = request<ApiUnitDetail>(user, "${membershipPath(locationId)}/unit")
+        requireResponse(apiId(response.condominiumId) == scope)
+        apiId(response.id)
+        apiUniqueIds(response.residents.map { it.id })
+        return response.residents.filterNot { it.isSelf }.map {
+            DelegateCandidate(apiId(it.id), apiText(it.name, 200))
+        }
+    }
+
     override suspend fun statistics(locationId: String): Statistics {
         val user = currentUser()
         membership(locationId, user)
