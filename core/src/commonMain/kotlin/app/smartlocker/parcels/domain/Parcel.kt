@@ -27,6 +27,7 @@ data class Parcel(
     val recipientKind: String? = null,
     val nodeLabel: String? = null,
     val delegateNames: List<String> = emptyList(),
+    val delegateIds: List<String?> = emptyList(),
     val collectedByName: String? = null,
 ) {
     val status: ParcelStatus get() = when {
