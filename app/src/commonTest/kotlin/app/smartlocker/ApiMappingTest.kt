@@ -69,6 +69,10 @@ class ApiMappingTest {
         assertFalse(brand.features.residents)
         assertFalse("whatsapp" in brand.channels)
         assertFalse("push" in brand.channels)
+        assertEquals(setOf("sms", "email"), brand.loginChannels)
+        assertEquals(setOf("otp", "password"),
+            config.copy(authMethods = listOf("otp", "password")).toDomain(Brands.aurora).authMethods)
+        failsSafely { config.copy(authMethods = listOf("unknown")).toDomain(Brands.aurora) }
         failsSafely { config.copy(brandId = "other").toDomain(Brands.aurora) }
         failsSafely { config.copy(termsUrl = "http://example.test/terms").validate("aurora") }
     }
