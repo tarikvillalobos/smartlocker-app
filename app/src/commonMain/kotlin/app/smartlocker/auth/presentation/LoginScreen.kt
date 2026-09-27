@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import app.smartlocker.auth.domain.*
 import app.smartlocker.config.*
@@ -48,6 +49,19 @@ fun LoginScreen(controller: AppController, state: AppState, legal: () -> Unit) {
         }
         Column(Modifier.padding(24.dp), verticalArrangement = Arrangement.spacedBy(18.dp)) {
             if (state.challenge == null) {
+                if (usePassword) {
+                    OutlinedTextField(identifier, { identifier = it.take(254) }, label = { Text("E-mail, celular ou CPF") },
+                        modifier = Modifier.fillMaxWidth().keepAboveKeyboard(), singleLine = true, shape = Tokens.control)
+                    OutlinedTextField(password, { password = it.take(8192) }, label = { Text("Senha") },
+                        modifier = Modifier.fillMaxWidth().keepAboveKeyboard(), singleLine = true, shape = Tokens.control,
+                        visualTransformation = PasswordVisualTransformation(),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password))
+                    PrimaryButton("Entrar", !state.busy && identifier.trim().length >= 3 && password.isNotEmpty()) {
+                        controller.loginWithPassword(identifier, password)
+                        password = ""
+                    }
+                    if (otpEnabled) TextButton({ passwordMode = false }, Modifier.fillMaxWidth()) { Text("Entrar com código") }
+                } else if (otpEnabled) {
                 OutlinedTextField(contact, { contact = it }, label = { Text(if (email) "E-mail" else "Celular") },
                     modifier = Modifier.fillMaxWidth().keepAboveKeyboard(), singleLine = true, shape = Tokens.control,
                     placeholder = { Text(if (email) "voce@exemplo.com" else "(11) 90000-0000") },
@@ -67,6 +81,10 @@ fun LoginScreen(controller: AppController, state: AppState, legal: () -> Unit) {
                     TextButton({ contact = if (email) "ana@example.test" else "11987654321"; cpf = "52998224725" }) {
                         Text("Preencher dados de demonstração")
                     }
+                }
+                if (passwordEnabled) TextButton({ passwordMode = true }, Modifier.fillMaxWidth()) { Text("Entrar com senha") }
+                } else {
+                    Text("Nenhum método de login está disponível para esta marca.", color = Tokens.secondary)
                 }
             } else {
                 Text("Confira seu código", style = MaterialTheme.typography.headlineSmall)
