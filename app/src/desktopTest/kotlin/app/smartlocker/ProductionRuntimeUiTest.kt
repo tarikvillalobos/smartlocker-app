@@ -43,7 +43,7 @@ class ProductionRuntimeUiTest {
             try {
                 setContent { SmartLockerApp(runtime) }
                 waitUntil(timeoutMillis = 10_000) { controller.state.value.initialized && !controller.state.value.busy }
-                onNodeWithText("Marca da API").assertExists()
+                onAllNodesWithText("Marca da API").onFirst().assertExists()
                 onNodeWithText("Preencher dados de demonstração").assertDoesNotExist()
                 onNodeWithText("Celular").performScrollTo().performTextInput("11987654321")
                 onNodeWithText("CPF").performScrollTo().performTextInput("52998224725")
