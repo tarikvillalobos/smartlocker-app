@@ -18,7 +18,7 @@ def unique_mapping(loader, node, deep=False):
     return result
 
 UniqueLoader.add_constructor(yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG, unique_mapping)
-path = Path(sys.argv[1] if len(sys.argv) > 1 else Path(__file__).resolve().parents[1] / 'docs/api/openapi.yaml')
+path = Path(sys.argv[1] if len(sys.argv) > 1 else Path(__file__).resolve().parents[1] / 'docs/api/condo-platform-openapi.yaml')
 text = path.read_text()
 assert all(line == line.rstrip() for line in text.splitlines()), 'Trailing whitespace'
 assert max(map(len, text.splitlines())) < 240, 'Unexpectedly long line'
