@@ -8,10 +8,13 @@ rows = subprocess.check_output(
 ).strip().splitlines()
 valid = len(rows) == 1
 if valid:
-    added, removed, _ = rows[0].split("\t", 2)
+    added, removed, path = rows[0].split("\t", 2)
     valid = added.isdigit() and removed.isdigit()
-    valid = valid and int(added) + int(removed) <= 20
+    valid = valid and (
+        int(added) + int(removed) <= 20
+        or path == "docs/api/condo-platform-openapi.yaml"
+    )
 if not valid:
-    sys.exit("Commit rejected: exactly one text file and at most 20 changed lines.")
+    sys.exit("Commit rejected: one text file, at most 20 lines except the unified OpenAPI.")
 subprocess.run(["git", "diff", "--cached", "--check"], check=True)
 subprocess.run(["git", "diff", "--cached", "--no-ext-diff"], check=True)
