@@ -61,6 +61,26 @@ class ApiSessionClient(
         return decodeApi<ApiChallenge>(request("/auth/challenges", HttpMethod.Post, body, authenticated = false)).toDomain("login")
     }
 
+    suspend fun loginWithPassword(identifier: String, password: String): Session {
+        val account = identifier.trim()
+        if (account.length !in 3..254 || password.length !in 1..8192)
+            invalidInput("Informe o identificador e a senha.")
+        if ("password" !in (configuration().authMethods ?: listOf("otp")))
+            throw AppFailure(FailureKind.UNAVAILABLE, "Login por senha indisponível para esta marca.")
+        return mutex.withLock {
+            val epoch = generation
+            val response = request("/auth/password/login", HttpMethod.Post,
+                ApiJson.encodeToString(ApiPasswordLoginRequest(account, password)),
+                authenticated = false, trackMutation = false)
+            val tokens = decodeApi<ApiSessionTokens>(response)
+            validateTokens(tokens)
+            ensureCurrent(epoch)
+            save(StoredApiSession(baseUrl, tokens), epoch)
+            restored = true
+            tokens.toDomain()
+        }
+    }
+
     suspend fun resendLogin(challengeId: String): Challenge = decodeApi<ApiChallenge>(request(
         "/auth/challenges/${apiId(challengeId)}/resend", HttpMethod.Post, authenticated = false,
     )).toDomain("login")
