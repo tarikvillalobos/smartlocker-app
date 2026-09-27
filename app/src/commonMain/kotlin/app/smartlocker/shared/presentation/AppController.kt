@@ -109,6 +109,13 @@ class AppController(
         actionJob?.cancel()
         mutable.update { it.copy(challenge = null, error = null, busy = false) }
     }
+    private fun acceptLogin(session: Session) {
+        mutable.update { it.copy(session = session, challenge = null,
+            route = if (previousUser == null || previousUser == session.userId) it.route else Route.HOME,
+            selectedId = if (previousUser == null || previousUser == session.userId) it.selectedId else null,
+            membershipId = if (previousUser == null || previousUser == session.userId) it.membershipId else "",
+            filter = if (previousUser == null || previousUser == session.userId) it.filter else ParcelFilter.ALL) }
+    }
     fun verify(code: String) = execute { generation ->
         val challenge = state.value.challenge ?: return@execute
         val session = repository.verifyLogin(challenge.id, code)
