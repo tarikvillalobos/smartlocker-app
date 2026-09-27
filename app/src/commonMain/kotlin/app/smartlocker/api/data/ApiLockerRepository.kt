@@ -29,6 +29,13 @@ class ApiLockerRepository(private val session: ApiSessionClient) : LockerReposit
         clearCache()
         return result
     }
+    override suspend fun requestPasswordRecovery(identifier: String, channel: LoginChannel): Challenge =
+        session.requestPasswordRecovery(identifier, channel)
+    override suspend fun verifyPasswordRecovery(challengeId: String, code: String, newPassword: String): Session {
+        val result = session.verifyPasswordRecovery(challengeId, code, newPassword)
+        clearCache()
+        return result
+    }
     override suspend fun resendLogin(challengeId: String, request: LoginRequest): Challenge =
         session.resendLogin(identifier(challengeId))
     override suspend fun verifyLogin(challengeId: String, code: String): Session {
