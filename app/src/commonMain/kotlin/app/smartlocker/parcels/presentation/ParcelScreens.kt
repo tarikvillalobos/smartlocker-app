@@ -159,6 +159,17 @@ private fun DelegateDialog(state: AppState, controller: AppController, close: ()
         text = { Column(Modifier.heightIn(max = 360.dp).verticalScroll(rememberScrollState())) {
             if (!state.delegateCandidatesLoaded) Text("Buscando moradores autorizáveis…")
             else if (state.delegateCandidates.isEmpty()) Text("Nenhum morador disponível nesta unidade.")
+            state.delegateCandidates.filterNot { it.membershipId in state.selected?.delegateIds.orEmpty() }
+                .forEach { candidate ->
+                    TextButton({ close(); controller.delegate(candidate.membershipId) }, enabled = !state.busy) {
+                        Text("Autorizar ${candidate.name}")
+                    }
+                }
+            state.selected?.delegateIds?.forEachIndexed { index, id ->
+                if (id != null) TextButton({ close(); controller.removeDelegate(id) }, enabled = !state.busy) {
+                    Text("Remover ${state.selected?.delegateNames?.getOrNull(index).orEmpty()}")
+                }
+            }
         } },
         confirmButton = { TextButton(close) { Text("Fechar") } })
 }
