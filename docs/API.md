@@ -1,9 +1,9 @@
 # Integração com a API externa
 
-O aplicativo possui cliente HTTP implementado para o contrato versionado em
-[api/openapi.yaml](api/openapi.yaml). O backend está sendo finalizado em outro
-projeto; este repositório contém o aplicativo, sem implementar esse servidor.
-A especificação continua identificada como minuta `0.1.0-draft` até homologação.
+O aplicativo possui cliente HTTP para as rotas SmartLocker do contrato unificado
+em [api/condo-platform-openapi.yaml](api/condo-platform-openapi.yaml). O contrato
+anterior está em [api/openapi.yaml](api/openapi.yaml) para checar compatibilidade.
+O backend está em outro projeto. A versão atual é `1.1.0-draft`.
 Seu domínio `.invalid` é um placeholder não operacional.
 
 A existência do cliente e dos testes com respostas controladas não comprova
