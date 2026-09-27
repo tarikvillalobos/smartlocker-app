@@ -25,6 +25,7 @@ data class Brand(
     val headingFont: String = "sora",
     val applicationId: String = "app.smartlocker.demo",
     val mark: BrandMark = BrandMark.PARCEL,
+    val authMethods: Set<String> = setOf("otp"),
 )
 
 object Brands {
