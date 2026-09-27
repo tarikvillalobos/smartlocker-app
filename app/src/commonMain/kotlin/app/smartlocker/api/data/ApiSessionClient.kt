@@ -84,6 +84,20 @@ class ApiSessionClient(
         }
     }
 
+    suspend fun requestPasswordRecovery(identifier: String, channel: LoginChannel): Challenge {
+        val account = identifier.trim()
+        if (account.length !in 3..254) invalidInput("Informe o identificador da conta.")
+        val public = configuration()
+        if ("password" !in (public.authMethods ?: listOf("otp")))
+            throw AppFailure(FailureKind.UNAVAILABLE, "Recuperação de senha indisponível para esta marca.")
+        val channels = public.capabilities.channels
+        if (!(if (channel == LoginChannel.SMS) channels.sms else channels.email).available)
+            throw AppFailure(FailureKind.UNAVAILABLE, "Este canal de recuperação está indisponível.")
+        val body = ApiJson.encodeToString(ApiPasswordRecoveryRequest(account, channel.apiValue()))
+        return decodeApi<ApiChallenge>(request("/auth/password/recovery", HttpMethod.Post, body,
+            authenticated = false)).toDomain("password_recovery")
+    }
+
     suspend fun resendLogin(challengeId: String): Challenge = decodeApi<ApiChallenge>(request(
         "/auth/challenges/${apiId(challengeId)}/resend", HttpMethod.Post, authenticated = false,
     )).toDomain("login")
