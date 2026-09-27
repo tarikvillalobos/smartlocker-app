@@ -25,6 +25,8 @@ class AppFailure(
 interface LockerRepository {
     suspend fun brandConfiguration(): app.smartlocker.config.Brand? = null
     suspend fun requestLogin(request: LoginRequest): Challenge
+    suspend fun loginWithPassword(identifier: String, password: String): Session =
+        throw AppFailure(FailureKind.UNAVAILABLE, "Login por senha indisponível para esta marca.")
     suspend fun resendLogin(challengeId: String, request: LoginRequest): Challenge = requestLogin(request)
     suspend fun verifyLogin(challengeId: String, code: String): Session
     suspend fun restoreSession(): Session?
