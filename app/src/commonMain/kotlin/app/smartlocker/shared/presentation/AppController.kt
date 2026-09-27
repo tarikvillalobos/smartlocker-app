@@ -84,7 +84,8 @@ class AppController(
         } else if (error is AppFailure && error.kind == FailureKind.DENIED) {
             mutable.update { it.copy(error = error.message, parcels = emptyList(), pending = emptyList(), recent = emptyList(),
                 selected = null, selectedId = null, credential = null, notices = emptyList(),
-                issues = emptyList(), residents = emptyList(), statistics = null, nextCursor = null,
+                issues = emptyList(), residents = emptyList(), delegateCandidates = emptyList(),
+                delegateCandidatesLoaded = false, statistics = null, nextCursor = null,
                 noticeCursor = null, serverUnreadCount = null, issueCursor = null, stale = false) }
         } else {
             mutable.update { it.copy(error = (error as? AppFailure)?.message ?: "Não foi possível concluir. Tente novamente.",
@@ -212,7 +213,8 @@ class AppController(
                 profile = profile, membershipId = nextMembership, route = Route.PROFILE,
                 selectedId = null, selected = null, credential = null, credentialMessage = null,
                 parcels = emptyList(), pending = emptyList(), recent = emptyList(), notices = emptyList(),
-                issues = emptyList(), residents = emptyList(), statistics = null, nextCursor = null,
+                issues = emptyList(), residents = emptyList(), delegateCandidates = emptyList(),
+                delegateCandidatesLoaded = false, statistics = null, nextCursor = null,
                 noticeCursor = null, serverUnreadCount = null, issueCursor = null, lastUpdated = null,
                 stale = nextMembership.isNotEmpty(),
                 error = if (nextMembership.isEmpty()) "Nenhum local autorizado para esta conta." else null,
@@ -285,7 +287,8 @@ class AppController(
         mutable.update { it.copy(membershipId = id, selectedId = null, selected = null, credential = null,
             parcels = emptyList(), pending = emptyList(), recent = emptyList(), notices = emptyList(), issues = emptyList(),
             statistics = null, nextCursor = null, noticeCursor = null, serverUnreadCount = null,
-            issueCursor = null, residents = emptyList(), route = Route.HOME) }
+            issueCursor = null, residents = emptyList(), delegateCandidates = emptyList(),
+            delegateCandidatesLoaded = false, route = Route.HOME) }
         refresh()
     }
     fun more() = execute {
