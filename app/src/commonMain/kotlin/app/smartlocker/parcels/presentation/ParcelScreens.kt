@@ -95,6 +95,7 @@ fun HistoryScreen(state: AppState, controller: AppController) {
 fun DetailScreen(state: AppState, controller: AppController, platform: PlatformServices) {
     var confirmation by remember { mutableStateOf(false) }
     val parcel = state.selected
+    var delegateDialog by remember(parcel?.id) { mutableStateOf(false) }
     PageTitle("Detalhe da encomenda", { controller.navigate(Route.HISTORY) })
     if (parcel == null) {
         if (!state.busy) EmptyState("Encomenda indisponível", "Atualize ou volte ao histórico para selecionar outra entrega.")
@@ -125,6 +126,11 @@ fun DetailScreen(state: AppState, controller: AppController, platform: PlatformS
     if (controller.features.issues && parcel.canReportIssue) {
         TextButton({ controller.navigate(Route.ISSUES) }, Modifier.fillMaxWidth()) { Text("Relatar um problema") }
     }
+    if (state.membership?.condominiumId != null && parcel.status == ParcelStatus.WAITING) {
+        TextButton({ delegateDialog = true; if (!state.delegateCandidatesLoaded) controller.loadDelegateCandidates() },
+            Modifier.fillMaxWidth(), enabled = !state.busy && !state.stale) { Text("Autorizar outra pessoa a retirar") }
+    }
+    if (delegateDialog) DelegateDialog(state, controller) { delegateDialog = false }
     if (controller.configuration.environment == Environment.DEMO && parcel.status == ParcelStatus.WAITING) {
         OutlinedButton(controller::physicalPickup, Modifier.fillMaxWidth(), enabled = !state.busy && !state.stale) {
             Text("Simular retirada física")
