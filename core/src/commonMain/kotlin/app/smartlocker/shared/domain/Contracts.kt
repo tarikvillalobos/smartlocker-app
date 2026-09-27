@@ -38,6 +38,12 @@ interface LockerRepository {
     suspend fun profile(): Profile
     suspend fun parcels(locationId: String, filter: ParcelFilter, cursor: String?): ParcelPage
     suspend fun parcel(locationId: String, id: String): Parcel
+    suspend fun delegateCandidates(locationId: String): List<DelegateCandidate> =
+        throw AppFailure(FailureKind.UNAVAILABLE, "Delegação indisponível para este local.")
+    suspend fun delegateParcel(locationId: String, parcelId: String, delegateMembershipId: String): Parcel =
+        throw AppFailure(FailureKind.UNAVAILABLE, "Delegação indisponível para este local.")
+    suspend fun removeDelegate(locationId: String, parcelId: String, delegateMembershipId: String): Parcel =
+        throw AppFailure(FailureKind.UNAVAILABLE, "Delegação indisponível para este local.")
     suspend fun statistics(locationId: String): Statistics
     suspend fun credential(locationId: String, parcelId: String): PickupCredential
     suspend fun markCollected(locationId: String, parcelId: String): Parcel
