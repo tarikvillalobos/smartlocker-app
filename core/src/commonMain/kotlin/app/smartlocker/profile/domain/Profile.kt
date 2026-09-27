@@ -6,6 +6,7 @@ data class Membership(
     val id: String, val location: String, val unit: String,
     val timeZone: String = "America/Sao_Paulo",
     val features: Features = Features(), val channels: Set<String>? = null,
+    val condominiumId: String? = null,
 )
 data class CommunicationPreferences(
     val inApp: Boolean = true,
@@ -21,6 +22,7 @@ data class Profile(
     val preferences: CommunicationPreferences = CommunicationPreferences(),
 )
 data class Recipient(val id: String, val name: String, val relationship: String)
+data class DelegateCandidate(val membershipId: String, val name: String)
 data class DeliveryNotice(
     val id: String,
     val parcelId: String,
