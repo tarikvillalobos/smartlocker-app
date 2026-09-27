@@ -49,6 +49,7 @@ fun ApiParcel.toDomain(): Parcel {
         canMarkManually = actions.canMarkManually, canUndo = actions.canUndoManual, version = version.toString(),
         canReportIssue = actions.canReportIssue, recipientKind = recipientKind,
         nodeLabel = node?.label, delegateNames = delegates.map { it.name },
+        delegateIds = delegates.map { it.membershipId },
         collectedByName = collectedBy?.name)
 }
 
