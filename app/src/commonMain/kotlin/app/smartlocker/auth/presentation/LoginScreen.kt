@@ -34,6 +34,7 @@ fun LoginScreen(controller: AppController, state: AppState, legal: () -> Unit) {
     var email by rememberSaveable { mutableStateOf(false) }
     val useEmail = emailEnabled && (email || !smsEnabled)
     var passwordMode by rememberSaveable { mutableStateOf(false) }
+    var recoveryMode by rememberSaveable { mutableStateOf(false) }
     var identifier by rememberSaveable { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val usePassword = passwordEnabled && (passwordMode || !otpEnabled)
@@ -52,7 +53,12 @@ fun LoginScreen(controller: AppController, state: AppState, legal: () -> Unit) {
         }
         Column(Modifier.padding(24.dp), verticalArrangement = Arrangement.spacedBy(18.dp)) {
             if (state.challenge == null) {
-                if (usePassword) {
+                if (recoveryMode) {
+                    RecoveryForm(controller, state, smsEnabled, emailEnabled) {
+                        controller.cancelPasswordRecovery()
+                        recoveryMode = false
+                    }
+                } else if (usePassword) {
                     OutlinedTextField(identifier, { identifier = it.take(254) }, label = { Text("E-mail, celular ou CPF") },
                         modifier = Modifier.fillMaxWidth().keepAboveKeyboard(), singleLine = true, shape = Tokens.control)
                     OutlinedTextField(password, { password = it.take(8192) }, label = { Text("Senha") },
@@ -64,6 +70,7 @@ fun LoginScreen(controller: AppController, state: AppState, legal: () -> Unit) {
                         password = ""
                     }
                     if (otpEnabled) TextButton({ passwordMode = false }, Modifier.fillMaxWidth()) { Text("Entrar com código") }
+                    TextButton({ recoveryMode = true }, Modifier.fillMaxWidth()) { Text("Esqueci minha senha") }
                 } else if (otpEnabled) {
                 OutlinedTextField(contact, { contact = it }, label = { Text(if (useEmail) "E-mail" else "Celular") },
                     modifier = Modifier.fillMaxWidth().keepAboveKeyboard(), singleLine = true, shape = Tokens.control,
