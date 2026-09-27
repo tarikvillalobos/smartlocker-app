@@ -2,7 +2,14 @@ from pathlib import Path
 import yaml
 from jsonschema import Draft202012Validator, FormatChecker
 
-spec = yaml.safe_load((Path(__file__).resolve().parents[1] / 'docs/api/openapi.yaml').read_text())
+api_dir = Path(__file__).resolve().parents[1] / 'docs/api'
+spec = yaml.safe_load((api_dir / 'condo-platform-openapi.yaml').read_text())
+legacy = yaml.safe_load((api_dir / 'openapi.yaml').read_text())
+for path, old_item in legacy['paths'].items():
+    assert path in spec['paths'], f'Missing SmartLocker route: {path}'
+    for method in ('get', 'post', 'put', 'patch', 'delete'):
+        if method in old_item:
+            assert spec['paths'][path][method]['operationId'] == old_item[method]['operationId'], (path, method)
 login = {'contact': '+5511987654321', 'cpf': '52998224725', 'channel': 'sms'}
 metrics = {'since': '2026-08-27T12:00:00.000Z', 'until': '2026-09-26T12:00:00.000Z',
            'generatedAt': '2026-09-26T12:00:00.000Z', 'complete': True,
