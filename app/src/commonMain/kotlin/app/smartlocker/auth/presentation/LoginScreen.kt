@@ -118,3 +118,23 @@ fun LoginScreen(controller: AppController, state: AppState, legal: () -> Unit) {
         }
     }
 }
+@Composable
+private fun RecoveryForm(controller: AppController, state: AppState, smsEnabled: Boolean,
+    emailEnabled: Boolean, onBack: () -> Unit) {
+    var identifier by rememberSaveable { mutableStateOf("") }
+    var email by rememberSaveable { mutableStateOf(!smsEnabled) }
+    val useEmail = emailEnabled && (email || !smsEnabled)
+    val challenge = state.recoveryChallenge
+    Text("Recuperar senha", style = MaterialTheme.typography.headlineSmall)
+    if (challenge == null) {
+        OutlinedTextField(identifier, { identifier = it.take(254) }, label = { Text("E-mail, celular ou CPF") },
+            modifier = Modifier.fillMaxWidth().keepAboveKeyboard(), singleLine = true, shape = Tokens.control)
+        if (smsEnabled && emailEnabled) TextButton({ email = !email }) {
+            Text(if (useEmail) "Receber por SMS" else "Receber por e-mail")
+        }
+        PrimaryButton("Receber código", !state.busy && identifier.trim().length >= 3) {
+            controller.requestPasswordRecovery(identifier, if (useEmail) LoginChannel.EMAIL else LoginChannel.SMS)
+        }
+    }
+    TextButton(onBack, Modifier.fillMaxWidth()) { Text("Voltar ao login") }
+}
