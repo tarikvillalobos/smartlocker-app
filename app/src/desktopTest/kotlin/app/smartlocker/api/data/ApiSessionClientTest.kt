@@ -42,6 +42,21 @@ class ApiSessionClientTest {
             assertTrue(secure.values.isNotEmpty()) } finally { client.close() }
     }
 
+    @Test fun passwordLoginIsUnavailableUnlessConfigurationAdvertisesIt() = runTest {
+        val clock = TestClock()
+        var calls = 0
+        val client = client(clock) { request ->
+            calls++
+            assertEquals("/configuration", request.path())
+            respond(configuration(), headers = JSON)
+        }
+        try {
+            assertEquals(FailureKind.UNAVAILABLE,
+                assertFailsWith<AppFailure> { client.loginWithPassword("ana@example.test", "private-password") }.kind)
+            assertEquals(1, calls)
+        } finally { client.close() }
+    }
+
     @Test fun loginNormalizesCpfAndBrazilianPhoneAndSuppliesBrandAndIdempotencyHeaders() = runTest {
         val clock = TestClock()
         var challenges = 0
