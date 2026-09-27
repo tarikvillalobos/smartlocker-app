@@ -9,7 +9,13 @@ for path, old_item in legacy['paths'].items():
     assert path in spec['paths'], f'Missing SmartLocker route: {path}'
     for method in ('get', 'post', 'put', 'patch', 'delete'):
         if method in old_item:
-            assert spec['paths'][path][method]['operationId'] == old_item[method]['operationId'], (path, method)
+            old_op, new_op = old_item[method], spec['paths'][path][method]
+            assert new_op['operationId'] == old_op['operationId'], (path, method)
+            assert new_op.get('parameters', []) == old_op.get('parameters', []), (path, method)
+            assert new_op.get('requestBody') == old_op.get('requestBody'), (path, method)
+            for status, response in old_op['responses'].items():
+                if str(status).startswith('2'):
+                    assert new_op['responses'][status] == response, (path, method, status)
 login = {'contact': '+5511987654321', 'cpf': '52998224725', 'channel': 'sms'}
 metrics = {'since': '2026-08-27T12:00:00.000Z', 'until': '2026-09-26T12:00:00.000Z',
            'generatedAt': '2026-09-26T12:00:00.000Z', 'complete': True,
