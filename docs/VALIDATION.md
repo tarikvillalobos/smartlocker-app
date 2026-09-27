@@ -47,12 +47,16 @@ A rodada local com o cliente completo passou em `207cbdb`, incluindo build Andro
 lint e compilação iOS para simulador e aparelho arm64. Relatórios:
 `core/build/reports/tests/jvmTest/` e `app/build/reports/tests/desktopTest/`.
 
-## Contrato OpenAPI proposto
+## Contratos OpenAPI
 
 A base em `docs/api/openapi.yaml` contém **23 caminhos, 26 operações e 38 schemas**.
 A validação formal de OpenAPI 3.1.1, referências locais e oito exemplos passou.
 Também passaram **25 casos positivos e negativos de JSON Schema**, cobrindo
 CPF, contatos/canais, OTP, preferências, métricas, UTC e cadastro push.
+
+Em 27/09/2026, `docs/api/condo-platform-openapi.yaml` passou a validação formal:
+**235 caminhos, 293 operações, 321 schemas e 13 exemplos válidos**. Os 25 casos
+de schema passaram, e a checagem confirmou as 26 operações SmartLocker legadas.
 
 Execute `scripts/validate_openapi.py` e `scripts/check_openapi_cases.py` no ambiente
 Python descrito em [OPENAPI.md](OPENAPI.md). A CI executa as mesmas verificações.
