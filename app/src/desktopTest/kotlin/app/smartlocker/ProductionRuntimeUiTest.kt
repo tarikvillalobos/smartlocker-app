@@ -23,6 +23,7 @@ class ProductionRuntimeUiTest {
             try {
                 setContent { SmartLockerApp(runtime) }
                 waitUntil(timeoutMillis = 10_000) { controller.state.value.initialized && !controller.state.value.busy }
+                onNodeWithText("Marca da API").assertExists()
                 onNodeWithText("Preencher dados de demonstração").assertDoesNotExist()
                 onNodeWithText("Celular").performScrollTo().performTextInput("11987654321")
                 onNodeWithText("CPF").performScrollTo().performTextInput("52998224725")
@@ -32,6 +33,7 @@ class ProductionRuntimeUiTest {
                 onNodeWithText("Confirmar código").performScrollTo().performClick()
                 waitUntil(timeoutMillis = 15_000) { controller.state.value.profile != null && !controller.state.value.busy }
                 assertEquals("user-api", controller.state.value.profile!!.id)
+                assertEquals("Ana API", controller.state.value.profile!!.name)
                 assertEquals("member-api", controller.state.value.membershipId)
                 onNodeWithText("Simular retirada física").assertDoesNotExist()
                 onNodeWithText("Copiar código").performScrollTo().performClick()
