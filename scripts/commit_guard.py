@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Reject commits touching multiple files, binaries, or more than 20 lines."""
+"""Limit commits to one text file and 20 lines, except the unified OpenAPI."""
 import subprocess
 import sys
 
