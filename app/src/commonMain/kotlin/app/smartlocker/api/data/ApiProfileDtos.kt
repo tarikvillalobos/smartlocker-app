@@ -74,7 +74,9 @@ data class ApiBrandConfiguration(
         return base.copy(name = appName, supportEmail = supportEmail, termsUrl = termsUrl,
             privacyUrl = privacyUrl, features = allowed,
             channels = base.channels intersect capabilities.channels.availableChannels(),
-            authMethods = authMethods?.toSet() ?: base.authMethods)
+            authMethods = authMethods?.toSet() ?: base.authMethods,
+            loginChannels = setOfNotNull("sms".takeIf { capabilities.channels.sms.available },
+                "email".takeIf { capabilities.channels.email.available }))
     }
 }
 
