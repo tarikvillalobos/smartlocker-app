@@ -65,6 +65,16 @@ data class ApiPasswordLoginRequest(val identifier: String, val password: String)
 }
 
 @Serializable
+data class ApiPasswordRecoveryRequest(val identifier: String, val channel: String) {
+    override fun toString() = "ApiPasswordRecoveryRequest(redacted)"
+}
+
+@Serializable
+data class ApiPasswordRecoveryVerify(val code: String, val newPassword: String) {
+    override fun toString() = "ApiPasswordRecoveryVerify(redacted)"
+}
+
+@Serializable
 data class ApiOtpVerification(val code: String) {
     override fun toString() = "ApiOtpVerification(redacted)"
 }
