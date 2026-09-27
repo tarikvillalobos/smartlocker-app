@@ -11,7 +11,7 @@ import kotlin.time.Clock
 import kotlin.time.Instant
 
 /** Stateful HTTP fixture, independent from the demo repository and private contract-test fixtures. */
-internal class ProductionApiFixture {
+internal class ProductionApiFixture(private val authMethods: List<String>? = null) {
     val requests = CopyOnWriteArrayList<HttpRequestData>()
     @Volatile var unavailable = false
     @Volatile private var manual = false
@@ -39,10 +39,13 @@ internal class ProductionApiFixture {
             respond("""{"type":"about:blank","title":"Indisponível","status":503,"code":"SERVICE_UNAVAILABLE","requestId":"test-1"}""",
                 HttpStatusCode.ServiceUnavailable, headersOf(HttpHeaders.ContentType, "application/problem+json"))
         } else when (path) {
-            "/configuration" -> json(ApiBrandConfiguration("smartlocker", "Marca da API", capabilities, null, null, null))
+            "/configuration" -> json(ApiBrandConfiguration("smartlocker", "Marca da API", capabilities, null, null, null,
+                authMethods))
             "/auth/challenges" -> json(ApiChallenge("login-api", at(600_000), at(30_000), "sms", "+55 ** *****-4321", 6, "login"), HttpStatusCode.Accepted)
             "/auth/challenges/login-api/verify" -> json(ApiSessionTokens("Bearer", "access-api", at(3_600_000),
                 "refresh-api", at(86_400_000), "user-api", "smartlocker", "session-api", listOf("parcels:read", "parcels:manual")))
+            "/auth/password/login" -> json(ApiSessionTokens("Bearer", "access-api", at(3_600_000),
+                "refresh-api", at(86_400_000), "user-api", "smartlocker", "session-api", listOf("parcels:read")))
             "/me" -> json(profile)
             "/me/memberships" -> json(ApiMembershipList(listOf(membership)))
             "/memberships/member-api/parcels" -> {
