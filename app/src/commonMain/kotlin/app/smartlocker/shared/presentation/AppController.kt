@@ -298,6 +298,13 @@ class AppController(
             delegateCandidatesLoaded = false, route = Route.HOME) }
         refresh()
     }
+    fun linkInvitation(code: String) = execute { generation ->
+        val linked = repository.linkInvitation(code)
+        if (generation == epoch) {
+            mutable.update { it.copy(membershipId = linked.id, feedback = "Convite vinculado à sua conta.") }
+            refreshAfterMutation(generation)
+        }
+    }
     fun more() = execute {
         val context = state.value
         val generation = epoch
