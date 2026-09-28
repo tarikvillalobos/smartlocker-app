@@ -33,6 +33,8 @@ interface LockerRepository {
         throw AppFailure(FailureKind.UNAVAILABLE, "Recuperação de senha indisponível para esta marca.")
     suspend fun changePassword(currentPassword: String, newPassword: String): Unit =
         throw AppFailure(FailureKind.UNAVAILABLE, "Alteração de senha indisponível para esta marca.")
+    suspend fun previewInvitation(code: String): InvitationPreview =
+        throw AppFailure(FailureKind.UNAVAILABLE, "Convite indisponível para esta marca.")
     suspend fun resendLogin(challengeId: String, request: LoginRequest): Challenge = requestLogin(request)
     suspend fun verifyLogin(challengeId: String, code: String): Session
     suspend fun restoreSession(): Session?
