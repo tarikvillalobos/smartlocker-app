@@ -104,9 +104,14 @@ class ApiSessionClient(
         val epoch = generation
         val verification = apiId(challengeId) to code
         val key = verificationKeys.getOrPut(verification) { Uuid.random().toString() }
-        val response = request("/auth/password/recovery/${apiId(challengeId)}/verify", HttpMethod.Post,
-            ApiJson.encodeToString(ApiPasswordRecoveryVerify(code, newPassword)),
-            mapOf("Idempotency-Key" to key), authenticated = false)
+        val response = try {
+            request("/auth/password/recovery/${apiId(challengeId)}/verify", HttpMethod.Post,
+                ApiJson.encodeToString(ApiPasswordRecoveryVerify(code, newPassword)),
+                mapOf("Idempotency-Key" to key), authenticated = false)
+        } catch (error: AppFailure) {
+            if (error.kind !in setOf(FailureKind.NETWORK, FailureKind.UNAVAILABLE)) verificationKeys.remove(verification)
+            throw error
+        }
         val tokens = decodeApi<ApiSessionTokens>(response)
         validateTokens(tokens)
         ensureCurrent(epoch)
