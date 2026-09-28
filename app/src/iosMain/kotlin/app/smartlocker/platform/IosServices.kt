@@ -16,6 +16,8 @@ class IosServices(
 ) : PlatformServices {
     override val apiBaseUrl: String? = (platform.Foundation.NSBundle.mainBundle
         .objectForInfoDictionaryKey("SmartLockerApiBaseUrl") as? String)?.takeIf { it.isNotBlank() && !it.startsWith("$(") }
+    override val termsVersion: String? = (platform.Foundation.NSBundle.mainBundle
+        .objectForInfoDictionaryKey("SmartLockerTermsVersion") as? String)?.takeIf { it.isNotBlank() && !it.startsWith("$(") }
     override val local = object : LocalStorage {
         private val defaults = NSUserDefaults.standardUserDefaults
         override fun read(key: String) = defaults.stringForKey("smartlocker.$key")
