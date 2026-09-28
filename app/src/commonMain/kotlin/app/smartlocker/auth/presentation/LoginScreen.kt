@@ -56,7 +56,7 @@ fun LoginScreen(controller: AppController, state: AppState, legal: () -> Unit) {
         Column(Modifier.padding(24.dp), verticalArrangement = Arrangement.spacedBy(18.dp)) {
             if (state.challenge == null) {
                 if (invitationMode) {
-                    InvitationForm(controller, state, brand) {
+                    InvitationForm(controller, state, brand, legal) {
                         controller.clearInvitationPreview(); invitationMode = false
                     }
                 } else if (recoveryMode) {
@@ -160,6 +160,23 @@ private fun RecoveryForm(controller: AppController, state: AppState, smsEnabled:
         TextButton({ code = ""; newPassword = ""; controller.restartPasswordRecovery() }, enabled = !state.busy) {
             Text("Solicitar novo código")
         }
+    }
+    TextButton(onBack, Modifier.fillMaxWidth()) { Text("Voltar ao login") }
+}
+
+@Composable
+private fun InvitationForm(controller: AppController, state: AppState, brand: Brand,
+    legal: () -> Unit, onBack: () -> Unit) {
+    var code by rememberSaveable { mutableStateOf("") }
+    val preview = state.invitationPreview
+    Text("Primeiro acesso", style = MaterialTheme.typography.headlineSmall)
+    if (preview == null) {
+        OutlinedTextField(code, { code = it.take(32) }, Modifier.fillMaxWidth().keepAboveKeyboard(),
+            label = { Text("Código do convite") }, singleLine = true)
+        PrimaryButton("Conferir convite", !state.busy && code.length in 6..32) { controller.previewInvitation(code) }
+    } else {
+        Text(preview.condominiumName, style = MaterialTheme.typography.titleMedium)
+        preview.unitLabel?.let { Text(it, color = Tokens.secondary) }
     }
     TextButton(onBack, Modifier.fillMaxWidth()) { Text("Voltar ao login") }
 }
