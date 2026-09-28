@@ -35,10 +35,19 @@ fun AuxiliaryScreen(state: AppState, controller: AppController, platform: Platfo
                 var inviteCode by rememberSaveable { mutableStateOf("") }
                 Panel {
                     Text("Vincular novo local", style = MaterialTheme.typography.titleMedium)
-                    OutlinedTextField(inviteCode, { inviteCode = it.take(32) }, Modifier.fillMaxWidth(),
+                    OutlinedTextField(inviteCode, { inviteCode = it.take(32); controller.clearInvitationPreview() }, Modifier.fillMaxWidth(),
                         label = { Text("Código do convite") }, singleLine = true)
-                    PrimaryButton("Vincular convite", !state.busy && inviteCode.length in 6..32) {
-                        controller.linkInvitation(inviteCode); inviteCode = ""
+                    PrimaryButton("Conferir convite", !state.busy && inviteCode.length in 6..32) {
+                        controller.previewInvitation(inviteCode)
+                    }
+                    state.invitationPreview?.let { preview ->
+                        Metadata("Condomínio", preview.condominiumName)
+                        preview.unitLabel?.let { Metadata("Unidade", it) }
+                        if (preview.purpose == "link_membership")
+                            PrimaryButton("Vincular este local", !state.busy && state.now < preview.expiresAt) {
+                                controller.linkInvitation(state.invitationCode); inviteCode = ""
+                            }
+                        else Text("Este convite é de primeiro acesso. Saia da conta para utilizá-lo.")
                     }
                 }
             }
