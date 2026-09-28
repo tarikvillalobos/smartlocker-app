@@ -41,6 +41,12 @@ fragmento. Endpoint e identificador público de marca não são segredos.
   ao `xcodebuild`. Ele preenche `SmartLockerApiBaseUrl` no Info.plist gerado.
 - Desktop: defina a variável de ambiente `SMARTLOCKER_API_BASE_URL` antes de
   iniciar o aplicativo ou seu launcher instalado.
+- Primeiro acesso por convite: forneça a versão vigente dos termos no build
+  Android com `-PtermsVersion=...`, no build iOS com
+  `SMARTLOCKER_TERMS_VERSION`, ou no desktop com a variável de ambiente
+  `SMARTLOCKER_TERMS_VERSION`. Sem uma versão, o app mostra a prévia do convite
+  mas bloqueia o aceite. O OpenAPI exige `acceptedTermsVersion` e não publica
+  a versão vigente em `/configuration`; confirme o valor com o backend.
 - Testes ou composição programática: `AppConfiguration.apiBaseUrl` permite
   injetar o endpoint e `AppRuntime.engineFactory` permite usar MockEngine.
 
