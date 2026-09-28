@@ -80,6 +80,18 @@ data class ApiPasswordChangeRequest(val currentPassword: String, val newPassword
 }
 
 @Serializable
+data class ApiInvitationPreview(
+    val purpose: String, val condominiumName: String, val unitLabel: String?,
+    val maskedName: String?, val expiresAt: String, val requiresCpf: Boolean,
+) {
+    fun toDomain(): app.smartlocker.auth.domain.InvitationPreview {
+        apiRequire(purpose in setOf("first_access", "link_membership"))
+        return app.smartlocker.auth.domain.InvitationPreview(purpose, apiText(condominiumName, 200),
+            unitLabel, maskedName, apiInstant(expiresAt), requiresCpf)
+    }
+}
+
+@Serializable
 data class ApiOtpVerification(val code: String) {
     override fun toString() = "ApiOtpVerification(redacted)"
 }
