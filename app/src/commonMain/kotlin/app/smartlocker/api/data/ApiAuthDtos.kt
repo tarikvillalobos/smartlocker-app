@@ -92,6 +92,14 @@ data class ApiInvitationPreview(
 }
 
 @Serializable
+data class ApiInvitationAcceptRequest(
+    val name: String, val cpf: String, val email: String?, val phone: String?,
+    val password: String, val acceptedTermsVersion: String,
+) {
+    override fun toString() = "ApiInvitationAcceptRequest(redacted)"
+}
+
+@Serializable
 data class ApiOtpVerification(val code: String) {
     override fun toString() = "ApiOtpVerification(redacted)"
 }
