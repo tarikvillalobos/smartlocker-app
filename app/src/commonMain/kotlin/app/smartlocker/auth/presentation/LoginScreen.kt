@@ -28,6 +28,7 @@ fun LoginScreen(controller: AppController, state: AppState, legal: () -> Unit) {
     val emailEnabled = "email" in brand.loginChannels
     val otpEnabled = "otp" in brand.authMethods && (smsEnabled || emailEnabled)
     val passwordEnabled = !demo && "password" in brand.authMethods
+    val invitationEnabled = !demo && "invitation" in brand.authMethods
     var contact by rememberSaveable { mutableStateOf("") }
     var cpf by rememberSaveable { mutableStateOf("") }
     var code by rememberSaveable { mutableStateOf("") }
@@ -35,6 +36,7 @@ fun LoginScreen(controller: AppController, state: AppState, legal: () -> Unit) {
     val useEmail = emailEnabled && (email || !smsEnabled)
     var passwordMode by rememberSaveable { mutableStateOf(false) }
     var recoveryMode by rememberSaveable { mutableStateOf(false) }
+    var invitationMode by rememberSaveable { mutableStateOf(false) }
     var identifier by rememberSaveable { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val usePassword = passwordEnabled && (passwordMode || !otpEnabled)
@@ -53,7 +55,11 @@ fun LoginScreen(controller: AppController, state: AppState, legal: () -> Unit) {
         }
         Column(Modifier.padding(24.dp), verticalArrangement = Arrangement.spacedBy(18.dp)) {
             if (state.challenge == null) {
-                if (recoveryMode) {
+                if (invitationMode) {
+                    InvitationForm(controller, state, brand) {
+                        controller.clearInvitationPreview(); invitationMode = false
+                    }
+                } else if (recoveryMode) {
                     RecoveryForm(controller, state, smsEnabled, emailEnabled) {
                         controller.cancelPasswordRecovery()
                         recoveryMode = false
@@ -99,6 +105,8 @@ fun LoginScreen(controller: AppController, state: AppState, legal: () -> Unit) {
                 } else {
                     Text("Nenhum método de login está disponível para esta marca.", color = Tokens.secondary)
                 }
+                if (!invitationMode && !recoveryMode && invitationEnabled) TextButton({ invitationMode = true },
+                    Modifier.fillMaxWidth()) { Text("Tenho um convite de primeiro acesso") }
             } else {
                 Text("Confira seu código", style = MaterialTheme.typography.headlineSmall)
                 Text("Enviado para ${state.challenge.maskedDestination ?: contact}.", color = Tokens.secondary)
