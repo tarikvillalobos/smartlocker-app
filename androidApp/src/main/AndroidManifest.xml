@@ -10,6 +10,7 @@
         android:usesCleartextTraffic="false"
         android:supportsRtl="true">
         <meta-data android:name="app.smartlocker.API_BASE_URL" android:value="${apiBaseUrl}" />
+        <meta-data android:name="app.smartlocker.TERMS_VERSION" android:value="${termsVersion}" />
         <activity android:name=".MainActivity" android:exported="true"
             android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout"
             android:windowSoftInputMode="adjustResize">
