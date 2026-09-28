@@ -12,6 +12,7 @@ import java.security.MessageDigest
 
 class DesktopServices : PlatformServices {
     override val apiBaseUrl: String? = System.getenv("SMARTLOCKER_API_BASE_URL")?.takeIf { it.isNotBlank() }
+    override val termsVersion: String? = System.getenv("SMARTLOCKER_TERMS_VERSION")?.takeIf { it.isNotBlank() }
     private val directory = Path.of(System.getProperty("user.home"), ".smartlocker")
     init { Files.createDirectories(directory); restrict(directory, true) }
     override val local = object : LocalStorage {
