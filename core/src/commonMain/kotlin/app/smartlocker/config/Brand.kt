@@ -27,6 +27,7 @@ data class Brand(
     val mark: BrandMark = BrandMark.PARCEL,
     val authMethods: Set<String> = setOf("otp"),
     val loginChannels: Set<String> = setOf("sms", "email"),
+    val termsVersion: String? = null,
 )
 
 object Brands {
