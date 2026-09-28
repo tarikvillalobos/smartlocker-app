@@ -5,6 +5,7 @@ import app.smartlocker.config.Brand
 import app.smartlocker.shared.data.HttpTransport
 import app.smartlocker.shared.domain.*
 import io.ktor.http.HttpMethod
+import io.ktor.http.encodeURLPathPart
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.withContext
@@ -129,6 +130,12 @@ class ApiSessionClient(
         request("/me/password", HttpMethod.Post,
             ApiJson.encodeToString(ApiPasswordChangeRequest(currentPassword, newPassword)),
             headers = mapOf("Idempotency-Key" to Uuid.random().toString()), trackMutation = false)
+    }
+
+    suspend fun previewInvitation(code: String): InvitationPreview {
+        if (code.length !in 6..32) invalidInput("Confira o código do convite.")
+        return decodeApi<ApiInvitationPreview>(request("/auth/invitations/${code.encodeURLPathPart()}",
+            authenticated = false)).toDomain()
     }
 
     suspend fun resendLogin(challengeId: String): Challenge = decodeApi<ApiChallenge>(request(
