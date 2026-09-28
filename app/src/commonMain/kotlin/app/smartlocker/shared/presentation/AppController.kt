@@ -299,9 +299,12 @@ class AppController(
         refresh()
     }
     fun linkInvitation(code: String) = execute { generation ->
+        if (state.value.invitationCode != code || state.value.invitationPreview?.purpose != "link_membership")
+            throw AppFailure(FailureKind.VALIDATION, "Confira o convite antes de vincular.")
         val linked = repository.linkInvitation(code)
         if (generation == epoch) {
-            mutable.update { it.copy(membershipId = linked.id, feedback = "Convite vinculado à sua conta.") }
+            mutable.update { it.copy(membershipId = linked.id, invitationPreview = null,
+                invitationCode = "", feedback = "Convite vinculado à sua conta.") }
             refreshAfterMutation(generation)
         }
     }
