@@ -204,8 +204,8 @@ private fun InvitationForm(controller: AppController, state: AppState, brand: Br
             }
             PrimaryButton("Concluir primeiro acesso", !state.busy && state.now < preview.expiresAt &&
                 name.trim().length in 2..120 && InputValidation.cpf(cpf) && password.isNotEmpty() && accepted) {
-                controller.acceptInvitation(InvitationAcceptance(name, cpf, email.ifBlank { null },
-                    phone.ifBlank { null }, password, brand.termsVersion.orEmpty()))
+                controller.acceptInvitation(InvitationAcceptance(name, cpf, email.takeIf { it.isNotBlank() },
+                    phone.takeIf { it.isNotBlank() }, password, brand.termsVersion.orEmpty()))
                 password = ""
             }
         }
