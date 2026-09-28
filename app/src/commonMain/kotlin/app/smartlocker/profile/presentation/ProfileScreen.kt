@@ -7,6 +7,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import app.smartlocker.auth.domain.LoginChannel
 import app.smartlocker.config.Environment
@@ -42,6 +43,8 @@ fun ProfileScreen(state: AppState, controller: AppController, platform: Platform
         Metadata("E-mail", profile.email.ifBlank { "Não informado" })
         if (controller.features.contactEditing) MenuRow("Editar e verificar contato", Symbol.EDIT) { controller.navigate(Route.CONTACT) }
     }
+    if (controller.configuration.environment == Environment.PRODUCTION && "password" in brand.authMethods)
+        PasswordChangeSection(state, controller)
     Text("AVISOS DE ENCOMENDA", style = MaterialTheme.typography.labelMedium, color = Tokens.secondary)
     Panel {
         PreferenceRow("Notificação no aplicativo", profile.preferences.inApp, !state.busy && "app" in state.channels(brand)) {
@@ -71,6 +74,23 @@ fun ProfileScreen(state: AppState, controller: AppController, platform: Platform
             AppIcon(Symbol.EXIT, tint = Tokens.destructive)
             Spacer(Modifier.width(12.dp))
             Text("Sair", color = Tokens.destructive)
+        }
+    }
+}
+
+@Composable
+private fun PasswordChangeSection(state: AppState, controller: AppController) {
+    var current by remember { mutableStateOf("") }
+    var replacement by remember { mutableStateOf("") }
+    Panel {
+        Text("Alterar senha", style = MaterialTheme.typography.titleMedium)
+        OutlinedTextField(current, { current = it.take(8192) }, Modifier.fillMaxWidth().keepAboveKeyboard(),
+            label = { Text("Senha atual") }, visualTransformation = PasswordVisualTransformation())
+        OutlinedTextField(replacement, { replacement = it.take(8192) }, Modifier.fillMaxWidth().keepAboveKeyboard(),
+            label = { Text("Nova senha") }, visualTransformation = PasswordVisualTransformation())
+        PrimaryButton("Salvar nova senha", !state.busy && current.isNotEmpty() && replacement.isNotEmpty()) {
+            controller.changePassword(current, replacement)
+            current = ""; replacement = ""
         }
     }
 }
