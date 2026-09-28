@@ -7,6 +7,7 @@ settings:
   base:
     PRODUCT_BUNDLE_IDENTIFIER: app.smartlocker.demo
     SMARTLOCKER_API_BASE_URL: ""
+    SMARTLOCKER_APP_NAME: SmartLocker
     SMARTLOCKER_TERMS_VERSION: ""
     SWIFT_VERSION: "5.0"
     PRODUCT_MODULE_NAME: SmartLockerHost
@@ -28,7 +29,7 @@ targets:
         CURRENT_PROJECT_VERSION: 2
         TARGETED_DEVICE_FAMILY: "1,2"
         GENERATE_INFOPLIST_FILE: YES
-        INFOPLIST_KEY_CFBundleDisplayName: SmartLocker
+        INFOPLIST_KEY_CFBundleDisplayName: "$(SMARTLOCKER_APP_NAME)"
         INFOPLIST_KEY_SmartLockerApiBaseUrl: "$(SMARTLOCKER_API_BASE_URL)"
         INFOPLIST_KEY_SmartLockerTermsVersion: "$(SMARTLOCKER_TERMS_VERSION)"
         INFOPLIST_FILE: Info.plist
