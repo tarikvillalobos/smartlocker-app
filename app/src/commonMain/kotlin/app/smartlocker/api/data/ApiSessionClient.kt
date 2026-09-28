@@ -116,6 +116,16 @@ class ApiSessionClient(
         tokens.toDomain()
     }
 
+    suspend fun changePassword(currentPassword: String, newPassword: String) {
+        if (currentPassword.length !in 1..8192 || newPassword.length !in 1..8192)
+            invalidInput("Informe a senha atual e a nova senha.")
+        if ("password" !in (configuration().authMethods ?: listOf("otp")))
+            throw AppFailure(FailureKind.UNAVAILABLE, "Senha indisponível para esta marca.")
+        request("/me/password", HttpMethod.Post,
+            ApiJson.encodeToString(ApiPasswordChangeRequest(currentPassword, newPassword)),
+            headers = mapOf("Idempotency-Key" to Uuid.random().toString()), trackMutation = false)
+    }
+
     suspend fun resendLogin(challengeId: String): Challenge = decodeApi<ApiChallenge>(request(
         "/auth/challenges/${apiId(challengeId)}/resend", HttpMethod.Post, authenticated = false,
     )).toDomain("login")
