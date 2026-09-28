@@ -167,7 +167,7 @@ private fun DelegateDialog(state: AppState, controller: AppController, close: ()
                 }
             state.selected?.delegateIds?.forEachIndexed { index, id ->
                 if (id != null) TextButton({ close(); controller.removeDelegate(id) }, enabled = !state.busy) {
-                    Text("Remover ${state.selected?.delegateNames?.getOrNull(index).orEmpty()}")
+                    Text("Remover ${state.selected.delegateNames.getOrNull(index).orEmpty()}")
                 }
             }
         } },
