@@ -150,6 +150,23 @@ class ApiSessionClient(
             value.password, value.acceptedTermsVersion)
     }
 
+    suspend fun acceptInvitation(code: String, value: InvitationAcceptance): Session = mutex.withLock {
+        if (code.length !in 6..32) invalidInput("Confira o código do convite.")
+        val payload = invitationPayload(value)
+        val epoch = generation
+        val verification = code to "accept"
+        val key = verificationKeys.getOrPut(verification) { Uuid.random().toString() }
+        val response = request("/auth/invitations/${code.encodeURLPathPart()}/accept", HttpMethod.Post,
+            ApiJson.encodeToString(payload), mapOf("Idempotency-Key" to key), authenticated = false)
+        val tokens = decodeApi<ApiSessionTokens>(response)
+        validateTokens(tokens)
+        ensureCurrent(epoch)
+        save(StoredApiSession(baseUrl, tokens), epoch)
+        restored = true
+        verificationKeys.clear()
+        tokens.toDomain()
+    }
+
     suspend fun resendLogin(challengeId: String): Challenge = decodeApi<ApiChallenge>(request(
         "/auth/challenges/${apiId(challengeId)}/resend", HttpMethod.Post, authenticated = false,
     )).toDomain("login")
