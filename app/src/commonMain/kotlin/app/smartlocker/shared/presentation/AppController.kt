@@ -141,6 +141,9 @@ class AppController(
         actionJob?.cancel()
         mutable.update { it.copy(recoveryChallenge = null, busy = false, error = null) }
     }
+    fun restartPasswordRecovery() {
+        if (!state.value.busy) mutable.update { it.copy(recoveryChallenge = null, error = null) }
+    }
     fun verifyPasswordRecovery(code: String, newPassword: String) = execute { generation ->
         val challenge = state.value.recoveryChallenge ?: return@execute
         val session = repository.verifyPasswordRecovery(challenge.id, code, newPassword)
