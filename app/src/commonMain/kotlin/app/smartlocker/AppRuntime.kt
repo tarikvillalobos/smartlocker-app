@@ -48,7 +48,7 @@ class AppRuntime(
         state.value.controller.close()
         platform.local.write("brand", brand.id)
         platform.local.write("environment", environment.name)
-        mutable.value = create(AppConfiguration(brand.copy(termsVersion = platform.termsVersion), environment, endpoint))
+        mutable.value = create(AppConfiguration(brand.copy(termsVersion = platform.termsVersion ?: brand.termsVersion), environment, endpoint))
     }
 
     fun close() = state.value.controller.close()
