@@ -147,6 +147,9 @@ private fun RecoveryForm(controller: AppController, state: AppState, smsEnabled:
             visualTransformation = PasswordVisualTransformation())
         PrimaryButton("Redefinir senha", !state.busy && code.length == 6 && newPassword.isNotEmpty()
             && state.now < challenge.expiresAt) { controller.verifyPasswordRecovery(code, newPassword); newPassword = "" }
+        TextButton({ code = ""; newPassword = ""; controller.restartPasswordRecovery() }, enabled = !state.busy) {
+            Text("Solicitar novo código")
+        }
     }
     TextButton(onBack, Modifier.fillMaxWidth()) { Text("Voltar ao login") }
 }
