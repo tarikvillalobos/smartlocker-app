@@ -31,6 +31,17 @@ fun AuxiliaryScreen(state: AppState, controller: AppController, platform: Platfo
         }
         Route.LOCATIONS -> {
             PageTitle("Meus locais", { controller.navigate(Route.PROFILE) })
+            if (controller.configuration.environment == Environment.PRODUCTION && "invitation" in brand.authMethods) {
+                var inviteCode by rememberSaveable { mutableStateOf("") }
+                Panel {
+                    Text("Vincular novo local", style = MaterialTheme.typography.titleMedium)
+                    OutlinedTextField(inviteCode, { inviteCode = it.take(32) }, Modifier.fillMaxWidth(),
+                        label = { Text("Código do convite") }, singleLine = true)
+                    PrimaryButton("Vincular convite", !state.busy && inviteCode.length in 6..32) {
+                        controller.linkInvitation(inviteCode); inviteCode = ""
+                    }
+                }
+            }
             state.profile?.memberships?.forEach { member ->
                 Panel {
                     Text(member.location, style = MaterialTheme.typography.titleMedium)
