@@ -197,6 +197,17 @@ private fun InvitationForm(controller: AppController, state: AppState, brand: Br
                 label = { Text("Celular opcional") }, singleLine = true)
             OutlinedTextField(password, { password = it.take(8192) }, Modifier.fillMaxWidth().keepAboveKeyboard(),
                 label = { Text("Criar senha") }, visualTransformation = PasswordVisualTransformation())
+            TextButton(legal) { Text("Ler termos de uso e privacidade") }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Checkbox(accepted, { accepted = it })
+                Text("Aceito os termos da versão ${brand.termsVersion}.")
+            }
+            PrimaryButton("Concluir primeiro acesso", !state.busy && state.now < preview.expiresAt &&
+                name.trim().length in 2..120 && InputValidation.cpf(cpf) && password.isNotEmpty() && accepted) {
+                controller.acceptInvitation(InvitationAcceptance(name, cpf, email.ifBlank { null },
+                    phone.ifBlank { null }, password, brand.termsVersion.orEmpty()))
+                password = ""
+            }
         }
     }
     TextButton(onBack, Modifier.fillMaxWidth()) { Text("Voltar ao login") }
