@@ -107,6 +107,24 @@ class ApiSessionClientTest {
         finally { client.close() }
     }
 
+    @Test fun invitationAcceptanceSendsTermsVersionAndStoresSession() = runTest {
+        val clock = TestClock()
+        val client = client(clock) { request ->
+            assertEquals("/auth/invitations/ABC123/accept", request.path())
+            assertNull(request.headers[HttpHeaders.Authorization])
+            assertNotNull(UUID.fromString(request.headers["Idempotency-Key"]))
+            val body = request.jsonBody()
+            assertEquals("52998224725", body.getValue("cpf").jsonPrimitive.content)
+            assertEquals("2026-09", body.getValue("acceptedTermsVersion").jsonPrimitive.content)
+            respond(tokens(clock), HttpStatusCode.Created, JSON)
+        }
+        try {
+            val value = app.smartlocker.auth.domain.InvitationAcceptance("Ana", "529.982.247-25",
+                "ana@example.test", null, "private-password", "2026-09")
+            assertEquals("ana", client.acceptInvitation("ABC123", value).userId)
+        } finally { client.close() }
+    }
+
     @Test fun loginNormalizesCpfAndBrazilianPhoneAndSuppliesBrandAndIdempotencyHeaders() = runTest {
         val clock = TestClock()
         var challenges = 0
