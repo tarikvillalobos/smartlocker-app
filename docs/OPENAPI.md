@@ -25,8 +25,8 @@ limites da implementação atual estão em [API.md](API.md).
 - Criação idempotente, lista e acompanhamento de solicitações de suporte.
 - Registro push opcional para Android/FCM e iOS/APNs, condicionado às capacidades.
 
-O cliente usa os mesmos 23 caminhos e 26 operações do contrato SmartLocker
-anterior. O contrato unificado também descreve condomínio, administração e
+O cliente preserva os caminhos do contrato SmartLocker anterior e usa rotas
+novas de autenticação, convites e delegação. O contrato também descreve condomínio, administração e
 operações de hardware em `/ops`, com autenticação própria. O aplicativo do
 usuário não chama essas rotas operacionais.
 
