@@ -25,7 +25,8 @@ class AppRuntime(
     private val initialConfig = (initial ?: AppConfiguration(
         Brands.all.find { it.id == platform.local.read("brand") } ?: Brands.smartLocker,
         platform.local.read("environment")?.let { runCatching { Environment.valueOf(it) }.getOrNull() } ?: Environment.PRODUCTION,
-    )).copy(apiBaseUrl = endpoint)
+    )).let { config -> config.copy(apiBaseUrl = endpoint,
+        brand = config.brand.copy(termsVersion = platform.termsVersion ?: config.brand.termsVersion)) }
     private val mutable = MutableStateFlow(create(initialConfig))
     val state = mutable.asStateFlow()
 
@@ -47,7 +48,7 @@ class AppRuntime(
         state.value.controller.close()
         platform.local.write("brand", brand.id)
         platform.local.write("environment", environment.name)
-        mutable.value = create(AppConfiguration(brand, environment, endpoint))
+        mutable.value = create(AppConfiguration(brand.copy(termsVersion = platform.termsVersion), environment, endpoint))
     }
 
     fun close() = state.value.controller.close()
