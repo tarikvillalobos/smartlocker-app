@@ -38,6 +38,7 @@ class ApiLockerRepository(private val session: ApiSessionClient) : LockerReposit
     }
     override suspend fun changePassword(currentPassword: String, newPassword: String) =
         session.changePassword(currentPassword, newPassword)
+    override suspend fun previewInvitation(code: String): InvitationPreview = session.previewInvitation(code)
     override suspend fun resendLogin(challengeId: String, request: LoginRequest): Challenge =
         session.resendLogin(identifier(challengeId))
     override suspend fun verifyLogin(challengeId: String, code: String): Session {
