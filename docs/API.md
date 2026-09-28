@@ -39,6 +39,9 @@ fragmento. Endpoint e identificador público de marca não são segredos.
   O valor entra no metadata `app.smartlocker.API_BASE_URL` do manifesto.
 - iOS: configure o build setting `SMARTLOCKER_API_BASE_URL` no Xcode ou passe-o
   ao `xcodebuild`. Ele preenche `SmartLockerApiBaseUrl` no Info.plist gerado.
+- Nome instalado: Android aceita `-PappName=...`; iOS aceita o build setting
+  `SMARTLOCKER_APP_NAME` (padrão `SmartLocker`). Esse nome é fixado no pacote,
+  enquanto `/configuration.appName` atualiza o nome exibido dentro do app.
 - Desktop: defina a variável de ambiente `SMARTLOCKER_API_BASE_URL` antes de
   iniciar o aplicativo ou seu launcher instalado.
 - Primeiro acesso por convite: forneça a versão vigente dos termos no build
@@ -85,7 +88,7 @@ O nome mostrado da marca vem de `/configuration.appName`; o nome da pessoa vem
 de `/me.name`. O contrato não oferece edição do nome da pessoa pelo próprio app.
 `authMethods` e a disponibilidade de SMS/e-mail controlam as opções de login.
 Senha pode ser recuperada por desafio e alterada no perfil quando habilitada.
-O nome do aplicativo instalado no sistema operacional continua definido no build.
+O nome do aplicativo instalado no sistema operacional é definido no build.
 
 Listas de encomendas, avisos e solicitações preservam cursores opacos. Cada ação
 “Carregar mais” solicita uma página. O contador de avisos usa `unreadCount` global;
