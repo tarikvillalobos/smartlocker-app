@@ -11,6 +11,8 @@ internal fun apiFailure(status: Int, body: String): AppFailure {
         ?.get("code")?.let { (it as? JsonPrimitive)?.contentOrNull }
     val retryAt = runCatching { Instant.parse(problem?.get("retryAt")?.jsonPrimitive?.content.orEmpty()).toEpochMilliseconds() }.getOrNull()
     val (kind, message) = when {
+        code == "INVALID_CREDENTIALS" -> FailureKind.VALIDATION to "Identificador ou senha incorretos."
+        code == "PASSWORD_POLICY" -> FailureKind.VALIDATION to "A nova senha não atende aos requisitos da conta."
         status == 401 -> FailureKind.EXPIRED_SESSION to "Sua sessão expirou. Entre novamente."
         code == "INVALID_OTP" -> FailureKind.INVALID_CODE to "Código incorreto. Confira e tente novamente."
         code == "OTP_EXPIRED" -> FailureKind.EXPIRED_CODE to "O código expirou. Solicite outro."
