@@ -25,6 +25,14 @@ class ProductionRuntimeUiTest {
                 onNodeWithText("Código do convite").performScrollTo().performTextInput("ABC123")
                 onNodeWithText("Conferir convite").performScrollTo().performClick()
                 waitUntil(timeoutMillis = 10_000) { controller.state.value.invitationPreview != null && !controller.state.value.busy }
+                onNodeWithText("Nome completo").performScrollTo().performTextInput("Ana API")
+                onNodeWithText("CPF").performScrollTo().performTextInput("52998224725")
+                onNodeWithText("Criar senha").performScrollTo().performTextInput("private-password")
+                onAllNodes(isToggleable()).onFirst().performScrollTo().performClick()
+                onNodeWithText("Concluir primeiro acesso").performScrollTo().performClick()
+                waitUntil(timeoutMillis = 15_000) { controller.state.value.profile != null && !controller.state.value.busy }
+                assertEquals("Ana API", controller.state.value.profile?.name)
+                assertTrue(fixture.requests.any { it.url.encodedPath.endsWith("/auth/invitations/ABC123/accept") })
             } finally { runOnIdle { runtime.close() } }
         }
 
