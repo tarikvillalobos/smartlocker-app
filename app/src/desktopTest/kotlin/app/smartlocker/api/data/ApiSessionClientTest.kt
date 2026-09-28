@@ -95,6 +95,18 @@ class ApiSessionClientTest {
         finally { client.close() }
     }
 
+    @Test fun invitationPreviewUsesPublicDocumentedRoute() = runTest {
+        val client = client(TestClock()) { request ->
+            assertEquals("/auth/invitations/ABC123", request.path())
+            assertNull(request.headers[HttpHeaders.Authorization])
+            respond("""{"purpose":"first_access","condominiumName":"Residencial",
+                "unitLabel":"42","maskedName":"A***","expiresAt":"2026-09-27T12:00:00Z",
+                "requiresCpf":true,"nodePath":[],"blockLabel":null,"role":"resident"}""", headers = JSON)
+        }
+        try { assertEquals("Residencial", client.previewInvitation("ABC123").condominiumName) }
+        finally { client.close() }
+    }
+
     @Test fun loginNormalizesCpfAndBrazilianPhoneAndSuppliesBrandAndIdempotencyHeaders() = runTest {
         val clock = TestClock()
         var challenges = 0
