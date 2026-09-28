@@ -315,6 +315,17 @@ class AppController(
     fun clearInvitationPreview() {
         mutable.update { it.copy(invitationPreview = null, invitationCode = "") }
     }
+    fun acceptInvitation(value: InvitationAcceptance) = execute { generation ->
+        val context = state.value
+        if (context.invitationPreview?.purpose != "first_access" ||
+            value.acceptedTermsVersion != brand.termsVersion || brand.termsVersion.isNullOrBlank())
+            throw AppFailure(FailureKind.VALIDATION, "Confira o convite e os termos vigentes.")
+        val session = repository.acceptInvitation(context.invitationCode, value)
+        if (generation != epoch) return@execute
+        acceptLogin(session)
+        mutable.update { it.copy(invitationPreview = null, invitationCode = "") }
+        load()
+    }
     fun more() = execute {
         val context = state.value
         val generation = epoch
