@@ -30,6 +30,24 @@ class ApiLockerRepositoryTest {
         }
     }
 
+    @Test fun delegateMutationsUseDocumentedPathsAndInvalidateCredentialState() = runTest {
+        withRepository { request ->
+            when (request.method) {
+                HttpMethod.Post -> {
+                    assertEquals("/v1/memberships/member-1/parcels/parcel-1/delegates", request.url.encodedPath)
+                    assertTrue(request.bodyText().contains("member-2"))
+                    assertNotNull(request.headers["Idempotency-Key"])
+                }
+                HttpMethod.Delete -> assertTrue(request.url.encodedPath.endsWith("/delegates/member-2"))
+                else -> error("Unexpected method")
+            }
+            json(parcel().copy(credentialStatus = "revoked"))
+        }.useSuspend { fixture ->
+            assertEquals(CredentialStatus.REVOKED, fixture.repo.delegateParcel("member-1", "parcel-1", "member-2").credentialStatus)
+            fixture.repo.removeDelegate("member-1", "parcel-1", "member-2")
+        }
+    }
+
     @Test fun profileIntersectsCapabilitiesAndRejectsAnotherUser() = runTest {
         val public = configuration.copy(appName = "Marca da API",
             capabilities = capabilities.copy(features = capabilities.features.copy(recipients = false)))
