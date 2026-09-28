@@ -11,6 +11,12 @@ data class InvitationPreview(
     val purpose: String, val condominiumName: String, val unitLabel: String?,
     val maskedName: String?, val expiresAt: Long, val requiresCpf: Boolean,
 )
+data class InvitationAcceptance(
+    val name: String, val cpf: String, val email: String?, val phone: String?,
+    val password: String, val acceptedTermsVersion: String,
+) {
+    override fun toString() = "InvitationAcceptance(redacted)"
+}
 
 object InputValidation {
     fun phone(value: String): Boolean {
