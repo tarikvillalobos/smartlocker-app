@@ -70,7 +70,9 @@ fun LoginScreen(controller: AppController, state: AppState, legal: () -> Unit) {
                         password = ""
                     }
                     if (otpEnabled) TextButton({ passwordMode = false }, Modifier.fillMaxWidth()) { Text("Entrar com código") }
-                    TextButton({ recoveryMode = true }, Modifier.fillMaxWidth()) { Text("Esqueci minha senha") }
+                    if (smsEnabled || emailEnabled) TextButton({ recoveryMode = true }, Modifier.fillMaxWidth()) {
+                        Text("Esqueci minha senha")
+                    }
                 } else if (otpEnabled) {
                 OutlinedTextField(contact, { contact = it }, label = { Text(if (useEmail) "E-mail" else "Celular") },
                     modifier = Modifier.fillMaxWidth().keepAboveKeyboard(), singleLine = true, shape = Tokens.control,
