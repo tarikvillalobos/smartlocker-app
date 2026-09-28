@@ -34,6 +34,8 @@ data class AppState(
     val delegateCandidatesLoaded: Boolean = false,
     val challenge: Challenge? = null,
     val recoveryChallenge: Challenge? = null,
+    val invitationPreview: InvitationPreview? = null,
+    val invitationCode: String = "",
     val contactChallenge: Challenge? = null,
     val contactValue: String = "",
     val contactChannel: LoginChannel = LoginChannel.EMAIL,
