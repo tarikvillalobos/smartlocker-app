@@ -189,6 +189,13 @@ a implementação e está fora da contagem. Binários não são versionados.
 
 ## Pendências externas
 
+Em 27/09/2026, após os fluxos novos de senha, convite e delegação, passaram
+`:core:jvmTest`, `:app:desktopTest`, `:app:compileKotlinIosSimulatorArm64`
+e `:androidApp:assembleDebug`. O XcodeGen gerou o projeto iOS e o build setting
+`SMARTLOCKER_APP_NAME` resolveu para `SmartLocker` no valor padrão. A auditoria
+local aprovou 1699 commits com um arquivo por commit e limite de 20 linhas,
+ressalvada a OpenAPI unificada. Essas verificações não incluem servidor real.
+
 O cliente HTTP está implementado contra a OpenAPI proposta. O backend é mantido
 em outro projeto; URL de homologação, conta de teste e compatibilidade precisam
 ser confirmadas. Testes MockEngine não demonstram integração com o servidor real.
