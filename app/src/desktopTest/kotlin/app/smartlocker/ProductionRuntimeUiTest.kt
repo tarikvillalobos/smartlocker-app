@@ -12,6 +12,22 @@ import kotlin.test.*
 
 @OptIn(ExperimentalTestApi::class)
 class ProductionRuntimeUiTest {
+    @Test fun invitedUserCompletesFirstAccessWithConfiguredTerms() =
+        runDesktopComposeUiTest(width = 390, height = 1100) {
+            val fixture = ProductionApiFixture(listOf("invitation"))
+            val runtime = AppRuntime(TestPlatform(), AppConfiguration(Brands.smartLocker.copy(termsVersion = "2026-09"),
+                Environment.PRODUCTION, "https://api.example.test/v1"), engineFactory = { fixture.engine })
+            val controller = runtime.state.value.controller
+            try {
+                setContent { SmartLockerApp(runtime) }
+                waitUntil(timeoutMillis = 10_000) { controller.state.value.initialized && !controller.state.value.busy }
+                onNodeWithText("Tenho um convite de primeiro acesso").performScrollTo().performClick()
+                onNodeWithText("Código do convite").performScrollTo().performTextInput("ABC123")
+                onNodeWithText("Conferir convite").performScrollTo().performClick()
+                waitUntil(timeoutMillis = 10_000) { controller.state.value.invitationPreview != null && !controller.state.value.busy }
+            } finally { runOnIdle { runtime.close() } }
+        }
+
     @Test fun passwordOnlyBrandSignsInThroughDocumentedApi() =
         runDesktopComposeUiTest(width = 390, height = 900) {
             val fixture = ProductionApiFixture(listOf("password"))
