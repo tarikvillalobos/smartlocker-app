@@ -76,6 +76,25 @@ class ApiSessionClientTest {
         } finally { client.close() }
     }
 
+    @Test fun passwordChangeUsesAuthenticatedApiAndIdempotencyKey() = runTest {
+        val clock = TestClock()
+        val client = client(clock) { request ->
+            when (request.path()) {
+                "/configuration" -> respond(configuration(listOf("password")), headers = JSON)
+                "/auth/challenges/challenge-1/verify" -> respond(tokens(clock), headers = JSON)
+                "/me/password" -> {
+                    assertEquals("Bearer access-old", request.headers[HttpHeaders.Authorization])
+                    assertNotNull(UUID.fromString(request.headers["Idempotency-Key"]))
+                    assertEquals("new-secret", request.jsonBody().getValue("newPassword").jsonPrimitive.content)
+                    respond("", HttpStatusCode.NoContent)
+                }
+                else -> error("Unexpected fixture path")
+            }
+        }
+        try { client.verifyLogin("challenge-1", "123456"); client.changePassword("old-secret", "new-secret") }
+        finally { client.close() }
+    }
+
     @Test fun loginNormalizesCpfAndBrazilianPhoneAndSuppliesBrandAndIdempotencyHeaders() = runTest {
         val clock = TestClock()
         var challenges = 0
