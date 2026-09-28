@@ -14,11 +14,13 @@ limites da implementação atual estão em [API.md](API.md).
 ## Cobertura SmartLocker no contrato unificado
 
 - Configuração pública da marca e capacidades efetivas por vínculo.
-- Login por OTP SMS/e-mail, reenvio, verificação, refresh rotativo e logout.
+- Login por OTP SMS/e-mail ou senha conforme a marca, recuperação e troca de
+  senha, primeiro acesso por convite, refresh rotativo e logout.
 - Perfil, lista completa de vínculos, preferências e troca verificada de contato.
 - Destinatários visíveis conforme autorização, sem acesso implícito às encomendas.
 - Histórico paginado por cursor, métricas completas, detalhes e credencial QR.
 - Marcação manual e reversão permitida; retirada física somente como estado lido.
+- Delegação de retirada para vínculo ativo do mesmo condomínio.
 - Avisos paginados, contador global de não lidos e confirmação de leitura.
 - Criação idempotente, lista e acompanhamento de solicitações de suporte.
 - Registro push opcional para Android/FCM e iOS/APNs, condicionado às capacidades.
