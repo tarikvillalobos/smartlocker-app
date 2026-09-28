@@ -149,6 +149,10 @@ class AppController(
         mutable.update { it.copy(recoveryChallenge = null) }
         load()
     }
+    fun changePassword(currentPassword: String, newPassword: String) = execute { generation ->
+        repository.changePassword(currentPassword, newPassword)
+        if (generation == epoch) mutable.update { it.copy(feedback = "Senha alterada. Outras sessões foram revogadas.") }
+    }
 
     fun refresh() { if (actionJob?.isActive != true) refreshData(detailOnly = false) }
     private fun refreshData(detailOnly: Boolean) {
