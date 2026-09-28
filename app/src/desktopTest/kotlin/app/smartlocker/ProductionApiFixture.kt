@@ -46,6 +46,10 @@ internal class ProductionApiFixture(private val authMethods: List<String>? = nul
                 "refresh-api", at(86_400_000), "user-api", "smartlocker", "session-api", listOf("parcels:read", "parcels:manual")))
             "/auth/password/login" -> json(ApiSessionTokens("Bearer", "access-api", at(3_600_000),
                 "refresh-api", at(86_400_000), "user-api", "smartlocker", "session-api", listOf("parcels:read")))
+            "/auth/invitations/ABC123" -> json(ApiInvitationPreview("first_access", "Residencial API", "42",
+                "A***", at(600_000), true))
+            "/auth/invitations/ABC123/accept" -> json(ApiSessionTokens("Bearer", "access-api", at(3_600_000),
+                "refresh-api", at(86_400_000), "user-api", "smartlocker", "session-api", listOf("parcels:read")), HttpStatusCode.Created)
             "/me" -> json(profile)
             "/me/memberships" -> json(ApiMembershipList(listOf(membership)))
             "/memberships/member-api/parcels" -> {
