@@ -8,6 +8,7 @@ import app.smartlocker.profile.domain.*
 import app.smartlocker.shared.domain.*
 import io.ktor.http.HttpMethod
 import io.ktor.http.encodeURLParameter
+import io.ktor.http.encodeURLPathPart
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.json.buildJsonObject
@@ -43,6 +44,13 @@ class ApiLockerRepository(private val session: ApiSessionClient) : LockerReposit
         val result = session.acceptInvitation(code, value)
         clearCache()
         return result
+    }
+    override suspend fun linkInvitation(code: String): Membership {
+        if (code.length !in 6..32) invalidInput("Confira o código do convite.")
+        val user = currentUser()
+        val result = request<ApiMembership>(user, "/me/invitations/${code.encodeURLPathPart()}/link", HttpMethod.Post)
+        clearCache()
+        return result.toDomain()
     }
     override suspend fun resendLogin(challengeId: String, request: LoginRequest): Challenge =
         session.resendLogin(identifier(challengeId))
