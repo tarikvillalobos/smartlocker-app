@@ -7,6 +7,10 @@ data class Challenge(
 )
 enum class LoginChannel { SMS, EMAIL }
 data class LoginRequest(val contact: String, val cpf: String, val channel: LoginChannel)
+data class InvitationPreview(
+    val purpose: String, val condominiumName: String, val unitLabel: String?,
+    val maskedName: String?, val expiresAt: Long, val requiresCpf: Boolean,
+)
 
 object InputValidation {
     fun phone(value: String): Boolean {
