@@ -75,6 +75,11 @@ data class ApiPasswordRecoveryVerify(val code: String, val newPassword: String) 
 }
 
 @Serializable
+data class ApiPasswordChangeRequest(val currentPassword: String, val newPassword: String) {
+    override fun toString() = "ApiPasswordChangeRequest(redacted)"
+}
+
+@Serializable
 data class ApiOtpVerification(val code: String) {
     override fun toString() = "ApiOtpVerification(redacted)"
 }
