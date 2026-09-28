@@ -183,6 +183,21 @@ private fun InvitationForm(controller: AppController, state: AppState, brand: Br
     } else {
         Text(preview.condominiumName, style = MaterialTheme.typography.titleMedium)
         preview.unitLabel?.let { Text(it, color = Tokens.secondary) }
+        preview.maskedName?.let { Text(it, color = Tokens.secondary) }
+        if (preview.purpose != "first_access") Text("Entre na sua conta para vincular este convite.")
+        else if (brand.termsVersion.isNullOrBlank()) Text("Primeiro acesso aguarda configuração dos termos vigentes.")
+        else {
+            OutlinedTextField(name, { name = it.take(120) }, Modifier.fillMaxWidth().keepAboveKeyboard(),
+                label = { Text("Nome completo") }, singleLine = true)
+            OutlinedTextField(cpf, { cpf = it.take(14) }, Modifier.fillMaxWidth().keepAboveKeyboard(),
+                label = { Text("CPF") }, singleLine = true)
+            OutlinedTextField(email, { email = it.take(254) }, Modifier.fillMaxWidth().keepAboveKeyboard(),
+                label = { Text("E-mail opcional") }, singleLine = true)
+            OutlinedTextField(phone, { phone = it.take(20) }, Modifier.fillMaxWidth().keepAboveKeyboard(),
+                label = { Text("Celular opcional") }, singleLine = true)
+            OutlinedTextField(password, { password = it.take(8192) }, Modifier.fillMaxWidth().keepAboveKeyboard(),
+                label = { Text("Criar senha") }, visualTransformation = PasswordVisualTransformation())
+        }
     }
     TextButton(onBack, Modifier.fillMaxWidth()) { Text("Voltar ao login") }
 }
