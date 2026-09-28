@@ -37,6 +37,8 @@ interface LockerRepository {
         throw AppFailure(FailureKind.UNAVAILABLE, "Convite indisponível para esta marca.")
     suspend fun acceptInvitation(code: String, value: InvitationAcceptance): Session =
         throw AppFailure(FailureKind.UNAVAILABLE, "Convite indisponível para esta marca.")
+    suspend fun linkInvitation(code: String): Membership =
+        throw AppFailure(FailureKind.UNAVAILABLE, "Convite indisponível para esta marca.")
     suspend fun resendLogin(challengeId: String, request: LoginRequest): Challenge = requestLogin(request)
     suspend fun verifyLogin(challengeId: String, code: String): Session
     suspend fun restoreSession(): Session?
