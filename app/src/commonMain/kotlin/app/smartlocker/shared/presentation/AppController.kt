@@ -305,6 +305,13 @@ class AppController(
             refreshAfterMutation(generation)
         }
     }
+    fun previewInvitation(code: String) = execute { generation ->
+        val preview = repository.previewInvitation(code)
+        if (generation == epoch) mutable.update { it.copy(invitationPreview = preview, invitationCode = code) }
+    }
+    fun clearInvitationPreview() {
+        mutable.update { it.copy(invitationPreview = null, invitationCode = "") }
+    }
     fun more() = execute {
         val context = state.value
         val generation = epoch
