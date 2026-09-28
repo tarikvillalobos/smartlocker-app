@@ -156,8 +156,13 @@ class ApiSessionClient(
         val epoch = generation
         val verification = code to "accept"
         val key = verificationKeys.getOrPut(verification) { Uuid.random().toString() }
-        val response = request("/auth/invitations/${code.encodeURLPathPart()}/accept", HttpMethod.Post,
-            ApiJson.encodeToString(payload), mapOf("Idempotency-Key" to key), authenticated = false)
+        val response = try {
+            request("/auth/invitations/${code.encodeURLPathPart()}/accept", HttpMethod.Post,
+                ApiJson.encodeToString(payload), mapOf("Idempotency-Key" to key), authenticated = false)
+        } catch (error: AppFailure) {
+            if (error.kind !in setOf(FailureKind.NETWORK, FailureKind.UNAVAILABLE)) verificationKeys.remove(verification)
+            throw error
+        }
         val tokens = decodeApi<ApiSessionTokens>(response)
         validateTokens(tokens)
         ensureCurrent(epoch)
