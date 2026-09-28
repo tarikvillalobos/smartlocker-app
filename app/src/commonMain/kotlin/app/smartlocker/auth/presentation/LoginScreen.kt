@@ -168,6 +168,12 @@ private fun RecoveryForm(controller: AppController, state: AppState, smsEnabled:
 private fun InvitationForm(controller: AppController, state: AppState, brand: Brand,
     legal: () -> Unit, onBack: () -> Unit) {
     var code by rememberSaveable { mutableStateOf("") }
+    var name by rememberSaveable { mutableStateOf("") }
+    var cpf by rememberSaveable { mutableStateOf("") }
+    var email by rememberSaveable { mutableStateOf("") }
+    var phone by rememberSaveable { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var accepted by rememberSaveable { mutableStateOf(false) }
     val preview = state.invitationPreview
     Text("Primeiro acesso", style = MaterialTheme.typography.headlineSmall)
     if (preview == null) {
