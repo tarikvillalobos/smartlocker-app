@@ -13,6 +13,10 @@ class AndroidServices(private val context: Context) : PlatformServices {
     override val apiBaseUrl: String? = context.packageManager
         .getApplicationInfo(context.packageName, android.content.pm.PackageManager.GET_META_DATA)
         .metaData?.getString("app.smartlocker.API_BASE_URL")?.takeIf { it.isNotBlank() }
+    @Suppress("DEPRECATION")
+    override val termsVersion: String? = context.packageManager
+        .getApplicationInfo(context.packageName, android.content.pm.PackageManager.GET_META_DATA)
+        .metaData?.getString("app.smartlocker.TERMS_VERSION")?.takeIf { it.isNotBlank() }
     private val preferences = context.getSharedPreferences("smartlocker.local", Context.MODE_PRIVATE)
     override val local = object : LocalStorage {
         override fun read(key: String): String? = preferences.getString(key, null)
