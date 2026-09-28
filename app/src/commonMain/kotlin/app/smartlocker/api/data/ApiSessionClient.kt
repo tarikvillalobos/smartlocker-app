@@ -138,6 +138,18 @@ class ApiSessionClient(
             authenticated = false)).toDomain()
     }
 
+    private fun invitationPayload(value: InvitationAcceptance): ApiInvitationAcceptRequest {
+        val name = value.name.trim()
+        if (name.length !in 2..120 || !InputValidation.cpf(value.cpf) ||
+            value.password.length !in 1..8192 || value.acceptedTermsVersion.isBlank())
+            invalidInput("Confira os dados do primeiro acesso.")
+        val email = value.email?.trim()?.takeIf { it.isNotEmpty() }
+        if (email != null && !InputValidation.email(email)) invalidInput("Confira o e-mail informado.")
+        val phone = value.phone?.takeIf { it.isNotBlank() }?.let { normalizedApiContact(it, LoginChannel.SMS) }
+        return ApiInvitationAcceptRequest(name, value.cpf.filter(Char::isDigit), email, phone,
+            value.password, value.acceptedTermsVersion)
+    }
+
     suspend fun resendLogin(challengeId: String): Challenge = decodeApi<ApiChallenge>(request(
         "/auth/challenges/${apiId(challengeId)}/resend", HttpMethod.Post, authenticated = false,
     )).toDomain("login")
