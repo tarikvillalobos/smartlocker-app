@@ -5,6 +5,7 @@ import app.smartlocker.shared.domain.SecureStorage
 
 interface PlatformServices {
     val apiBaseUrl: String? get() = null
+    val termsVersion: String? get() = null
     val local: LocalStorage
     val secure: SecureStorage
     fun copyText(value: String)
