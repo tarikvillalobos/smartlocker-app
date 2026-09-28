@@ -40,6 +40,13 @@ class ApiMappingTest {
         failsSafely { dto.copy(codeLength = 8).toDomain() }
     }
 
+    @Test fun passwordFailureDoesNotMisreportExpiredSessionOrEchoCredentials() {
+        val failure = apiFailure(401,
+            """{"status":401,"code":"INVALID_CREDENTIALS","detail":"private-password"}""")
+        assertEquals(FailureKind.VALIDATION, failure.kind)
+        assertFalse(failure.message.contains("private-password"))
+    }
+
     @Test fun presentationSessionExpiresWithRefreshAndItsDiagnosticTextRedactsTokens() {
         val tokens = ApiSessionTokens("Bearer", "opaque-access", start, "opaque-refresh", end,
             "user", "smartlocker", "session", listOf("profile:read"))
